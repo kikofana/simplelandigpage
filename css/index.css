@@ -203,3 +203,24 @@ header > .collapsible-header{
     }
     
 }
+/* Second button (matches header button) */
+#main-button {
+  background-color: #393E46 !important;
+  color: #FBF4E4 !important;
+  border: none !important;
+}
+
+#main-button .arrow-circle {
+  background-color: #FBF4E4 !important;
+  color: #393E46 !important;
+}
+
+/* Hover effects */
+#main-button:hover {
+  background-color: #2E3238 !important;
+}
+
+#main-button:hover .arrow-circle {
+  background-color: #393E46 !important;
+  color: #FBF4E4 !important;
+}
