@@ -5,7 +5,7 @@
     --btn-color: #fdfdfd;/* button color*/
     --btn-bg: #0d0d0d;/* button bg color*/
 
-    --primary-text-color: #000;
+    --primary-text-color: #333333;
     --header-link-hover: #dddcdccf;
     --footer-link-hover: #6dbb00;
     --input-focus-bd-color: #0d0d0d;
@@ -212,4 +212,7 @@ header > .collapsible-header{
         color: black;
     }
     
+}
+.dark-gray-text {
+    color: #333333 !important;
 }
