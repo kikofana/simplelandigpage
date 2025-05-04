@@ -40,50 +40,20 @@
     <body
         class="tw-flex tw-min-h-[100vh] tw-flex-col" style="background-color: #FBF4E4B0; padding: 20px; font-family: 'Playfair Display', serif; color: #393E46;"
     >
-        <header
-            class="tw-absolute tw-top-0 tw-z-20 tw-flex tw-h-[60px] tw-w-full tw-bg-opacity-0 tw-px-[5%] max-lg:tw-mr-auto max-lg:tw-px-4 lg:tw-justify-around"
-        >
-            <a
-                class="tw-h-[50px] tw-p-[4px] tw-text-2xl tw-font-medium"
-                href=""
-            >
-                Dr.Abreu
-            </a>
-            <div
-                class="collapsible-header animated-collapse max-lg:tw-shadow-md"
-                id="collapsed-header-items"
-            >
-                <div
-                    class="tw-flex tw-h-full tw-w-max tw-gap-5 tw-text-base tw-text-black max-lg:tw-mt-[30px] max-lg:tw-flex-col max-lg:tw-place-items-end max-lg:tw-gap-5 lg:tw-mx-auto lg:tw-place-items-center"
-                >
-                    <a class="header-links" href=""> About Me </a>
-                    <a class="header-links" href="#pricing"> Work </a>
-                    <a class="header-links" href=""> Blog </a>
-                    <a class="header-links" href=""> Contact me </a>
-                </div>
-                <div
-                    class="tw-mx-4 tw-flex tw-place-items-center tw-gap-[20px] tw-text-base max-md:tw-w-full max-md:tw-flex-col max-md:tw-place-content-center"
-                >
-                    <a
-                        href="http://www.doctorabreu.es"
-                        id="header-button" 
-                        class="tw-flex tw-h-[40px] tw-place-items-center tw-gap-2 tw-rounded-full tw-p-1 tw-pl-4"
-                    >
-                        <span>Get in touch</span>
-                        <div
-                            class="arrow-circle tw-flex tw-h-[30px] tw-w-[30px] tw-place-content-center tw-place-items-center tw-rounded-full tw-font-semibold">
-                          <i class="bi bi-arrow-up-right"></i>
-                        </div>
-                    </a>
-                </div>
-            </div>
-            <button
-                class="bi bi-list tw-absolute tw-right-3 tw-top-3 tw-z-50 tw-text-3xl tw-text-black lg:tw-hidden"
-                onclick="toggleHeader()"
-                aria-label="menu"
-                id="collapse-btn"
-            ></button>
-        </header>
+        <header class="tw-relative tw-z-20 tw-flex tw-h-[60px] tw-w-full tw-items-center tw-justify-between tw-px-[5%]">
+    <div class="tw-w-8"></div> <!-- Spacer for balance -->
+    <a class="tw-text-2xl tw-font-medium" href="index.html">
+        Dr.Abreu
+    </a>
+    <a href="http://www.doctorabreu.es" 
+       id="header-button"
+       class="tw-flex tw-h-[40px] tw-items-center tw-gap-2 tw-rounded-full tw-p-1 tw-pl-4">
+       <span>Get in touch</span>
+       <div class="arrow-circle tw-flex tw-h-[30px] tw-w-[30px] tw-place-content-center tw-place-items-center tw-rounded-full tw-font-semibold">
+          <i class="bi bi-arrow-up-right"></i>
+       </div>
+    </a>
+</header>
 
         <section
             class="tw-relative tw-flex tw-min-h-[100vh] tw-w-full tw-max-w-[100vw] tw-flex-col tw-overflow-hidden max-lg:tw-p-4 max-md:tw-mt-[50px]"
