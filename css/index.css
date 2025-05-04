@@ -216,3 +216,17 @@ header > .collapsible-header{
 .dark-gray-text {
     color: #333333 !important;
 }
+/* Ensure all text inherits the dark gray */
+body, p, a, span, div {
+    color: inherit;
+}
+
+/* Special cases for elements using Tailwind's text-black */
+.tw-text-black {
+    color: #333 !important;
+}
+
+/* For the green highlighted text */
+.tw-bg-green-200 {
+    color: #333 !important; /* Keep text dark on light green */
+}
