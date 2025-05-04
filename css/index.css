@@ -230,3 +230,24 @@ body, p, a, span, div {
 .tw-bg-green-200 {
     color: #333 !important; /* Keep text dark on light green */
 }
+#header-button {
+  background-color: #393E46 !important;
+  color: #FBF4E4 !important;
+  border: none !important;
+}
+
+/* Override the arrow circle inside */
+#header-button .arrow-circle {
+  background-color: #FBF4E4 !important;
+  color: #393E46 !important;
+}
+
+/* Hover effects */
+#header-button:hover {
+  background-color: #2E3238 !important; /* Slightly darker gray */
+}
+
+#header-button:hover .arrow-circle {
+  background-color: #393E46 !important;
+  color: #FBF4E4 !important;
+}
