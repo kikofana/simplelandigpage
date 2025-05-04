@@ -198,13 +198,13 @@ header > .collapsible-header{
         box-shadow: 2px 0px 3px #000;
     }
     body {
-    background-color: #f5f5dc !important; /* Beige color */
+    background-color: #fbf4e4b3 !important; /* Beige color */
 }
 
 /* For the mobile menu background */
 @media not all and (min-width: 1024px) {
     header .collapsible-header {
-        background-color: #f5f5dc !important; /* Match the beige */
+        background-color: #fbf4e4b3 !important; /* Match the beige */
     }
 }
 
