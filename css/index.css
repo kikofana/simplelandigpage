@@ -272,16 +272,22 @@ body, p, a, span, div {
   background-color: #393E46 !important;
   color: #FBF4E4 !important;
 }
-/* Ensure header stays on top of content */
+/* Header styles */
 header {
     position: fixed !important;
     top: 0 !important;
     left: 0 !important;
     right: 0 !important;
-    background-color: #FBF4E4B0 !important;
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    height: 60px;
+    width: 100%;
+    background-color: #FBF4E4B0;
+    z-index: 20;
 }
 
-/* Adjust body padding to account for fixed header */
+/* Body padding to account for fixed header */
 body {
     padding-top: 60px !important;
 }
