@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Buscador de implantes</title>
+  <link rel="stylesheet" href="estilos.css">
+</head>
+<body>
+
+<header class="cabecera">
+  <h1>Buscador de implantes</h1>
+  <p class="subtitulo">Búsqueda por base mamaria con tolerancia</p>
+</header>
+
+<div id="avisoDemo" class="aviso-demo" hidden>
+  <strong>Datos de demostración.</strong>
+  <span id="avisoDemoTexto"></span>
+  Las medidas son <strong>ficticias</strong> y no corresponden a ningún producto
+  real. No usar para planificación.
+</div>
+
+<main>
+  <section class="panel" aria-label="Criterios de búsqueda">
+    <div class="campos">
+      <div class="campo campo-principal">
+        <label for="base">Base de la paciente</label>
+        <div class="con-unidad">
+          <input type="number" id="base" value="11" step="0.1" min="6" max="18" inputmode="decimal">
+          <span class="unidad">cm</span>
+        </div>
+      </div>
+
+      <div class="campo">
+        <label for="tolerancia">Tolerancia</label>
+        <div class="con-unidad">
+          <span class="prefijo">±</span>
+          <input type="number" id="tolerancia" value="0.5" step="0.1" min="0" max="3" inputmode="decimal">
+          <span class="unidad">cm</span>
+        </div>
+      </div>
+
+      <div class="campo">
+        <label for="forma">Forma</label>
+        <select id="forma">
+          <option value="">Todas</option>
+          <option value="redonda">Redonda</option>
+          <option value="anatomica">Anatómica</option>
+        </select>
+      </div>
+
+      <div class="campo">
+        <label for="superficie">Superficie</label>
+        <select id="superficie">
+          <option value="">Todas</option>
+        </select>
+      </div>
+
+      <div class="campo">
+        <label for="orden">Ordenar por</label>
+        <select id="orden">
+          <option value="cercania">Cercanía a la base</option>
+          <option value="volumen">Volumen</option>
+          <option value="proyeccion">Proyección</option>
+        </select>
+      </div>
+    </div>
+
+    <fieldset class="marcas">
+      <legend>Marcas</legend>
+      <div id="listaMarcas" class="chips"></div>
+    </fieldset>
+  </section>
+
+  <p id="resumen" class="resumen" role="status"></p>
+  <div id="resultados" class="resultados"></div>
+</main>
+
+<footer class="pie">
+  Herramienta interna de consulta. Cada medida debe contrastarse con el catálogo
+  del fabricante antes de usarse en planificación quirúrgica.
+</footer>
+
+<script src="datos.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

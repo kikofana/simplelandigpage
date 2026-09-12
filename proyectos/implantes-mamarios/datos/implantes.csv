@@ -1,0 +1,13 @@
+marca,linea,referencia,forma,superficie,perfil_marca,volumen_cc,base_cm,altura_cm,proyeccion_cm,arco_cm,gel,catalogo,pagina,notas
+DEMO,Linea Demo,DEMO-001,redonda,lisa,Perfil Bajo,255,10.5,10.5,3.3,5.8,Demo,Datos ficticios de prueba,,FICTICIO - no usar
+DEMO,Linea Demo,DEMO-002,redonda,lisa,Perfil Medio,295,10.5,10.5,3.9,6.1,Demo,Datos ficticios de prueba,,FICTICIO - no usar
+DEMO,Linea Demo,DEMO-003,redonda,texturizada,Perfil Medio,330,11.0,11.0,4.1,6.4,Demo,Datos ficticios de prueba,,FICTICIO - no usar
+DEMO,Linea Demo,DEMO-004,redonda,texturizada,Perfil Alto,375,11.0,11.0,4.7,6.7,Demo,Datos ficticios de prueba,,FICTICIO - no usar
+DEMO,Linea Demo,DEMO-005,redonda,lisa,Perfil Bajo,300,11.5,11.5,3.5,6.2,Demo,Datos ficticios de prueba,,FICTICIO - no usar
+DEMO,Linea Demo,DEMO-006,redonda,lisa,Perfil Alto,420,11.5,11.5,4.9,7.0,Demo,Datos ficticios de prueba,,FICTICIO - no usar
+DEMO,Linea Demo,DEMO-007,redonda,texturizada,Perfil Medio,460,12.0,12.0,4.3,6.9,Demo,Datos ficticios de prueba,,FICTICIO - no usar
+DEMO,Linea Demo,DEMO-008,anatomica,texturizada,Altura Media / Proy Media,295,10.5,9.5,3.6,5.5,Demo,Datos ficticios de prueba,,FICTICIO - no usar
+DEMO,Linea Demo,DEMO-009,anatomica,texturizada,Altura Media / Proy Alta,335,11.0,10.0,4.4,5.9,Demo,Datos ficticios de prueba,,FICTICIO - no usar
+DEMO,Linea Demo,DEMO-010,anatomica,texturizada,Altura Alta / Proy Media,350,11.0,11.5,3.8,6.3,Demo,Datos ficticios de prueba,,FICTICIO - no usar
+DEMO,Linea Demo,DEMO-011,anatomica,nanotexturizada,Altura Media / Proy Alta,390,11.5,10.5,4.6,6.1,Demo,Datos ficticios de prueba,,FICTICIO - no usar
+DEMO,Linea Demo,DEMO-012,anatomica,nanotexturizada,Altura Baja / Proy Media,270,11.5,9.0,3.4,5.2,Demo,Datos ficticios de prueba,,FICTICIO - no usar
