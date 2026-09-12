@@ -1,13 +1,172 @@
-marca,linea,referencia,forma,superficie,perfil_marca,volumen_cc,base_cm,altura_cm,proyeccion_cm,arco_cm,gel,catalogo,pagina,notas
-DEMO,Linea Demo,DEMO-001,redonda,lisa,Perfil Bajo,255,10.5,10.5,3.3,5.8,Demo,Datos ficticios de prueba,,FICTICIO - no usar
-DEMO,Linea Demo,DEMO-002,redonda,lisa,Perfil Medio,295,10.5,10.5,3.9,6.1,Demo,Datos ficticios de prueba,,FICTICIO - no usar
-DEMO,Linea Demo,DEMO-003,redonda,texturizada,Perfil Medio,330,11.0,11.0,4.1,6.4,Demo,Datos ficticios de prueba,,FICTICIO - no usar
-DEMO,Linea Demo,DEMO-004,redonda,texturizada,Perfil Alto,375,11.0,11.0,4.7,6.7,Demo,Datos ficticios de prueba,,FICTICIO - no usar
-DEMO,Linea Demo,DEMO-005,redonda,lisa,Perfil Bajo,300,11.5,11.5,3.5,6.2,Demo,Datos ficticios de prueba,,FICTICIO - no usar
-DEMO,Linea Demo,DEMO-006,redonda,lisa,Perfil Alto,420,11.5,11.5,4.9,7.0,Demo,Datos ficticios de prueba,,FICTICIO - no usar
-DEMO,Linea Demo,DEMO-007,redonda,texturizada,Perfil Medio,460,12.0,12.0,4.3,6.9,Demo,Datos ficticios de prueba,,FICTICIO - no usar
-DEMO,Linea Demo,DEMO-008,anatomica,texturizada,Altura Media / Proy Media,295,10.5,9.5,3.6,5.5,Demo,Datos ficticios de prueba,,FICTICIO - no usar
-DEMO,Linea Demo,DEMO-009,anatomica,texturizada,Altura Media / Proy Alta,335,11.0,10.0,4.4,5.9,Demo,Datos ficticios de prueba,,FICTICIO - no usar
-DEMO,Linea Demo,DEMO-010,anatomica,texturizada,Altura Alta / Proy Media,350,11.0,11.5,3.8,6.3,Demo,Datos ficticios de prueba,,FICTICIO - no usar
-DEMO,Linea Demo,DEMO-011,anatomica,nanotexturizada,Altura Media / Proy Alta,390,11.5,10.5,4.6,6.1,Demo,Datos ficticios de prueba,,FICTICIO - no usar
-DEMO,Linea Demo,DEMO-012,anatomica,nanotexturizada,Altura Baja / Proy Media,270,11.5,9.0,3.4,5.2,Demo,Datos ficticios de prueba,,FICTICIO - no usar
+marca,linea,referencia,forma,superficie,superficie_marca,perfil_marca,volumen_cc,base_cm,altura_cm,proyeccion_cm,arco_cm,gel,catalogo,pagina,notas
+Silimed,Redondos,255 XH,redonda,sin especificar,,XH (Extra High),255,9.2,9.2,5.6,7.8,,Aportado sin referencia de catálogo,,Superficie y línea sin especificar en el origen
+Silimed,Redondos,225 HI,redonda,sin especificar,,HI (High),225,9.2,9.2,4.8,7.2,,Aportado sin referencia de catálogo,,Superficie y línea sin especificar en el origen
+Silimed,Redondos,190 MD,redonda,sin especificar,,MD (Moderate),190,9.2,9.2,4.0,6.7,,Aportado sin referencia de catálogo,,Superficie y línea sin especificar en el origen
+Silimed,Redondos,155 LO,redonda,sin especificar,,LO (Low),155,9.2,9.2,3.2,6.2,,Aportado sin referencia de catálogo,,Superficie y línea sin especificar en el origen
+Silimed,Redondos,280 XH,redonda,sin especificar,,XH (Extra High),280,9.5,9.5,5.7,8.0,,Aportado sin referencia de catálogo,,Superficie y línea sin especificar en el origen
+Silimed,Redondos,245 HI,redonda,sin especificar,,HI (High),245,9.5,9.5,4.9,7.3,,Aportado sin referencia de catálogo,,Superficie y línea sin especificar en el origen
+Silimed,Redondos,205 MD,redonda,sin especificar,,MD (Moderate),205,9.5,9.5,4.1,6.8,,Aportado sin referencia de catálogo,,Superficie y línea sin especificar en el origen
+Silimed,Redondos,170 LO,redonda,sin especificar,,LO (Low),170,9.5,9.5,3.3,6.4,,Aportado sin referencia de catálogo,,Superficie y línea sin especificar en el origen
+Silimed,Redondos,305 XH,redonda,sin especificar,,XH (Extra High),305,9.8,9.8,5.8,8.4,,Aportado sin referencia de catálogo,,Superficie y línea sin especificar en el origen
+Silimed,Redondos,270 HI,redonda,sin especificar,,HI (High),270,9.8,9.8,5.0,7.6,,Aportado sin referencia de catálogo,,Superficie y línea sin especificar en el origen
+Silimed,Redondos,225 MD,redonda,sin especificar,,MD (Moderate),225,9.8,9.8,4.2,7.0,,Aportado sin referencia de catálogo,,Superficie y línea sin especificar en el origen
+Silimed,Redondos,185 LO,redonda,sin especificar,,LO (Low),185,9.8,9.8,3.4,6.6,,Aportado sin referencia de catálogo,,Superficie y línea sin especificar en el origen
+Silimed,Redondos,325 XH,redonda,sin especificar,,XH (Extra High),325,10.1,10.1,5.9,8.6,,Aportado sin referencia de catálogo,,Superficie y línea sin especificar en el origen
+Silimed,Redondos,285 HI,redonda,sin especificar,,HI (High),285,10.1,10.1,5.1,7.8,,Aportado sin referencia de catálogo,,Superficie y línea sin especificar en el origen
+Silimed,Redondos,240 MD,redonda,sin especificar,,MD (Moderate),240,10.1,10.1,4.3,7.2,,Aportado sin referencia de catálogo,,Superficie y línea sin especificar en el origen
+Silimed,Redondos,200 LO,redonda,sin especificar,,LO (Low),200,10.1,10.1,3.5,6.8,,Aportado sin referencia de catálogo,,Superficie y línea sin especificar en el origen
+Silimed,Redondos,360 XH,redonda,sin especificar,,XH (Extra High),360,10.4,10.4,6.0,8.8,,Aportado sin referencia de catálogo,,Superficie y línea sin especificar en el origen
+Silimed,Redondos,305 HI,redonda,sin especificar,,HI (High),305,10.4,10.4,5.2,8.1,,Aportado sin referencia de catálogo,,Superficie y línea sin especificar en el origen
+Silimed,Redondos,255 MD,redonda,sin especificar,,MD (Moderate),255,10.4,10.4,4.4,7.4,,Aportado sin referencia de catálogo,,Superficie y línea sin especificar en el origen
+Silimed,Redondos,215 LO,redonda,sin especificar,,LO (Low),215,10.4,10.4,3.6,7.0,,Aportado sin referencia de catálogo,,Superficie y línea sin especificar en el origen
+Silimed,Redondos,380 XH,redonda,sin especificar,,XH (Extra High),380,10.7,10.7,6.1,9.0,,Aportado sin referencia de catálogo,,Superficie y línea sin especificar en el origen
+Silimed,Redondos,335 HI,redonda,sin especificar,,HI (High),335,10.7,10.7,5.3,8.3,,Aportado sin referencia de catálogo,,Superficie y línea sin especificar en el origen
+Silimed,Redondos,280 MD,redonda,sin especificar,,MD (Moderate),280,10.7,10.7,4.5,7.6,,Aportado sin referencia de catálogo,,Superficie y línea sin especificar en el origen
+Silimed,Redondos,240 LO,redonda,sin especificar,,LO (Low),240,10.7,10.7,3.7,7.2,,Aportado sin referencia de catálogo,,Superficie y línea sin especificar en el origen
+Silimed,Redondos,410 XH,redonda,sin especificar,,XH (Extra High),410,11.0,11.0,6.2,9.1,,Aportado sin referencia de catálogo,,Superficie y línea sin especificar en el origen
+Silimed,Redondos,365 HI,redonda,sin especificar,,HI (High),365,11.0,11.0,5.4,8.5,,Aportado sin referencia de catálogo,,Superficie y línea sin especificar en el origen
+Silimed,Redondos,305 MD,redonda,sin especificar,,MD (Moderate),305,11.0,11.0,4.6,7.8,,Aportado sin referencia de catálogo,,Superficie y línea sin especificar en el origen
+Silimed,Redondos,260 LO,redonda,sin especificar,,LO (Low),260,11.0,11.0,3.8,7.4,,Aportado sin referencia de catálogo,,Superficie y línea sin especificar en el origen
+Silimed,Redondos,430 XH,redonda,sin especificar,,XH (Extra High),430,11.3,11.3,6.3,9.2,,Aportado sin referencia de catálogo,,Superficie y línea sin especificar en el origen
+Silimed,Redondos,390 HI,redonda,sin especificar,,HI (High),390,11.3,11.3,5.5,8.6,,Aportado sin referencia de catálogo,,Superficie y línea sin especificar en el origen
+Silimed,Redondos,330 MD,redonda,sin especificar,,MD (Moderate),330,11.3,11.3,4.7,8.0,,Aportado sin referencia de catálogo,,Superficie y línea sin especificar en el origen
+Silimed,Redondos,275 LO,redonda,sin especificar,,LO (Low),275,11.3,11.3,3.9,7.5,,Aportado sin referencia de catálogo,,Superficie y línea sin especificar en el origen
+Silimed,Redondos,470 XH,redonda,sin especificar,,XH (Extra High),470,11.6,11.6,6.4,9.4,,Aportado sin referencia de catálogo,,Superficie y línea sin especificar en el origen
+Silimed,Redondos,420 HI,redonda,sin especificar,,HI (High),420,11.6,11.6,5.6,8.8,,Aportado sin referencia de catálogo,,Superficie y línea sin especificar en el origen
+Silimed,Redondos,350 MD,redonda,sin especificar,,MD (Moderate),350,11.6,11.6,4.8,8.2,,Aportado sin referencia de catálogo,,Superficie y línea sin especificar en el origen
+Silimed,Redondos,305 LO,redonda,sin especificar,,LO (Low),305,11.6,11.6,4.0,7.7,,Aportado sin referencia de catálogo,,Superficie y línea sin especificar en el origen
+Silimed,Redondos,500 XH,redonda,sin especificar,,XH (Extra High),500,11.9,11.9,6.5,9.6,,Aportado sin referencia de catálogo,,Superficie y línea sin especificar en el origen
+Silimed,Redondos,445 HI,redonda,sin especificar,,HI (High),445,11.9,11.9,5.7,9.0,,Aportado sin referencia de catálogo,,Superficie y línea sin especificar en el origen
+Silimed,Redondos,385 MD,redonda,sin especificar,,MD (Moderate),385,11.9,11.9,4.9,8.4,,Aportado sin referencia de catálogo,,Superficie y línea sin especificar en el origen
+Silimed,Redondos,335 LO,redonda,sin especificar,,LO (Low),335,11.9,11.9,4.1,8.0,,Aportado sin referencia de catálogo,,Superficie y línea sin especificar en el origen
+Silimed,Redondos,570 XH,redonda,sin especificar,,XH (Extra High),570,12.5,12.5,6.7,10.0,,Aportado sin referencia de catálogo,,Superficie y línea sin especificar en el origen
+Silimed,Redondos,505 HI,redonda,sin especificar,,HI (High),505,12.5,12.5,5.9,9.4,,Aportado sin referencia de catálogo,,Superficie y línea sin especificar en el origen
+Mentor,MemoryGel Xtra,TMPX-130,redonda,texturizada,SILTEX,Perfil Moderado Plus,130,9.1,9.1,3.1,,,Aportado sin referencia de catálogo,,El catálogo de redondos no publica arco vertical
+Mentor,MemoryGel Xtra,TMPX-160,redonda,texturizada,SILTEX,Perfil Moderado Plus,160,9.5,9.5,3.3,,,Aportado sin referencia de catálogo,,El catálogo de redondos no publica arco vertical
+Mentor,MemoryGel Xtra,TMPX-190,redonda,texturizada,SILTEX,Perfil Moderado Plus,190,10.1,10.1,3.5,,,Aportado sin referencia de catálogo,,El catálogo de redondos no publica arco vertical
+Mentor,MemoryGel Xtra,TMPX-215,redonda,texturizada,SILTEX,Perfil Moderado Plus,215,10.5,10.5,3.6,,,Aportado sin referencia de catálogo,,El catálogo de redondos no publica arco vertical
+Mentor,MemoryGel Xtra,TMPX-240,redonda,texturizada,SILTEX,Perfil Moderado Plus,240,10.9,10.9,3.8,,,Aportado sin referencia de catálogo,,El catálogo de redondos no publica arco vertical
+Mentor,MemoryGel Xtra,TMPX-270,redonda,texturizada,SILTEX,Perfil Moderado Plus,270,11.4,11.4,3.9,,,Aportado sin referencia de catálogo,,El catálogo de redondos no publica arco vertical
+Mentor,MemoryGel Xtra,TMPX-295,redonda,texturizada,SILTEX,Perfil Moderado Plus,295,11.6,11.6,4.1,,,Aportado sin referencia de catálogo,,El catálogo de redondos no publica arco vertical
+Mentor,MemoryGel Xtra,TMPX-325,redonda,texturizada,SILTEX,Perfil Moderado Plus,325,11.9,11.9,4.2,,,Aportado sin referencia de catálogo,,El catálogo de redondos no publica arco vertical
+Mentor,MemoryGel Xtra,TMPX-350,redonda,texturizada,SILTEX,Perfil Moderado Plus,350,12.2,12.2,4.3,,,Aportado sin referencia de catálogo,,El catálogo de redondos no publica arco vertical
+Mentor,MemoryGel Xtra,TMPX-370,redonda,texturizada,SILTEX,Perfil Moderado Plus,370,12.7,12.7,4.3,,,Aportado sin referencia de catálogo,,El catálogo de redondos no publica arco vertical
+Mentor,MemoryGel Xtra,TMPX-405,redonda,texturizada,SILTEX,Perfil Moderado Plus,405,12.8,12.8,4.5,,,Aportado sin referencia de catálogo,,El catálogo de redondos no publica arco vertical
+Mentor,MemoryGel Xtra,TMPX-440,redonda,texturizada,SILTEX,Perfil Moderado Plus,440,13.1,13.1,4.8,,,Aportado sin referencia de catálogo,,El catálogo de redondos no publica arco vertical
+Mentor,MemoryGel Xtra,TMPX-490,redonda,texturizada,SILTEX,Perfil Moderado Plus,490,13.6,13.6,4.8,,,Aportado sin referencia de catálogo,,El catálogo de redondos no publica arco vertical
+Mentor,MemoryGel Xtra,TMPX-545,redonda,texturizada,SILTEX,Perfil Moderado Plus,545,14.1,14.1,5.0,,,Aportado sin referencia de catálogo,,El catálogo de redondos no publica arco vertical
+Mentor,MemoryGel Xtra,TMPX-605,redonda,texturizada,SILTEX,Perfil Moderado Plus,605,14.4,14.4,5.3,,,Aportado sin referencia de catálogo,,El catálogo de redondos no publica arco vertical
+Mentor,MemoryGel Xtra,TMPX-645,redonda,texturizada,SILTEX,Perfil Moderado Plus,645,15.0,15.0,5.3,,,Aportado sin referencia de catálogo,,El catálogo de redondos no publica arco vertical
+Mentor,MemoryGel Xtra,TMPX-755,redonda,texturizada,SILTEX,Perfil Moderado Plus,755,15.7,15.7,5.6,,,Aportado sin referencia de catálogo,,El catálogo de redondos no publica arco vertical
+Mentor,MemoryGel Xtra,THPX-150,redonda,texturizada,SILTEX,Perfil Alto,150,8.4,8.4,4.2,,,Aportado sin referencia de catálogo,,El catálogo de redondos no publica arco vertical
+Mentor,MemoryGel Xtra,THPX-175,redonda,texturizada,SILTEX,Perfil Alto,175,9.0,9.0,4.4,,,Aportado sin referencia de catálogo,,El catálogo de redondos no publica arco vertical
+Mentor,MemoryGel Xtra,THPX-200,redonda,texturizada,SILTEX,Perfil Alto,200,9.4,9.4,4.5,,,Aportado sin referencia de catálogo,,El catálogo de redondos no publica arco vertical
+Mentor,MemoryGel Xtra,THPX-230,redonda,texturizada,SILTEX,Perfil Alto,230,9.8,9.8,4.8,,,Aportado sin referencia de catálogo,,El catálogo de redondos no publica arco vertical
+Mentor,MemoryGel Xtra,THPX-255,redonda,texturizada,SILTEX,Perfil Alto,255,10.1,10.1,4.9,,,Aportado sin referencia de catálogo,,El catálogo de redondos no publica arco vertical
+Mentor,MemoryGel Xtra,THPX-285,redonda,texturizada,SILTEX,Perfil Alto,285,10.5,10.5,5.1,,,Aportado sin referencia de catálogo,,El catálogo de redondos no publica arco vertical
+Mentor,MemoryGel Xtra,THPX-325,redonda,texturizada,SILTEX,Perfil Alto,325,10.8,10.8,5.4,,,Aportado sin referencia de catálogo,,El catálogo de redondos no publica arco vertical
+Mentor,MemoryGel Xtra,THPX-340,redonda,texturizada,SILTEX,Perfil Alto,340,11.1,11.1,5.4,,,Aportado sin referencia de catálogo,,El catálogo de redondos no publica arco vertical
+Mentor,MemoryGel Xtra,THPX-365,redonda,texturizada,SILTEX,Perfil Alto,365,11.4,11.4,5.5,,,Aportado sin referencia de catálogo,,El catálogo de redondos no publica arco vertical
+Mentor,MemoryGel Xtra,THPX-405,redonda,texturizada,SILTEX,Perfil Alto,405,11.6,11.6,5.9,,,Aportado sin referencia de catálogo,,El catálogo de redondos no publica arco vertical
+Mentor,MemoryGel Xtra,THPX-425,redonda,texturizada,SILTEX,Perfil Alto,425,11.9,11.9,5.8,,,Aportado sin referencia de catálogo,,El catálogo de redondos no publica arco vertical
+Mentor,MemoryGel Xtra,THPX-455,redonda,texturizada,SILTEX,Perfil Alto,455,12.1,12.1,6.0,,,Aportado sin referencia de catálogo,,El catálogo de redondos no publica arco vertical
+Mentor,MemoryGel Xtra,THPX-470,redonda,texturizada,SILTEX,Perfil Alto,470,12.3,12.3,5.9,,,Aportado sin referencia de catálogo,,El catálogo de redondos no publica arco vertical
+Mentor,MemoryGel Xtra,THPX-515,redonda,texturizada,SILTEX,Perfil Alto,515,12.6,12.6,6.2,,,Aportado sin referencia de catálogo,,El catálogo de redondos no publica arco vertical
+Mentor,MemoryGel Xtra,THPX-570,redonda,texturizada,SILTEX,Perfil Alto,570,13.2,13.2,6.3,,,Aportado sin referencia de catálogo,,El catálogo de redondos no publica arco vertical
+Mentor,MemoryGel Xtra,THPX-620,redonda,texturizada,SILTEX,Perfil Alto,620,13.4,13.4,6.5,,,Aportado sin referencia de catálogo,,El catálogo de redondos no publica arco vertical
+Mentor,MemoryGel Xtra,THPX-680,redonda,texturizada,SILTEX,Perfil Alto,680,14.0,14.0,6.6,,,Aportado sin referencia de catálogo,,El catálogo de redondos no publica arco vertical
+Mentor,MemoryGel Xtra,THPX-725,redonda,texturizada,SILTEX,Perfil Alto,725,14.5,14.5,6.7,,,Aportado sin referencia de catálogo,,El catálogo de redondos no publica arco vertical
+Mentor,MemoryGel Xtra,THPX-765,redonda,texturizada,SILTEX,Perfil Alto,765,14.7,14.7,6.7,,,Aportado sin referencia de catálogo,,El catálogo de redondos no publica arco vertical
+Mentor,MemoryGel Xtra,SMPX-130,redonda,lisa,Liso,Perfil Moderado Plus,130,8.9,8.9,3.1,,,Aportado sin referencia de catálogo,,El catálogo de redondos no publica arco vertical
+Mentor,MemoryGel Xtra,SMPX-160,redonda,lisa,Liso,Perfil Moderado Plus,160,9.5,9.5,3.3,,,Aportado sin referencia de catálogo,,El catálogo de redondos no publica arco vertical
+Mentor,MemoryGel Xtra,SMPX-190,redonda,lisa,Liso,Perfil Moderado Plus,190,10.0,10.0,3.4,,,Aportado sin referencia de catálogo,,El catálogo de redondos no publica arco vertical
+Mentor,MemoryGel Xtra,SMPX-215,redonda,lisa,Liso,Perfil Moderado Plus,215,10.4,10.4,3.6,,,Aportado sin referencia de catálogo,,El catálogo de redondos no publica arco vertical
+Mentor,MemoryGel Xtra,SMPX-240,redonda,lisa,Liso,Perfil Moderado Plus,240,10.8,10.8,3.7,,,Aportado sin referencia de catálogo,,El catálogo de redondos no publica arco vertical
+Mentor,MemoryGel Xtra,SMPX-270,redonda,lisa,Liso,Perfil Moderado Plus,270,11.4,11.4,3.8,,,Aportado sin referencia de catálogo,,El catálogo de redondos no publica arco vertical
+Mentor,MemoryGel Xtra,SMPX-295,redonda,lisa,Liso,Perfil Moderado Plus,295,11.5,11.5,4.0,,,Aportado sin referencia de catálogo,,El catálogo de redondos no publica arco vertical
+Mentor,MemoryGel Xtra,SMPX-325,redonda,lisa,Liso,Perfil Moderado Plus,325,11.9,11.9,4.1,,,Aportado sin referencia de catálogo,,El catálogo de redondos no publica arco vertical
+Mentor,MemoryGel Xtra,SMPX-350,redonda,lisa,Liso,Perfil Moderado Plus,350,12.3,12.3,4.1,,,Aportado sin referencia de catálogo,,El catálogo de redondos no publica arco vertical
+Mentor,MemoryGel Xtra,SMPX-370,redonda,lisa,Liso,Perfil Moderado Plus,370,12.6,12.6,4.1,,,Aportado sin referencia de catálogo,,El catálogo de redondos no publica arco vertical
+Mentor,MemoryGel Xtra,SMPX-405,redonda,lisa,Liso,Perfil Moderado Plus,405,12.7,12.7,4.4,,,Aportado sin referencia de catálogo,,El catálogo de redondos no publica arco vertical
+Mentor,MemoryGel Xtra,SMPX-440,redonda,lisa,Liso,Perfil Moderado Plus,440,13.1,13.1,4.5,,,Aportado sin referencia de catálogo,,El catálogo de redondos no publica arco vertical
+Mentor,MemoryGel Xtra,SMPX-490,redonda,lisa,Liso,Perfil Moderado Plus,490,13.6,13.6,4.7,,,Aportado sin referencia de catálogo,,El catálogo de redondos no publica arco vertical
+Mentor,MemoryGel Xtra,SMPX-545,redonda,lisa,Liso,Perfil Moderado Plus,545,14.0,14.0,4.9,,,Aportado sin referencia de catálogo,,El catálogo de redondos no publica arco vertical
+Mentor,MemoryGel Xtra,SMPX-605,redonda,lisa,Liso,Perfil Moderado Plus,605,14.5,14.5,5.1,,,Aportado sin referencia de catálogo,,El catálogo de redondos no publica arco vertical
+Mentor,MemoryGel Xtra,SMPX-645,redonda,lisa,Liso,Perfil Moderado Plus,645,14.9,14.9,5.1,,,Aportado sin referencia de catálogo,,El catálogo de redondos no publica arco vertical
+Mentor,MemoryGel Xtra,SMPX-755,redonda,lisa,Liso,Perfil Moderado Plus,755,15.7,15.7,5.4,,,Aportado sin referencia de catálogo,,El catálogo de redondos no publica arco vertical
+Motiva,Round SilkSurface,RSM-105,redonda,lisa,SilkSurface,Mini,105,8.5,8.5,2.2,5.0,,Aportado sin referencia de catálogo,,"Clasificación de SilkSurface como lisa, pendiente de confirmar"
+Motiva,Round SilkSurface,RSD-135,redonda,lisa,SilkSurface,Demi,135,8.5,8.5,3.1,5.7,,Aportado sin referencia de catálogo,,"Clasificación de SilkSurface como lisa, pendiente de confirmar"
+Motiva,Round SilkSurface,RSF-145,redonda,lisa,SilkSurface,Full,145,8.5,8.5,3.5,6.0,,Aportado sin referencia de catálogo,,"Clasificación de SilkSurface como lisa, pendiente de confirmar"
+Motiva,Round SilkSurface,RSC-180,redonda,lisa,SilkSurface,Corsé,180,8.5,8.5,4.0,6.5,,Aportado sin referencia de catálogo,,"Clasificación de SilkSurface como lisa, pendiente de confirmar"
+Motiva,Round SilkSurface,RSM-125,redonda,lisa,SilkSurface,Mini,125,9.0,9.0,2.3,5.3,,Aportado sin referencia de catálogo,,"Clasificación de SilkSurface como lisa, pendiente de confirmar"
+Motiva,Round SilkSurface,RSD-155,redonda,lisa,SilkSurface,Demi,155,9.0,9.0,3.3,6.0,,Aportado sin referencia de catálogo,,"Clasificación de SilkSurface como lisa, pendiente de confirmar"
+Motiva,Round SilkSurface,RSF-175,redonda,lisa,SilkSurface,Full,175,9.0,9.0,3.7,6.3,,Aportado sin referencia de catálogo,,"Clasificación de SilkSurface como lisa, pendiente de confirmar"
+Motiva,Round SilkSurface,RSC-210,redonda,lisa,SilkSurface,Corsé,210,9.0,9.0,4.2,6.8,,Aportado sin referencia de catálogo,,"Clasificación de SilkSurface como lisa, pendiente de confirmar"
+Motiva,Round SilkSurface,RSM-140,redonda,lisa,SilkSurface,Mini,140,9.5,9.5,2.4,5.5,,Aportado sin referencia de catálogo,,"Clasificación de SilkSurface como lisa, pendiente de confirmar"
+Motiva,Round SilkSurface,RSD-180,redonda,lisa,SilkSurface,Demi,180,9.5,9.5,3.4,6.3,,Aportado sin referencia de catálogo,,"Clasificación de SilkSurface como lisa, pendiente de confirmar"
+Motiva,Round SilkSurface,RSF-205,redonda,lisa,SilkSurface,Full,205,9.5,9.5,3.9,6.7,,Aportado sin referencia de catálogo,,"Clasificación de SilkSurface como lisa, pendiente de confirmar"
+Motiva,Round SilkSurface,RSC-240,redonda,lisa,SilkSurface,Corsé,240,9.5,9.5,4.5,7.2,,Aportado sin referencia de catálogo,,"Clasificación de SilkSurface como lisa, pendiente de confirmar"
+Motiva,Round SilkSurface,RSM-150,redonda,lisa,SilkSurface,Mini,150,9.75,9.75,2.4,5.6,,Aportado sin referencia de catálogo,,"Clasificación de SilkSurface como lisa, pendiente de confirmar"
+Motiva,Round SilkSurface,RSD-190,redonda,lisa,SilkSurface,Demi,190,9.75,9.75,3.4,6.4,,Aportado sin referencia de catálogo,,"Clasificación de SilkSurface como lisa, pendiente de confirmar"
+Motiva,Round SilkSurface,RSF-220,redonda,lisa,SilkSurface,Full,220,9.75,9.75,4.0,6.9,,Aportado sin referencia de catálogo,,"Clasificación de SilkSurface como lisa, pendiente de confirmar"
+Motiva,Round SilkSurface,RSC-260,redonda,lisa,SilkSurface,Corsé,260,9.75,9.75,4.6,7.4,,Aportado sin referencia de catálogo,,"Clasificación de SilkSurface como lisa, pendiente de confirmar"
+Motiva,Round SilkSurface,RSM-160,redonda,lisa,SilkSurface,Mini,160,10.0,10.0,2.5,5.8,,Aportado sin referencia de catálogo,,"Clasificación de SilkSurface como lisa, pendiente de confirmar"
+Motiva,Round SilkSurface,RSD-205,redonda,lisa,SilkSurface,Demi,205,10.0,10.0,3.5,6.5,,Aportado sin referencia de catálogo,,"Clasificación de SilkSurface como lisa, pendiente de confirmar"
+Motiva,Round SilkSurface,RSF-235,redonda,lisa,SilkSurface,Full,235,10.0,10.0,4.1,7.1,,Aportado sin referencia de catálogo,,"Clasificación de SilkSurface como lisa, pendiente de confirmar"
+Motiva,Round SilkSurface,RSC-280,redonda,lisa,SilkSurface,Corsé,280,10.0,10.0,4.8,7.7,,Aportado sin referencia de catálogo,,"Clasificación de SilkSurface como lisa, pendiente de confirmar"
+Motiva,Round SilkSurface,RSM-170,redonda,lisa,SilkSurface,Mini,170,10.25,10.25,2.5,5.9,,Aportado sin referencia de catálogo,,"Clasificación de SilkSurface como lisa, pendiente de confirmar"
+Motiva,Round SilkSurface,RSD-215,redonda,lisa,SilkSurface,Demi,215,10.25,10.25,3.5,6.6,,Aportado sin referencia de catálogo,,"Clasificación de SilkSurface como lisa, pendiente de confirmar"
+Motiva,Round SilkSurface,RSF-255,redonda,lisa,SilkSurface,Full,255,10.25,10.25,4.2,7.2,,Aportado sin referencia de catálogo,,"Clasificación de SilkSurface como lisa, pendiente de confirmar"
+Motiva,Round SilkSurface,RSC-300,redonda,lisa,SilkSurface,Corsé,300,10.25,10.25,4.9,7.9,,Aportado sin referencia de catálogo,,"Clasificación de SilkSurface como lisa, pendiente de confirmar"
+Motiva,Round SilkSurface,RSM-185,redonda,lisa,SilkSurface,Mini,185,10.5,10.5,2.6,6.1,,Aportado sin referencia de catálogo,,"Clasificación de SilkSurface como lisa, pendiente de confirmar"
+Motiva,Round SilkSurface,RSD-230,redonda,lisa,SilkSurface,Demi,230,10.5,10.5,3.6,6.8,,Aportado sin referencia de catálogo,,"Clasificación de SilkSurface como lisa, pendiente de confirmar"
+Motiva,Round SilkSurface,RSF-275,redonda,lisa,SilkSurface,Full,275,10.5,10.5,4.3,7.4,,Aportado sin referencia de catálogo,,"Clasificación de SilkSurface como lisa, pendiente de confirmar"
+Motiva,Round SilkSurface,RSC-325,redonda,lisa,SilkSurface,Corsé,325,10.5,10.5,5.1,8.2,,Aportado sin referencia de catálogo,,"Clasificación de SilkSurface como lisa, pendiente de confirmar"
+Motiva,Round SilkSurface,RSM-205,redonda,lisa,SilkSurface,Mini,205,10.75,10.75,2.6,6.2,,Aportado sin referencia de catálogo,,"Clasificación de SilkSurface como lisa, pendiente de confirmar"
+Motiva,Round SilkSurface,RSD-245,redonda,lisa,SilkSurface,Demi,245,10.75,10.75,3.7,7.0,,Aportado sin referencia de catálogo,,"Clasificación de SilkSurface como lisa, pendiente de confirmar"
+Motiva,Round SilkSurface,RSF-295,redonda,lisa,SilkSurface,Full,295,10.75,10.75,4.4,7.6,,Aportado sin referencia de catálogo,,"Clasificación de SilkSurface como lisa, pendiente de confirmar"
+Motiva,Round SilkSurface,RSC-350,redonda,lisa,SilkSurface,Corsé,350,10.75,10.75,5.2,8.3,,Aportado sin referencia de catálogo,,"Clasificación de SilkSurface como lisa, pendiente de confirmar"
+Motiva,Round SilkSurface,RSM-220,redonda,lisa,SilkSurface,Mini,220,11.0,11.0,2.7,6.4,,Aportado sin referencia de catálogo,,"Clasificación de SilkSurface como lisa, pendiente de confirmar"
+Motiva,Round SilkSurface,RSD-265,redonda,lisa,SilkSurface,Demi,265,11.0,11.0,3.8,7.1,,Aportado sin referencia de catálogo,,"Clasificación de SilkSurface como lisa, pendiente de confirmar"
+Motiva,Round SilkSurface,RSF-315,redonda,lisa,SilkSurface,Full,315,11.0,11.0,4.5,7.7,,Aportado sin referencia de catálogo,,"Clasificación de SilkSurface como lisa, pendiente de confirmar"
+Motiva,Round SilkSurface,RSC-380,redonda,lisa,SilkSurface,Corsé,380,11.0,11.0,5.4,8.6,,Aportado sin referencia de catálogo,,"Clasificación de SilkSurface como lisa, pendiente de confirmar"
+Motiva,Round SilkSurface,RSM-230,redonda,lisa,SilkSurface,Mini,230,11.25,11.25,2.7,6.5,,Aportado sin referencia de catálogo,,"Clasificación de SilkSurface como lisa, pendiente de confirmar"
+Motiva,Round SilkSurface,RSD-285,redonda,lisa,SilkSurface,Demi,285,11.25,11.25,3.8,7.2,,Aportado sin referencia de catálogo,,"Clasificación de SilkSurface como lisa, pendiente de confirmar"
+Motiva,Round SilkSurface,RSF-335,redonda,lisa,SilkSurface,Full,335,11.25,11.25,4.6,7.9,,Aportado sin referencia de catálogo,,"Clasificación de SilkSurface como lisa, pendiente de confirmar"
+Motiva,Round SilkSurface,RSC-410,redonda,lisa,SilkSurface,Corsé,410,11.25,11.25,5.5,8.7,,Aportado sin referencia de catálogo,,"Clasificación de SilkSurface como lisa, pendiente de confirmar"
+Motiva,Round SilkSurface,RSM-245,redonda,lisa,SilkSurface,Mini,245,11.5,11.5,2.8,6.6,,Aportado sin referencia de catálogo,,"Clasificación de SilkSurface como lisa, pendiente de confirmar"
+Motiva,Round SilkSurface,RSD-300,redonda,lisa,SilkSurface,Demi,300,11.5,11.5,3.9,7.4,,Aportado sin referencia de catálogo,,"Clasificación de SilkSurface como lisa, pendiente de confirmar"
+Motiva,Round SilkSurface,RSF-355,redonda,lisa,SilkSurface,Full,355,11.5,11.5,4.7,8.1,,Aportado sin referencia de catálogo,,"Clasificación de SilkSurface como lisa, pendiente de confirmar"
+Motiva,Round SilkSurface,RSC-440,redonda,lisa,SilkSurface,Corsé,440,11.5,11.5,5.7,9.0,,Aportado sin referencia de catálogo,,"Clasificación de SilkSurface como lisa, pendiente de confirmar"
+Motiva,Round SilkSurface,RSM-260,redonda,lisa,SilkSurface,Mini,260,11.75,11.75,2.8,6.7,,Aportado sin referencia de catálogo,,"Clasificación de SilkSurface como lisa, pendiente de confirmar"
+Motiva,Round SilkSurface,RSD-320,redonda,lisa,SilkSurface,Demi,320,11.75,11.75,3.9,7.5,,Aportado sin referencia de catálogo,,"Clasificación de SilkSurface como lisa, pendiente de confirmar"
+Motiva,Round SilkSurface,RSF-375,redonda,lisa,SilkSurface,Full,375,11.75,11.75,4.8,8.2,,Aportado sin referencia de catálogo,,"Clasificación de SilkSurface como lisa, pendiente de confirmar"
+Motiva,Round SilkSurface,RSC-475,redonda,lisa,SilkSurface,Corsé,475,11.75,11.75,5.8,9.2,,Aportado sin referencia de catálogo,,"Clasificación de SilkSurface como lisa, pendiente de confirmar"
+Motiva,Round SilkSurface,RSM-275,redonda,lisa,SilkSurface,Mini,275,12.0,12.0,2.9,6.9,,Aportado sin referencia de catálogo,,"Clasificación de SilkSurface como lisa, pendiente de confirmar"
+Motiva,Round SilkSurface,RSD-340,redonda,lisa,SilkSurface,Demi,340,12.0,12.0,4.0,7.7,,Aportado sin referencia de catálogo,,"Clasificación de SilkSurface como lisa, pendiente de confirmar"
+Motiva,Round SilkSurface,RSF-400,redonda,lisa,SilkSurface,Full,400,12.0,12.0,4.9,8.4,,Aportado sin referencia de catálogo,,"Clasificación de SilkSurface como lisa, pendiente de confirmar"
+Motiva,Round SilkSurface,RSC-510,redonda,lisa,SilkSurface,Corsé,510,12.0,12.0,6.0,9.5,,Aportado sin referencia de catálogo,,"Clasificación de SilkSurface como lisa, pendiente de confirmar"
+Motiva,Round SilkSurface,RSM-290,redonda,lisa,SilkSurface,Mini,290,12.25,12.25,2.9,7.0,,Aportado sin referencia de catálogo,,"Clasificación de SilkSurface como lisa, pendiente de confirmar"
+Motiva,Round SilkSurface,RSD-360,redonda,lisa,SilkSurface,Demi,360,12.25,12.25,4.0,7.8,,Aportado sin referencia de catálogo,,"Clasificación de SilkSurface como lisa, pendiente de confirmar"
+Motiva,Round SilkSurface,RSF-425,redonda,lisa,SilkSurface,Full,425,12.25,12.25,5.0,8.6,,Aportado sin referencia de catálogo,,"Clasificación de SilkSurface como lisa, pendiente de confirmar"
+Motiva,Round SilkSurface,RSC-550,redonda,lisa,SilkSurface,Corsé,550,12.25,12.25,6.1,9.6,,Aportado sin referencia de catálogo,,"Clasificación de SilkSurface como lisa, pendiente de confirmar"
+Motiva,Round SilkSurface,RSM-310,redonda,lisa,SilkSurface,Mini,310,12.5,12.5,3.0,7.2,,Aportado sin referencia de catálogo,,"Clasificación de SilkSurface como lisa, pendiente de confirmar"
+Motiva,Round SilkSurface,RSD-380,redonda,lisa,SilkSurface,Demi,380,12.5,12.5,4.1,7.9,,Aportado sin referencia de catálogo,,"Clasificación de SilkSurface como lisa, pendiente de confirmar"
+Motiva,Round SilkSurface,RSF-450,redonda,lisa,SilkSurface,Full,450,12.5,12.5,5.1,8.8,,Aportado sin referencia de catálogo,,"Clasificación de SilkSurface como lisa, pendiente de confirmar"
+Motiva,Round SilkSurface,RSC-590,redonda,lisa,SilkSurface,Corsé,590,12.5,12.5,6.3,9.9,,Aportado sin referencia de catálogo,,"Clasificación de SilkSurface como lisa, pendiente de confirmar"
+Motiva,Round SilkSurface,RSM-360,redonda,lisa,SilkSurface,Mini,360,13.0,13.0,3.1,7.5,,Aportado sin referencia de catálogo,,"Clasificación de SilkSurface como lisa, pendiente de confirmar"
+Motiva,Round SilkSurface,RSD-425,redonda,lisa,SilkSurface,Demi,425,13.0,13.0,4.3,8.3,,Aportado sin referencia de catálogo,,"Clasificación de SilkSurface como lisa, pendiente de confirmar"
+Motiva,Round SilkSurface,RSF-500,redonda,lisa,SilkSurface,Full,500,13.0,13.0,5.3,9.1,,Aportado sin referencia de catálogo,,"Clasificación de SilkSurface como lisa, pendiente de confirmar"
+Motiva,Round SilkSurface,RSC-650,redonda,lisa,SilkSurface,Corsé,650,13.0,13.0,6.6,10.3,,Aportado sin referencia de catálogo,,"Clasificación de SilkSurface como lisa, pendiente de confirmar"
+Motiva,Round SilkSurface,RSM-400,redonda,lisa,SilkSurface,Mini,400,13.5,13.5,3.2,7.7,,Aportado sin referencia de catálogo,,"Clasificación de SilkSurface como lisa, pendiente de confirmar"
+Motiva,Round SilkSurface,RSD-475,redonda,lisa,SilkSurface,Demi,475,13.5,13.5,4.4,8.5,,Aportado sin referencia de catálogo,,"Clasificación de SilkSurface como lisa, pendiente de confirmar"
+Motiva,Round SilkSurface,RSF-550,redonda,lisa,SilkSurface,Full,550,13.5,13.5,5.5,9.5,,Aportado sin referencia de catálogo,,"Clasificación de SilkSurface como lisa, pendiente de confirmar"
+Motiva,Round SilkSurface,RSC-725,redonda,lisa,SilkSurface,Corsé,725,13.5,13.5,6.9,10.8,,Aportado sin referencia de catálogo,,"Clasificación de SilkSurface como lisa, pendiente de confirmar"
+Motiva,Round SilkSurface,RSM-430,redonda,lisa,SilkSurface,Mini,430,14.0,14.0,3.3,8.0,,Aportado sin referencia de catálogo,,"Clasificación de SilkSurface como lisa, pendiente de confirmar"
+Motiva,Round SilkSurface,RSD-525,redonda,lisa,SilkSurface,Demi,525,14.0,14.0,4.5,8.8,,Aportado sin referencia de catálogo,,"Clasificación de SilkSurface como lisa, pendiente de confirmar"
+Motiva,Round SilkSurface,RSF-625,redonda,lisa,SilkSurface,Full,625,14.0,14.0,5.7,9.8,,Aportado sin referencia de catálogo,,"Clasificación de SilkSurface como lisa, pendiente de confirmar"
+Motiva,Round SilkSurface,RSC-825,redonda,lisa,SilkSurface,Corsé,825,14.0,14.0,7.2,11.2,,Aportado sin referencia de catálogo,,"Clasificación de SilkSurface como lisa, pendiente de confirmar"
+Motiva,Round SilkSurface,RSM-475,redonda,lisa,SilkSurface,Mini,475,14.5,14.5,3.4,8.3,,Aportado sin referencia de catálogo,,"Clasificación de SilkSurface como lisa, pendiente de confirmar"
+Motiva,Round SilkSurface,RSD-575,redonda,lisa,SilkSurface,Demi,575,14.5,14.5,4.6,9.1,,Aportado sin referencia de catálogo,,"Clasificación de SilkSurface como lisa, pendiente de confirmar"
+Motiva,Round SilkSurface,RSF-700,redonda,lisa,SilkSurface,Full,700,14.5,14.5,5.9,10.2,,Aportado sin referencia de catálogo,,"Clasificación de SilkSurface como lisa, pendiente de confirmar"
+Motiva,Round SilkSurface,RSC-925,redonda,lisa,SilkSurface,Corsé,925,14.5,14.5,7.5,11.7,,Aportado sin referencia de catálogo,,"Clasificación de SilkSurface como lisa, pendiente de confirmar"

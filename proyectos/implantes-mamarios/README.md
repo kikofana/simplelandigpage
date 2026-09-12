@@ -6,18 +6,34 @@ entre 10,5 y 11,5, ordenado por cercanía.
 
 ## Estado
 
-| | |
-|---|---|
-| Buscador, filtros, esquemas, validación | ✅ funcionando |
-| Datos reales de Mentor / Motiva / Silimed | ⛔ **pendientes** |
+**171 implantes cargados**, todos redondos:
 
-Ahora mismo solo hay **12 filas de demostración con medidas inventadas**
-(`marca = DEMO`), para poder probar la interfaz. La app muestra un aviso
-mientras estén ahí. No sirve para planificar nada hasta cargar los catálogos.
+| Marca | Línea | Filas | Bases |
+|---|---|---|---|
+| Mentor | MemoryGel Xtra (SILTEX y liso) | 53 | 8,4 – 15,7 cm |
+| Motiva | Round SilkSurface (Mini/Demi/Full/Corsé) | 76 | 8,5 – 14,5 cm |
+| Silimed | Redondos (LO/MD/HI/XH) | 42 | 9,2 – 12,5 cm |
 
-Por qué están pendientes: la red de la sesión donde se montó esto bloquea la
-descarga de los PDF de los fabricantes, y las medidas de implantes no se
-reconstruyen de memoria. Ver `PLAN.md` → "Qué hace falta".
+Una consulta de base 11 ±0,5 devuelve 42 opciones.
+
+### Lo que falta en estos datos
+
+Nada de esto impide usarlo, pero conviene tenerlo presente:
+
+1. **Ninguna fila tiene catálogo ni página.** No se puede contrastar una medida
+   contra su origen. La app lo avisa en un banner permanente hasta que se
+   rellene.
+2. **Silimed no trae superficie ni línea**, quedan como `sin especificar`.
+3. **SilkSurface está clasificada como `lisa`** en la taxonomía normalizada;
+   el término literal se conserva aparte. Pendiente de confirmar.
+4. **Dos proyecciones de Mentor no son monótonas** y conviene verificarlas
+   contra el PDF: `THPX-405` (5,9) → `THPX-425` (5,8), y `THPX-455` (6,0) →
+   `THPX-470` (5,9). Más volumen con menos proyección. Están transcritas
+   fielmente del origen, pero es el patrón típico de una celda mal copiada.
+5. **La tabla de Silimed parece truncada**: termina en `505 HI` (12,5 cm) sin
+   las MD/LO de esa base.
+6. **Solo hay redondos.** Faltan los anatómicos de las tres marcas, y de Motiva
+   solo está Round SilkSurface (falta Ergonomix).
 
 ## Uso
 
@@ -27,8 +43,21 @@ Ningún dato sale del ordenador: no hay backend.
 
 ## Cargar o corregir datos
 
+El CSV lo genera `datos/fuentes/importar.py`, que guarda la transcripción de
+los catálogos y cómo se mapearon las columnas de cada fabricante. **Ese script
+sobrescribe el CSV entero**, así que para un catálogo nuevo o una corrección
+que deba perdurar, el sitio es el script:
+
+```bash
+python3 datos/fuentes/importar.py   # regenera datos/implantes.csv
+python3 construir.py                # valida y regenera web/datos.js
+```
+
+Para un retoque puntual también vale editar el CSV a mano:
+
 1. Edita `datos/implantes.csv` (se abre en Excel o en cualquier editor).
-   Los campos están documentados en `datos/esquema.md`.
+   Los campos están documentados en `datos/esquema.md`. Recuerda que el
+   siguiente `importar.py` se lo llevará por delante.
 2. Regenera:
 
    ```bash
@@ -49,9 +78,11 @@ Sin dependencias: solo Python 3 de la biblioteca estándar.
 
 ```
 datos/
-  implantes.csv    fuente de verdad, editable a mano
+  implantes.csv    GENERADO por fuentes/importar.py
   plantilla.csv    CSV vacío con las cabeceras
   esquema.md       qué significa cada columna y qué se valida
+  fuentes/
+    importar.py    transcripción de los catálogos -> implantes.csv
 web/
   index.html       la app
   app.js           búsqueda + generación de los esquemas SVG

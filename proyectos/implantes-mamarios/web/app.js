@@ -136,7 +136,9 @@ function tarjeta(imp, objetivo) {
     <div class="etiquetas">
       <span class="etiqueta perfil">${imp.perfilMarca}</span>
       <span class="etiqueta">${cap(imp.forma)}</span>
-      <span class="etiqueta">${cap(imp.superficie)}</span>
+      <span class="etiqueta">${imp.superficieMarca
+        ? `${imp.superficieMarca} · ${imp.superficie}`
+        : cap(imp.superficie)}</span>
       ${imp.gel ? `<span class="etiqueta">${imp.gel}</span>` : ""}
     </div>
 
@@ -233,6 +235,33 @@ function leerEstado() {
   }
 }
 
+// --- Aviso de calidad de los datos ------------------------------------------
+// El banner lo decide el propio dataset, no una constante: mientras falte
+// trazabilidad o haya filas de prueba, se ve. Cuando los datos estén completos
+// desaparece solo.
+
+function mostrarAvisoDatos() {
+  const total = IMPLANTES.length;
+  const demo = IMPLANTES.filter((i) => i.marca.toUpperCase() === "DEMO").length;
+  const sinPagina = IMPLANTES.filter((i) => !i.pagina).length;
+  const partes = [];
+
+  if (demo) {
+    partes.push(`<strong>${demo} de ${total} filas son ficticias</strong>
+      (marca DEMO) y no corresponden a ningún producto real.`);
+  }
+  if (sinPagina) {
+    partes.push(`${sinPagina === total ? "Los datos no tienen" : `${sinPagina} filas no tienen`}
+      referencia de catálogo ni página, así que una medida no se puede
+      contrastar contra su origen.`);
+  }
+
+  if (!partes.length) return;
+  el.avisoDemoTexto.innerHTML =
+    partes.join(" ") + " Contrasta cada medida antes de usarla en planificación.";
+  el.avisoDemo.hidden = false;
+}
+
 // --- Arranque ---------------------------------------------------------------
 
 function iniciar() {
@@ -258,12 +287,7 @@ function iniciar() {
     el.orden.value = previo.orden ?? "cercania";
   }
 
-  const nDemo = IMPLANTES.filter((i) => i.marca.toUpperCase() === "DEMO").length;
-  if (nDemo) {
-    el.avisoDemoTexto.textContent =
-      `${nDemo} de ${IMPLANTES.length} filas son de prueba.`;
-    el.avisoDemo.hidden = false;
-  }
+  mostrarAvisoDatos();
 
   document.querySelector("main").addEventListener("input", buscar);
   buscar();

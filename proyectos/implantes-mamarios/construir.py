@@ -22,10 +22,15 @@ OBLIGATORIAS = [
     "marca", "linea", "referencia", "forma", "superficie", "perfil_marca",
     "volumen_cc", "base_cm", "altura_cm", "proyeccion_cm", "catalogo",
 ]
-OPCIONALES = ["arco_cm", "gel", "pagina", "notas"]
+OPCIONALES = ["superficie_marca", "arco_cm", "gel", "pagina", "notas"]
 
 FORMAS = {"redonda", "anatomica"}
-SUPERFICIES = {"lisa", "texturizada", "microtexturizada", "nanotexturizada"}
+# Taxonomía normalizada, para poder filtrar liso/texturizado entre marcas.
+# El término comercial literal (SILTEX, SilkSurface, …) va en superficie_marca.
+SUPERFICIES = {
+    "lisa", "texturizada", "microtexturizada", "nanotexturizada",
+    "sin especificar",
+}
 NUMERICAS = ["volumen_cc", "base_cm", "altura_cm", "proyeccion_cm"]
 
 # Rangos plausibles: fuera de aquí no es error, pero casi siempre es una
@@ -34,7 +39,7 @@ RANGOS = {
     "base_cm": (6.0, 18.0),
     "altura_cm": (6.0, 18.0),
     "proyeccion_cm": (1.0, 8.0),
-    "volumen_cc": (80.0, 900.0),
+    "volumen_cc": (80.0, 1000.0),
 }
 
 
@@ -121,9 +126,6 @@ def validar(filas, cabeceras):
             )
 
         arco = numero(fila.get("arco_cm")) if str(fila.get("arco_cm", "")).strip() else None
-        if arco is None:
-            avisos.append(f"{ref}: sin arco vertical")
-
         pagina = str(fila.get("pagina", "")).strip()
 
         limpias.append({
@@ -132,6 +134,7 @@ def validar(filas, cabeceras):
             "referencia": str(fila["referencia"]).strip(),
             "forma": forma,
             "superficie": superficie,
+            "superficieMarca": str(fila.get("superficie_marca", "")).strip() or None,
             "perfilMarca": str(fila["perfil_marca"]).strip(),
             "volumenCc": valores["volumen_cc"],
             "baseCm": valores["base_cm"],
@@ -149,6 +152,24 @@ def validar(filas, cabeceras):
         avisos.append(
             f"Hay {n_demo} filas de demostración (marca = DEMO) con medidas FICTICIAS. "
             "Bórralas en cuanto cargues los catálogos reales."
+        )
+
+    # Estos tres se agrupan: por fila serían cientos de líneas idénticas.
+    sin_arco = [f for f in limpias if f["arcoCm"] is None]
+    if sin_arco:
+        marcas = ", ".join(sorted({f"{f['marca']} {f['linea']}" for f in sin_arco}))
+        avisos.append(f"{len(sin_arco)} filas sin arco vertical ({marcas})")
+
+    sin_superficie = [f for f in limpias if f["superficie"] == "sin especificar"]
+    if sin_superficie:
+        marcas = ", ".join(sorted({f["marca"] for f in sin_superficie}))
+        avisos.append(f"{len(sin_superficie)} filas sin superficie identificada ({marcas})")
+
+    sin_pagina = [f for f in limpias if not f["pagina"]]
+    if sin_pagina:
+        avisos.append(
+            f"{len(sin_pagina)} filas sin página de catálogo: no se puede "
+            "contrastar la medida contra el origen"
         )
 
     return errores, avisos, limpias

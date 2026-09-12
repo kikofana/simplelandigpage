@@ -69,9 +69,17 @@ sabes si una fila está vigente.
 Esquema de datos, validador, buscador con tolerancia ±, esquemas SVG, interfaz.
 Funciona de punta a punta con datos de demostración ficticios.
 
-### Fase 2 — Datos reales ⛔ bloqueado
-Volcar Mentor, Motiva y Silimed desde los catálogos. **Bloqueado: la red de
-esta sesión no deja descargar los PDF.** Ver "Qué hace falta" abajo.
+### Fase 2 — Datos reales 🟡 parcial
+171 implantes **redondos** cargados de Mentor, Motiva y Silimed, transcritos en
+`datos/fuentes/importar.py`.
+
+Queda: los **anatómicos** de las tres marcas, y de Motiva la línea **Ergonomix**
+(solo está Round SilkSurface). Y completar la trazabilidad — ninguna fila tiene
+catálogo ni página. Ver README → "Lo que falta en estos datos".
+
+Nota sobre las anatómicas: la interfaz ya las contempla (el esquema lateral
+coloca la máxima proyección en el polo inferior y `altura` se separa de `base`),
+pero hasta ahora no ha corrido ninguna fila anatómica de verdad por ella.
 
 ### Fase 3 — Refinamiento
 Con datos reales dentro y tras usarlo en consulta:
@@ -84,17 +92,31 @@ Con datos reales dentro y tras usarlo en consulta:
 Salir a repo propio. Se hace cuando la Fase 2 esté cerrada, no antes: mover una
 carpeta es trivial, mover una carpeta a medias no.
 
-## Qué hace falta para desbloquear la Fase 2
+## Cómo se cargaron las tres marcas
 
-Los PDF de catálogo de Mentor, Motiva y Silimed, subidos al chat o al repo. Con
-ellos puedo extraer las tablas, validar y cargar.
+Las tablas llegaron pegadas como texto. El mapeo de columnas de cada fabricante
+queda documentado en `datos/fuentes/importar.py`; el caso que requirió
+comprobación fue Motiva, cuyas columnas venían sin etiquetar fila a fila.
 
-Dos avisos sobre la carga:
+El orden (base / proyección / arco / volumen) se dedujo cruzando dos filas
+contra Silimed a igual base y proyección, donde el arco tenía que salir casi
+idéntico:
 
-1. **La versión importa.** Necesito saber de qué año es cada catálogo. Las
-   referencias y perfiles cambian entre ediciones.
-2. **Toda fila cargada hay que contrastarla contra el PDF antes de usarla en
-   consulta.** La extracción de tablas de PDF falla de formas silenciosas
-   (columnas desplazadas, comas decimales perdidas). `construir.py` detecta
-   incoherencias groseras, pero no puede saber si un 11,5 era en realidad 11,0.
-   La revisión de la primera carga es manual y no me la puedo saltar por ti.
+```
+Motiva  RSC-180   base 8.5  proy 4.0 -> 6.5      Silimed  190 MD   9.2 / 4.0 -> 6.7
+Motiva  RSF-315   base 11   proy 4.5 -> 7.7      Silimed  305 MD  11.0 / 4.6 -> 7.8
+```
+
+Ambas cuadran, y después se confirmó con el origen.
+
+## Lo que sigue haciendo falta
+
+- Los **anatómicos** de las tres marcas y la línea **Ergonomix** de Motiva.
+- **Catálogo, año y página de cada fila.** Sin eso no se puede contrastar una
+  medida contra su origen, que es justo lo que salva de un error de
+  transcripción. La app lo avisa hasta que se rellene.
+- Verificar los dos saltos no monótonos de Mentor THPX (ver README).
+
+Y un aviso que sigue vigente: **toda fila hay que contrastarla contra el
+catálogo antes de usarla en consulta**. `construir.py` detecta incoherencias
+groseras, pero no puede saber si un 11,5 era en realidad 11,0.
