@@ -84,15 +84,21 @@ function vistaLateral({ alturaCm, proyeccionCm, forma }) {
   const yTop = PAD_SUP;
   const yBot = yTop + alto;
 
-  // En anatómica el punto de máxima proyección cae en el polo inferior.
-  const apexY = yTop + alto * (forma === "anatomica" ? 0.68 : 0.5);
+  // En anatómica el punto de máxima proyección cae en el polo inferior y el
+  // polo superior se afina; en redonda el perfil es una cúpula simétrica.
+  const anatomica = forma === "anatomica";
+  const apexY = yTop + alto * (anatomica ? 0.68 : 0.5);
   const apexX = x0 + proy;
   const dArriba = (apexY - yTop) * 0.78;
   const dAbajo = (yBot - apexY) * 0.78;
+  // Cuánto se separa la curva de la pared torácica al arrancar: si el polo
+  // superior sale recto hacia fuera, la anatómica se ve como una cúpula.
+  const salidaSup = proy * (anatomica ? 0.30 : 0.72);
+  const salidaInf = proy * (anatomica ? 0.50 : 0.62);
 
   const perfil = `M${x0},${yTop}
-    C${x0 + proy * 0.72},${yTop} ${apexX},${apexY - dArriba} ${apexX},${apexY}
-    C${apexX},${apexY + dAbajo} ${x0 + proy * 0.62},${yBot} ${x0},${yBot} Z`;
+    C${x0 + salidaSup},${yTop} ${apexX},${apexY - dArriba} ${apexX},${apexY}
+    C${apexX},${apexY + dAbajo} ${x0 + salidaInf},${yBot} ${x0},${yBot} Z`;
 
   return `<svg viewBox="0 0 ${w} ${h}" width="${w}" height="${h}" role="img"
       aria-label="Vista lateral: proyección ${num(proyeccionCm)} centímetros">

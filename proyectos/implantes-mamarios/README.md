@@ -6,34 +6,53 @@ entre 10,5 y 11,5, ordenado por cercanía.
 
 ## Estado
 
-**171 implantes cargados**, todos redondos:
+**292 implantes cargados**: 171 redondos y 121 anatómicos.
 
-| Marca | Línea | Filas | Bases |
-|---|---|---|---|
-| Mentor | MemoryGel Xtra (SILTEX y liso) | 53 | 8,4 – 15,7 cm |
-| Motiva | Round SilkSurface (Mini/Demi/Full/Corsé) | 76 | 8,5 – 14,5 cm |
-| Silimed | Redondos (LO/MD/HI/XH) | 42 | 9,2 – 12,5 cm |
+| Marca | Línea | Forma | Filas | Bases |
+|---|---|---|---|---|
+| Mentor | CPG Cohesive III | anatómica | 121 | 9,0 – 17,0 cm |
+| Mentor | MemoryGel Xtra (SILTEX y liso) | redonda | 53 | 8,4 – 15,7 cm |
+| Motiva | Round SilkSurface (Mini/Demi/Full/Corsé) | redonda | 76 | 8,5 – 14,5 cm |
+| Silimed | Redondos (LO/MD/HI/XH) | redonda | 42 | 9,2 – 12,5 cm |
 
-Una consulta de base 11 ±0,5 devuelve 42 opciones.
+Una consulta de base 11 ±0,5 devuelve 69 opciones: 42 redondas y 27 anatómicas.
+
+Las CPG cubren las nueve combinaciones de altura (Baja/Media/Alta) por
+proyección (Moderada/Moderada Plus/Alta). La denominación lo codifica: dígito 1
+cohesión, 2 altura, 3 proyección — `332` es altura alta con proyección
+moderada plus.
+
+### El arco no es comparable entre marcas
+
+Mentor publica el **Arco del Polo Inferior (API)**: del punto más bajo del polo
+inferior al **punto medio** del implante, e **incluye 0,5 cm de cubierta
+tisular**. Motiva y Silimed publican un arco que no se define igual.
+
+Las tres cifras viven en la columna `arco_cm`, pero **no son la misma
+magnitud**. Compáralas dentro de una marca, no entre marcas. La base, la altura
+y la proyección sí son directamente comparables.
 
 ### Lo que falta en estos datos
 
 Nada de esto impide usarlo, pero conviene tenerlo presente:
 
-1. **Ninguna fila tiene catálogo ni página.** No se puede contrastar una medida
-   contra su origen. La app lo avisa en un banner permanente hasta que se
-   rellene.
+1. **Las 171 filas de redondos no tienen catálogo ni página**, así que no se
+   puede contrastar una medida contra su origen. Las 121 CPG sí: salen del PDF
+   que está en `datos/fuentes/`, con su página. La app avisa mientras queden
+   filas sin trazabilidad.
 2. **Silimed no trae superficie ni línea**, quedan como `sin especificar`.
 3. **SilkSurface está clasificada como `lisa`** en la taxonomía normalizada;
    el término literal se conserva aparte. Pendiente de confirmar.
-4. **Dos proyecciones de Mentor no son monótonas** y conviene verificarlas
-   contra el PDF: `THPX-405` (5,9) → `THPX-425` (5,8), y `THPX-455` (6,0) →
-   `THPX-470` (5,9). Más volumen con menos proyección. Están transcritas
+4. **Las páginas de CPG aportadas no indican la superficie.** Se marcan como
+   SILTEX / texturizada, que es lo que monta la línea, pero no está leído del
+   documento.
+5. **Dos proyecciones de Mentor no son monótonas** y conviene verificarlas
+   contra el catálogo: `THPX-405` (5,9) → `THPX-425` (5,8), y `THPX-455` (6,0)
+   → `THPX-470` (5,9). Más volumen con menos proyección. Están transcritas
    fielmente del origen, pero es el patrón típico de una celda mal copiada.
-5. **La tabla de Silimed parece truncada**: termina en `505 HI` (12,5 cm) sin
+6. **La tabla de Silimed parece truncada**: termina en `505 HI` (12,5 cm) sin
    las MD/LO de esa base.
-6. **Solo hay redondos.** Faltan los anatómicos de las tres marcas, y de Motiva
-   solo está Round SilkSurface (falta Ergonomix).
+7. **De Motiva solo está Round SilkSurface**; falta Ergonomix.
 
 ## Uso
 
@@ -82,7 +101,8 @@ datos/
   plantilla.csv    CSV vacío con las cabeceras
   esquema.md       qué significa cada columna y qué se valida
   fuentes/
-    importar.py    transcripción de los catálogos -> implantes.csv
+    importar.py                transcripción de los catálogos -> implantes.csv
+    mentor-cpg-anatomicas.pdf  catálogo original de las CPG
 web/
   index.html       la app
   app.js           búsqueda + generación de los esquemas SVG

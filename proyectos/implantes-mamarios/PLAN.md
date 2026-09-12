@@ -69,17 +69,14 @@ sabes si una fila está vigente.
 Esquema de datos, validador, buscador con tolerancia ±, esquemas SVG, interfaz.
 Funciona de punta a punta con datos de demostración ficticios.
 
-### Fase 2 — Datos reales 🟡 parcial
-171 implantes **redondos** cargados de Mentor, Motiva y Silimed, transcritos en
+### Fase 2 — Datos reales 🟢 cubre el uso actual
+292 implantes: 171 redondos de Mentor, Motiva y Silimed, y las 121 anatómicas
+CPG de Mentor, que son las únicas anatómicas en uso. Todo transcrito en
 `datos/fuentes/importar.py`.
 
-Queda: los **anatómicos** de las tres marcas, y de Motiva la línea **Ergonomix**
-(solo está Round SilkSurface). Y completar la trazabilidad — ninguna fila tiene
-catálogo ni página. Ver README → "Lo que falta en estos datos".
-
-Nota sobre las anatómicas: la interfaz ya las contempla (el esquema lateral
-coloca la máxima proyección en el polo inferior y `altura` se separa de `base`),
-pero hasta ahora no ha corrido ninguna fila anatómica de verdad por ella.
+Queda, pero no bloquea: la línea **Ergonomix** de Motiva, y completar la
+trazabilidad de los redondos (las CPG ya la tienen). Ver README → "Lo que falta
+en estos datos".
 
 ### Fase 3 — Refinamiento
 Con datos reales dentro y tras usarlo en consulta:
@@ -109,13 +106,19 @@ Motiva  RSF-315   base 11   proy 4.5 -> 7.7      Silimed  305 MD  11.0 / 4.6 -> 
 
 Ambas cuadran, y después se confirmó con el origen.
 
+Las anatómicas CPG salieron de un PDF, con extracción de texto contrastada
+contra las páginas renderizadas. En las páginas con dos tablas el orden visual
+no coincide con el de extracción, así que el emparejamiento tabla-denominación
+se verificó por referencia y por altura.
+
 ## Lo que sigue haciendo falta
 
-- Los **anatómicos** de las tres marcas y la línea **Ergonomix** de Motiva.
-- **Catálogo, año y página de cada fila.** Sin eso no se puede contrastar una
-  medida contra su origen, que es justo lo que salva de un error de
-  transcripción. La app lo avisa hasta que se rellene.
+- La línea **Ergonomix** de Motiva.
+- **Catálogo, año y página de los 171 redondos.** Sin eso no se puede
+  contrastar una medida contra su origen, que es justo lo que salva de un error
+  de transcripción. Las CPG ya lo tienen. La app lo avisa hasta que se rellene.
 - Verificar los dos saltos no monótonos de Mentor THPX (ver README).
+- Confirmar la superficie de las CPG: las páginas aportadas no la indican.
 
 Y un aviso que sigue vigente: **toda fila hay que contrastarla contra el
 catálogo antes de usarla en consulta**. `construir.py` detecta incoherencias

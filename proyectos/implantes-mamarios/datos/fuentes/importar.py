@@ -19,6 +19,25 @@ MENTOR   Las tablas de redondos dan Volumen, Diámetro y Proyección, sin altura
          ni arco. Al ser redondas, altura = diámetro. El arco queda vacío.
          SILTEX = texturizada; las tablas marcadas LISOS = lisa.
 
+MENTOR CPG  Anatómicas, de mentor-cpg-anatomicas.pdf, en esta misma carpeta.
+         La columna `pagina` es la página del PDF, no el folio impreso: los
+         pies de página se solapan al extraer y no son de fiar.
+         Nueve tablas, las nueve combinaciones de altura (Baja /
+         Media / Alta) por proyección (Moderada / Moderada Plus / Alta). La
+         denominación CPG codifica eso: dígito 1 = cohesión, 2 = altura,
+         3 = proyección; así 332 es altura alta con proyección moderada plus.
+
+         En las páginas con dos tablas, el orden visual y el de extracción de
+         texto no coinciden, así que el emparejamiento tabla-denominación se
+         verificó por referencia y por altura: las "Alta" tienen altura mayor
+         que anchura (9,0 -> 9,4) y las "Media" menor (9,0 -> 8,5).
+
+         OJO CON EL ARCO: Mentor publica el "Arco del Polo Inferior (API)",
+         que va del punto más bajo del polo inferior al PUNTO MEDIO del
+         implante e INCLUYE 0,5 cm de cubierta tisular. No es la misma
+         magnitud que el arco de Motiva o Silimed, así que las cifras de arco
+         no son comparables entre estas marcas.
+
 MOTIVA   Las columnas no venían etiquetadas fila a fila. El orden es
          base / proyección / arco / volumen, verificado cruzando dos filas
          contra Silimed a igual base y proyección:
@@ -111,6 +130,97 @@ MENTOR_SMPX = [  # Xtra Redondo LISOS, Perfil Moderado Plus
     (755, 15.7, 5.4, "SMPX-755"),
 ]
 
+# --- Mentor CPG (anatómicas) -----------------------------------------------
+# (código, altura, proyección, página del PDF, filas)
+# Cada fila: (volumen, anchura, altura, proyección, arco polo inferior, referencia)
+CPG_PDF = "Mentor CPG — datos/fuentes/mentor-cpg-anatomicas.pdf"
+CPG_NOTA = ("Arco = API de Mentor: polo inferior al punto medio, incluye "
+            "0,5 cm de cubierta tisular. No comparable con el arco de Motiva o Silimed")
+
+MENTOR_CPG = [
+    ("331", "Altura Alta", "Proyección Moderada", 2, [
+        (125, 9.0, 9.2, 3.2, 7.3, "334-0903"), (150, 9.5, 9.7, 3.3, 7.7, "334-0953"),
+        (175, 10.0, 10.2, 3.4, 8.1, "334-1003"), (200, 10.5, 10.7, 3.5, 8.4, "334-1053"),
+        (230, 11.0, 11.3, 3.6, 8.8, "334-1103"), (265, 11.5, 11.8, 3.7, 9.1, "334-1153"),
+        (300, 12.0, 12.3, 3.9, 9.5, "334-1203"), (340, 12.5, 12.8, 4.0, 9.9, "334-1253"),
+        (380, 13.0, 13.3, 4.1, 10.2, "334-1303"), (425, 13.5, 13.8, 4.3, 10.6, "334-1353"),
+        (475, 14.0, 14.3, 4.5, 11.0, "334-1403"), (530, 14.5, 14.8, 4.6, 11.3, "334-1453"),
+        (585, 15.0, 15.3, 4.8, 11.7, "334-1503"), (645, 15.5, 15.9, 5.0, 12.1, "334-1553"),
+    ]),
+    ("321", "Altura Media", "Proyección Moderada", 2, [
+        (120, 9.0, 8.5, 3.3, 7.0, "354-0908"), (135, 9.5, 8.9, 3.5, 7.3, "354-0958"),
+        (155, 10.0, 9.4, 3.7, 7.7, "354-1008"), (180, 10.5, 9.9, 3.8, 8.0, "354-1058"),
+        (215, 11.0, 10.3, 3.9, 8.2, "354-1108"), (245, 11.5, 10.8, 4.0, 8.6, "354-1158"),
+        (280, 12.0, 11.3, 4.2, 8.9, "354-1208"), (315, 12.5, 11.8, 4.4, 9.2, "354-1258"),
+        (355, 13.0, 12.2, 4.6, 9.6, "354-1308"), (395, 13.5, 12.7, 4.7, 9.9, "354-1358"),
+        (440, 14.0, 13.2, 4.9, 10.3, "354-1408"), (480, 14.5, 13.3, 5.0, 10.5, "354-1458"),
+        (530, 15.0, 14.1, 5.2, 10.9, "354-1508"), (640, 16.0, 15.0, 5.6, 11.5, "354-1608"),
+        (775, 17.0, 16.0, 5.9, 12.2, "354-1708"),
+    ]),
+    ("311", "Altura Baja", "Proyección Moderada", 3, [
+        (120, 9.5, 8.5, 3.2, 6.9, "334-0951"), (140, 10.0, 8.9, 3.4, 7.2, "334-1001"),
+        (160, 10.5, 9.4, 3.6, 7.5, "334-1051"), (180, 11.0, 9.8, 3.7, 7.9, "334-1101"),
+        (210, 11.5, 10.3, 3.9, 8.2, "334-1151"), (235, 12.0, 10.7, 4.1, 8.5, "334-1201"),
+        (270, 12.5, 11.2, 4.2, 8.8, "334-1251"), (300, 13.0, 11.6, 4.4, 9.2, "334-1301"),
+        (335, 13.5, 12.0, 4.6, 9.5, "334-1351"), (375, 14.0, 12.5, 4.7, 9.8, "334-1401"),
+        (415, 14.5, 12.9, 4.9, 10.1, "334-1451"), (460, 15.0, 13.4, 5.1, 10.5, "334-1501"),
+        (510, 15.5, 13.8, 5.2, 10.8, "334-1551"), (560, 16.0, 14.3, 5.4, 11.1, "334-1601"),
+        (615, 16.5, 14.7, 5.6, 11.4, "334-1651"),
+    ]),
+    ("332", "Altura Alta", "Proyección Moderada Plus", 4, [
+        (145, 9.0, 9.4, 3.8, 8.1, "334-0909"), (175, 9.5, 9.9, 4.0, 8.5, "334-0959"),
+        (205, 10.0, 10.4, 4.2, 8.9, "334-1009"), (235, 10.5, 10.9, 4.4, 9.3, "334-1059"),
+        (270, 11.0, 11.5, 4.7, 9.7, "334-1109"), (305, 11.5, 12.0, 4.9, 10.1, "334-1159"),
+        (350, 12.0, 12.5, 5.1, 10.5, "334-1209"), (395, 12.5, 13.0, 5.3, 10.9, "334-1259"),
+        (445, 13.0, 13.5, 5.5, 11.3, "334-1309"), (495, 13.5, 14.1, 5.7, 11.7, "334-1359"),
+        (555, 14.0, 14.6, 5.9, 12.1, "334-1409"), (615, 14.5, 15.1, 6.1, 12.6, "334-1459"),
+        (680, 15.0, 15.6, 6.3, 13.0, "334-1509"),
+    ]),
+    ("322", "Altura Media", "Proyección Moderada Plus", 4, [
+        (140, 9.0, 8.5, 3.8, 7.6, "334-0905"), (165, 9.5, 8.9, 4.0, 8.0, "334-0955"),
+        (195, 10.0, 9.4, 4.2, 8.4, "334-1005"), (225, 10.5, 9.9, 4.4, 8.8, "334-1055"),
+        (255, 11.0, 10.3, 4.7, 9.2, "334-1105"), (295, 11.5, 10.8, 4.9, 9.5, "334-1155"),
+        (330, 12.0, 11.3, 5.1, 9.9, "334-1205"), (375, 12.5, 11.8, 5.3, 10.3, "334-1255"),
+        (420, 13.0, 12.2, 5.5, 10.7, "334-1305"), (475, 13.5, 12.7, 5.7, 11.1, "334-1355"),
+        (525, 14.0, 13.2, 5.9, 11.4, "334-1405"), (585, 14.5, 13.6, 6.1, 11.8, "334-1455"),
+        (650, 15.0, 14.1, 6.3, 12.2, "334-1505"),
+    ]),
+    ("312", "Altura Baja", "Proyección Moderada Plus", 5, [
+        (125, 9.0, 8.0, 3.8, 7.2, "334-0907"), (145, 9.5, 8.4, 4.0, 7.5, "334-0957"),
+        (170, 10.0, 8.8, 4.2, 7.9, "334-1007"), (195, 10.5, 9.3, 4.4, 8.3, "334-1057"),
+        (225, 11.0, 9.7, 4.7, 8.6, "334-1107"), (255, 11.5, 10.2, 4.9, 9.0, "334-1157"),
+        (290, 12.0, 10.6, 5.1, 9.3, "334-1207"), (330, 12.5, 11.1, 5.3, 9.7, "334-1257"),
+        (370, 13.0, 11.5, 5.5, 10.0, "334-1307"), (415, 13.5, 11.9, 5.7, 10.4, "334-1357"),
+        (465, 14.0, 12.4, 5.9, 10.8, "334-1407"), (515, 14.5, 12.8, 6.1, 11.1, "334-1457"),
+        (570, 15.0, 13.3, 6.3, 11.5, "334-1507"), (690, 16.0, 14.2, 6.8, 12.2, "334-1607"),
+    ]),
+    ("323", "Altura Media", "Proyección Alta", 6, [
+        (165, 9.0, 8.5, 4.6, 8.1, "334-0902"), (195, 9.5, 8.9, 4.8, 8.5, "334-0952"),
+        (225, 10.0, 9.4, 5.1, 8.9, "334-1002"), (260, 10.5, 9.9, 5.3, 9.3, "334-1052"),
+        (300, 11.0, 10.3, 5.6, 9.7, "334-1102"), (345, 11.5, 10.8, 5.8, 10.1, "334-1152"),
+        (390, 12.0, 11.3, 6.0, 10.5, "334-1202"), (440, 12.5, 11.8, 6.2, 10.9, "334-1252"),
+        (495, 13.0, 12.2, 6.5, 11.3, "334-1302"), (555, 13.5, 12.7, 6.7, 11.8, "334-1352"),
+        (620, 14.0, 13.2, 6.9, 12.2, "334-1402"), (685, 14.5, 13.6, 7.1, 12.6, "334-1452"),
+    ]),
+    ("333", "Altura Elevada", "Proyección Alta", 6, [
+        (180, 9.0, 9.4, 4.6, 8.4, "334-0904"), (215, 9.5, 9.9, 4.8, 8.8, "334-0954"),
+        (250, 10.0, 10.4, 5.1, 9.3, "334-1004"), (290, 10.5, 10.9, 5.3, 9.7, "334-1054"),
+        (330, 11.0, 11.5, 5.6, 10.1, "334-1104"), (380, 11.5, 12.0, 5.8, 10.5, "334-1154"),
+        (430, 12.0, 12.5, 6.0, 11.0, "334-1204"), (485, 12.5, 13.0, 6.2, 11.4, "334-1254"),
+        (545, 13.0, 13.5, 6.5, 11.8, "334-1304"), (610, 13.5, 14.1, 6.7, 12.2, "334-1354"),
+        (680, 14.0, 14.6, 6.9, 12.7, "334-1404"), (755, 14.5, 15.1, 7.1, 13.1, "334-1454"),
+    ]),
+    ("313", "Altura Baja", "Proyección Alta", 7, [
+        (130, 9.0, 8.1, 4.4, 7.6, "334-0906"), (155, 9.5, 8.6, 4.5, 7.8, "334-0956"),
+        (180, 10.0, 9.0, 4.6, 8.3, "334-1006"), (210, 10.5, 9.5, 4.8, 8.7, "334-1056"),
+        (240, 11.0, 9.9, 4.9, 9.1, "334-1106"), (270, 11.5, 10.3, 5.0, 9.5, "334-1156"),
+        (310, 12.0, 10.8, 5.2, 9.9, "334-1206"), (350, 12.5, 11.2, 5.4, 10.2, "334-1256"),
+        (395, 13.0, 11.7, 5.6, 10.6, "334-1306"), (440, 13.5, 12.2, 5.8, 11.0, "334-1356"),
+        (490, 14.0, 12.6, 6.1, 11.4, "334-1406"), (545, 14.5, 13.1, 6.3, 11.7, "334-1456"),
+        (605, 15.0, 13.5, 6.6, 12.1, "334-1506"),
+    ]),
+]
+
 # --- Motiva ----------------------------------------------------------------
 # base, y luego (referencia, proyección, arco, volumen) para Mini/Demi/Full/Corsé
 MOTIVA = [
@@ -177,6 +287,22 @@ def generar():
                 proyeccion_cm=proy, arco_cm="",
                 catalogo=SIN_CATALOGO,
                 notas="El catálogo de redondos no publica arco vertical",
+            ))
+
+    # Mentor CPG, anatómicas. Las páginas aportadas no indican la superficie;
+    # se marca texturizada/SILTEX, que es lo que monta la línea CPG.
+    for codigo, altura_txt, proy_txt, pagina, tabla in MENTOR_CPG:
+        for vol, anchura, altura, proy, api, ref in tabla:
+            filas.append(fila(
+                marca="Mentor", linea="CPG Cohesive III", referencia=ref,
+                forma="anatomica", superficie="texturizada",
+                superficie_marca="SILTEX",
+                perfil_marca=f"CPG {codigo} · {altura_txt}, {proy_txt}",
+                volumen_cc=vol, base_cm=anchura, altura_cm=altura,
+                proyeccion_cm=proy, arco_cm=api,
+                gel="Cohesive III",
+                catalogo=CPG_PDF, pagina=pagina,
+                notas=CPG_NOTA,
             ))
 
     # Motiva. SilkSurface se normaliza como lisa; el término literal se
