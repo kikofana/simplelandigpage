@@ -13,10 +13,17 @@ const $ = (id) => document.getElementById(id);
 const el = {
   base: $("base"),
   tolerancia: $("tolerancia"),
+  volMin: $("volMin"),
+  volMax: $("volMax"),
+  proyeccion: $("proyeccion"),
   forma: $("forma"),
   superficie: $("superficie"),
   orden: $("orden"),
   listaMarcas: $("listaMarcas"),
+  comparador: $("comparador"),
+  comparadorEsquemas: $("comparadorEsquemas"),
+  comparadorTabla: $("comparadorTabla"),
+  limpiarComparacion: $("limpiarComparacion"),
   resumen: $("resumen"),
   resultados: $("resultados"),
   avisoDemo: $("avisoDemo"),
@@ -25,6 +32,22 @@ const el = {
 
 const unicos = (campo) => [...new Set(IMPLANTES.map((i) => i[campo]))].sort();
 const num = (n, dec = 1) => n.toFixed(dec).replace(".", ",");
+
+// Cada marca nombra la proyección a su manera y los nombres no se traducen
+// entre sí, así que el grupo se calcula del índice (proyección ÷ base), que sí
+// es comparable. Los dos cortes caen en huecos reales del catálogo: entre 0,370
+// y 0,407 no hay ningún implante, y entre 0,445 y 0,456 tampoco. Cada perfil de
+// cada marca cae entero en un grupo, salvo el CPG 313 de Mentor, que se reparte.
+const CORTE_MEDIA = 0.39;
+const CORTE_ALTA = 0.45;
+
+const indiceProyeccion = (imp) => imp.proyeccionCm / imp.baseCm;
+
+function grupoProyeccion(imp) {
+  const i = indiceProyeccion(imp);
+  if (i < CORTE_MEDIA) return "baja";
+  return i < CORTE_ALTA ? "media" : "alta";
+}
 
 // El CSV guarda los valores sin tildes para no complicar la edición a mano;
 // al mostrarlos se acentúan.
@@ -72,6 +95,24 @@ function vistaFrontal({ baseCm, alturaCm }) {
   </svg>`;
 }
 
+// Silueta de perfil. En anatómica el punto de máxima proyección cae en el polo
+// inferior y el superior se afina; en redonda es una cúpula simétrica.
+function perfilPath(x0, yTop, alto, proy, anatomica) {
+  const yBot = yTop + alto;
+  const apexY = yTop + alto * (anatomica ? 0.68 : 0.5);
+  const apexX = x0 + proy;
+  const dArriba = (apexY - yTop) * 0.78;
+  const dAbajo = (yBot - apexY) * 0.78;
+  // Cuánto se separa la curva de la pared torácica al arrancar: si el polo
+  // superior sale recto hacia fuera, la anatómica se ve como una cúpula.
+  const salidaSup = proy * (anatomica ? 0.30 : 0.72);
+  const salidaInf = proy * (anatomica ? 0.50 : 0.62);
+
+  return `M${x0},${yTop}
+    C${x0 + salidaSup},${yTop} ${apexX},${apexY - dArriba} ${apexX},${apexY}
+    C${apexX},${apexY + dAbajo} ${x0 + salidaInf},${yBot} ${x0},${yBot} Z`;
+}
+
 function vistaLateral({ alturaCm, proyeccionCm, forma }) {
   const alto = alturaCm * ESCALA;
   const proy = proyeccionCm * ESCALA;
@@ -83,22 +124,8 @@ function vistaLateral({ alturaCm, proyeccionCm, forma }) {
   const x0 = padIzq;             // pared torácica
   const yTop = PAD_SUP;
   const yBot = yTop + alto;
-
-  // En anatómica el punto de máxima proyección cae en el polo inferior y el
-  // polo superior se afina; en redonda el perfil es una cúpula simétrica.
-  const anatomica = forma === "anatomica";
-  const apexY = yTop + alto * (anatomica ? 0.68 : 0.5);
   const apexX = x0 + proy;
-  const dArriba = (apexY - yTop) * 0.78;
-  const dAbajo = (yBot - apexY) * 0.78;
-  // Cuánto se separa la curva de la pared torácica al arrancar: si el polo
-  // superior sale recto hacia fuera, la anatómica se ve como una cúpula.
-  const salidaSup = proy * (anatomica ? 0.30 : 0.72);
-  const salidaInf = proy * (anatomica ? 0.50 : 0.62);
-
-  const perfil = `M${x0},${yTop}
-    C${x0 + salidaSup},${yTop} ${apexX},${apexY - dArriba} ${apexX},${apexY}
-    C${apexX},${apexY + dAbajo} ${x0 + salidaInf},${yBot} ${x0},${yBot} Z`;
+  const perfil = perfilPath(x0, yTop, alto, proy, forma === "anatomica");
 
   return `<svg viewBox="0 0 ${w} ${h}" width="${w}" height="${h}" role="img"
       aria-label="Vista lateral: proyección ${num(proyeccionCm)} centímetros">
@@ -123,12 +150,18 @@ function tarjeta(imp, objetivo) {
   const delta = imp.baseCm - objetivo;
   const exacta = Math.abs(delta) < 0.001;
   const signo = delta > 0 ? "+" : delta < 0 ? "−" : "";
-  const indice = imp.proyeccionCm / imp.baseCm;
+  const indice = indiceProyeccion(imp);
+
+  const id = idDe(imp);
+  const puesto = seleccion.indexOf(id);
+  const comparada = puesto !== -1;
+  const lleno = seleccion.length >= MAX_COMPARAR && !comparada;
 
   const fuente = [imp.catalogo, imp.pagina ? `p. ${imp.pagina}` : null]
     .filter(Boolean).join(" · ");
 
-  return `<article class="tarjeta${exacta ? " exacta" : ""}">
+  return `<article class="tarjeta${exacta ? " exacta" : ""}${comparada ? " comparada" : ""}"
+      ${comparada ? `style="--comp: var(--comp-${puesto + 1})"` : ""}>
     <div class="tarjeta-cabecera">
       <div>
         <div class="marca-linea">${imp.marca} · ${imp.linea}</div>
@@ -138,6 +171,11 @@ function tarjeta(imp, objetivo) {
         ${exacta ? "exacta" : `${signo}${num(Math.abs(delta), 1)}`}
       </span>
     </div>
+
+    <label class="comparar${lleno ? " lleno" : ""}">
+      <input type="checkbox" data-id="${id}"${comparada ? " checked" : ""}${lleno ? " disabled" : ""}>
+      ${comparada ? "En la comparación" : lleno ? `Máximo ${MAX_COMPARAR}` : "Comparar"}
+    </label>
 
     <div class="etiquetas">
       <span class="etiqueta perfil">${imp.perfilMarca}</span>
@@ -159,13 +197,118 @@ function tarjeta(imp, objetivo) {
       ${medida("Proyección", num(imp.proyeccionCm), "cm")}
       ${medida("Arco", imp.arcoCm == null ? null : num(imp.arcoCm), "cm")}
       ${medida("Volumen", num(imp.volumenCc, 0), "cc")}
-      ${medida("Índice", num(indice, 2), "")}
+      ${medida("Índice", num(indice, 2), grupoProyeccion(imp))}
     </dl>
 
     <div class="fuente">
       ${fuente}${imp.notas ? ` — ${imp.notas}` : ""}
     </div>
   </article>`;
+}
+
+// --- Comparación ------------------------------------------------------------
+// Hasta tres, superpuestas a la misma escala: es donde se ve de un vistazo la
+// diferencia entre proyecciones que en la tabla son dos decimales.
+
+const MAX_COMPARAR = 3;
+const ESCALA_COMP = 13;
+let seleccion = [];   // ids, en el orden en que se marcaron
+
+const idDe = (imp) => `${imp.marca}|${imp.referencia}`;
+const implantePorId = (id) => IMPLANTES.find((i) => idDe(i) === id);
+
+function alternarComparacion(id) {
+  if (seleccion.includes(id)) seleccion = seleccion.filter((x) => x !== id);
+  else if (seleccion.length < MAX_COMPARAR) seleccion = [...seleccion, id];
+  buscar();
+}
+
+function superposicionFrontal(imps) {
+  const anchoMax = Math.max(...imps.map((i) => i.baseCm)) * ESCALA_COMP;
+  const altoMax = Math.max(...imps.map((i) => i.alturaCm)) * ESCALA_COMP;
+  const pad = 10;
+  const w = anchoMax + pad * 2;
+  const h = altoMax + pad * 2;
+
+  const formas = imps.map((imp, n) => {
+    const rx = (imp.baseCm * ESCALA_COMP) / 2;
+    const ry = (imp.alturaCm * ESCALA_COMP) / 2;
+    return `<ellipse cx="${w / 2}" cy="${h / 2}" rx="${rx}" ry="${ry}"
+      fill="var(--comp-${n + 1})" fill-opacity="0.16"
+      stroke="var(--comp-${n + 1})" stroke-width="2"/>`;
+  }).join("");
+
+  return `<figure class="esquema">
+    <svg viewBox="0 0 ${w} ${h}" width="${w}" height="${h}" role="img"
+      aria-label="Superposición frontal de los implantes seleccionados">${formas}</svg>
+    <figcaption>Frontal</figcaption></figure>`;
+}
+
+function superposicionLateral(imps) {
+  const altoMax = Math.max(...imps.map((i) => i.alturaCm)) * ESCALA_COMP;
+  const proyMax = Math.max(...imps.map((i) => i.proyeccionCm)) * ESCALA_COMP;
+  const pad = 10;
+  const w = proyMax + pad * 2;
+  const h = altoMax + pad * 2;
+  const x0 = pad;
+
+  // Centradas verticalmente y apoyadas en la misma pared torácica, para que la
+  // comparación sea de proyección y de altura, no de dónde se apoyan.
+  const formas = imps.map((imp, n) => {
+    const alto = imp.alturaCm * ESCALA_COMP;
+    const proy = imp.proyeccionCm * ESCALA_COMP;
+    const yTop = (h - alto) / 2;
+    return `<path d="${perfilPath(x0, yTop, alto, proy, imp.forma === "anatomica")}"
+      fill="var(--comp-${n + 1})" fill-opacity="0.16"
+      stroke="var(--comp-${n + 1})" stroke-width="2"/>`;
+  }).join("");
+
+  return `<figure class="esquema">
+    <svg viewBox="0 0 ${w} ${h}" width="${w}" height="${h}" role="img"
+      aria-label="Superposición lateral de los implantes seleccionados">
+      <path d="M${x0},${pad / 2} V${h - pad / 2}" stroke="var(--cota)" stroke-width="1.5"
+        stroke-dasharray="3 2" fill="none"/>${formas}</svg>
+    <figcaption>Lateral</figcaption></figure>`;
+}
+
+function renderComparador() {
+  const imps = seleccion.map(implantePorId).filter(Boolean);
+
+  if (!imps.length) {
+    el.comparador.hidden = true;
+    el.comparadorEsquemas.innerHTML = "";
+    el.comparadorTabla.innerHTML = "";
+    return;
+  }
+  el.comparador.hidden = false;
+
+  el.comparadorEsquemas.innerHTML =
+    superposicionFrontal(imps) + superposicionLateral(imps);
+
+  const filas = [
+    ["Base", (i) => `${num(i.baseCm)} cm`],
+    ["Altura", (i) => `${num(i.alturaCm)} cm`],
+    ["Proyección", (i) => `${num(i.proyeccionCm)} cm`],
+    ["Arco", (i) => (i.arcoCm == null ? "—" : `${num(i.arcoCm)} cm`)],
+    ["Volumen", (i) => `${num(i.volumenCc, 0)} cc`],
+    ["Índice", (i) => `${num(indiceProyeccion(i), 2)} · ${grupoProyeccion(i)}`],
+    ["Forma", (i) => cap(i.forma)],
+    ["Superficie", (i) => i.superficieMarca || cap(i.superficie)],
+  ];
+
+  el.comparadorTabla.innerHTML = `<table>
+    <thead><tr><th><span class="oculto">Medida</span></th>
+      ${imps.map((i, n) => `<th>
+        <span class="punto" style="background: var(--comp-${n + 1})"></span>
+        <span class="ref">${i.referencia}</span>
+        <span class="sub">${i.marca} · ${i.perfilMarca}</span>
+      </th>`).join("")}
+    </tr></thead>
+    <tbody>${filas.map(([etiqueta, valor]) => `<tr>
+      <th scope="row">${etiqueta}</th>
+      ${imps.map((i) => `<td>${valor(i)}</td>`).join("")}
+    </tr>`).join("")}</tbody>
+  </table>`;
 }
 
 // --- Búsqueda ---------------------------------------------------------------
@@ -188,10 +331,20 @@ function buscar() {
   const max = objetivo + tol;
   const marcas = marcasSeleccionadas();
 
+  // La horquilla de volumen admite dejar un extremo en blanco: sin mínimo, sin
+  // máximo, o ninguno de los dos.
+  const volMin = parseFloat(el.volMin.value);
+  const volMax = parseFloat(el.volMax.value);
+  const hayVolMin = Number.isFinite(volMin);
+  const hayVolMax = Number.isFinite(volMax);
+
   const encontrados = IMPLANTES.filter((i) =>
     i.baseCm >= min - 0.001 &&
     i.baseCm <= max + 0.001 &&
     marcas.includes(i.marca) &&
+    (!hayVolMin || i.volumenCc >= volMin) &&
+    (!hayVolMax || i.volumenCc <= volMax) &&
+    (!el.proyeccion.value || grupoProyeccion(i) === el.proyeccion.value) &&
     (!el.forma.value || i.forma === el.forma.value) &&
     (!el.superficie.value || i.superficie === el.superficie.value)
   );
@@ -205,16 +358,26 @@ function buscar() {
     return da !== db ? da - db : a.volumenCc - b.volumenCc;
   });
 
-  const rango = `${num(min)}–${num(max)} cm`;
+  const criterios = [`base entre <strong>${num(min)}–${num(max)} cm</strong>`];
+  if (hayVolMin || hayVolMax) {
+    const desde = hayVolMin ? num(volMin, 0) : "";
+    const hasta = hayVolMax ? num(volMax, 0) : "";
+    criterios.push(hayVolMin && hayVolMax
+      ? `volumen <strong>${desde}–${hasta} cc</strong>`
+      : hayVolMin ? `desde <strong>${desde} cc</strong>` : `hasta <strong>${hasta} cc</strong>`);
+  }
+  if (el.proyeccion.value) criterios.push(`proyección <strong>${el.proyeccion.value}</strong>`);
+  const filtros = criterios.join(", ");
+
   el.resumen.innerHTML = encontrados.length
-    ? `<strong>${encontrados.length}</strong> ${encontrados.length === 1 ? "opción" : "opciones"}
-       con base entre <strong>${rango}</strong>`
-    : `Ninguna opción con base entre <strong>${rango}</strong> con estos filtros.`;
+    ? `<strong>${encontrados.length}</strong> ${encontrados.length === 1 ? "opción" : "opciones"} con ${filtros}`
+    : `Ninguna opción con ${filtros}.`;
 
   el.resultados.innerHTML = encontrados.length
     ? encontrados.map((i) => tarjeta(i, objetivo)).join("")
     : `<p class="vacio-total">Prueba a ampliar la tolerancia o a quitar filtros.</p>`;
 
+  renderComparador();
   guardarEstado();
 }
 
@@ -225,6 +388,9 @@ function guardarEstado() {
     localStorage.setItem(CLAVE_ESTADO, JSON.stringify({
       base: el.base.value,
       tolerancia: el.tolerancia.value,
+      volMin: el.volMin.value,
+      volMax: el.volMax.value,
+      proyeccion: el.proyeccion.value,
       forma: el.forma.value,
       superficie: el.superficie.value,
       orden: el.orden.value,
@@ -288,6 +454,9 @@ function iniciar() {
   if (previo) {
     el.base.value = previo.base ?? el.base.value;
     el.tolerancia.value = previo.tolerancia ?? el.tolerancia.value;
+    el.volMin.value = previo.volMin ?? "";
+    el.volMax.value = previo.volMax ?? "";
+    el.proyeccion.value = previo.proyeccion ?? "";
     el.forma.value = previo.forma ?? "";
     el.superficie.value = previo.superficie ?? "";
     el.orden.value = previo.orden ?? "cercania";
@@ -295,7 +464,19 @@ function iniciar() {
 
   mostrarAvisoDatos();
 
-  document.querySelector("main").addEventListener("input", buscar);
+  // Las casillas de comparar viven dentro de los resultados, que se rehacen en
+  // cada búsqueda, así que se escuchan desde el contenedor.
+  el.resultados.addEventListener("change", (ev) => {
+    const casilla = ev.target.closest("input[data-id]");
+    if (casilla) alternarComparacion(casilla.dataset.id);
+  });
+
+  el.limpiarComparacion.addEventListener("click", () => {
+    seleccion = [];
+    buscar();
+  });
+
+  document.querySelector(".panel").addEventListener("input", buscar);
   buscar();
 }
 

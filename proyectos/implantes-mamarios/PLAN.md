@@ -78,10 +78,15 @@ Queda, pero no bloquea: la línea **Ergonomix** de Motiva, y completar la
 trazabilidad de los redondos (las CPG ya la tienen). Ver README → "Lo que falta
 en estos datos".
 
-### Fase 3 — Refinamiento
-Con datos reales dentro y tras usarlo en consulta:
-- Comparador lado a lado de 2–3 implantes.
-- Filtro por volumen además de por base.
+### Fase 3 — Refinamiento 🟡 en curso
+Hecho:
+- Horquilla de volumen, con los dos extremos opcionales.
+- Grupo de proyección normalizado entre marcas (baja / media / alta), calculado
+  del índice proyección ÷ base. Ver README.
+- Comparador de hasta tres implantes con las siluetas superpuestas a la misma
+  escala, que es donde se ve la diferencia que en la tabla son dos decimales.
+
+Queda:
 - Campo de arco vertical anotado en el esquema lateral.
 - Exportar la selección (PDF o impresión) para la historia.
 

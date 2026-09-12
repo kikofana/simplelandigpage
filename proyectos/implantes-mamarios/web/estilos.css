@@ -13,6 +13,11 @@
   --implante-borde: #1b5e8c;
   --cota: #99a0ab;
   --radio: 8px;
+  /* Tres colores para la comparación, distinguibles también en escala de
+     grises: azul medio, ámbar, verde azulado. */
+  --comp-1: #1b5e8c;
+  --comp-2: #c2701a;
+  --comp-3: #1d7a6c;
 }
 
 /* El tema tiene tres estados, no dos: una elección explícita marca la raíz con
@@ -34,6 +39,9 @@
     --implante: #2c4757;
     --implante-borde: #6fb3dd;
     --cota: #6b7280;
+    --comp-1: #6fb3dd;
+    --comp-2: #e0a44a;
+    --comp-3: #5ac0ac;
   }
 }
 
@@ -51,6 +59,9 @@
   --implante: #2c4757;
   --implante-borde: #6fb3dd;
   --cota: #6b7280;
+  --comp-1: #6fb3dd;
+  --comp-2: #e0a44a;
+  --comp-3: #5ac0ac;
 }
 
 * { box-sizing: border-box; }
@@ -146,7 +157,15 @@ main { max-width: 1100px; margin: 0 auto; }
 .con-unidad input:focus { outline: none; }
 .con-unidad:focus-within { outline: 2px solid var(--acento); outline-offset: 1px; }
 select:focus-visible, .chip:focus-within { outline: 2px solid var(--acento); outline-offset: 1px; }
-.unidad, .prefijo { color: var(--texto-suave); font-size: 14px; flex: none; }
+.unidad, .prefijo, .separador { color: var(--texto-suave); font-size: 14px; flex: none; }
+
+.horquilla { min-width: 172px; }
+.horquilla input { width: 4.5em; text-align: center; font-size: 17px; }
+.horquilla input::placeholder { font-size: 13px; font-weight: 400; }
+/* Las flechas nativas se comen el hueco entre el campo y la unidad. */
+.horquilla input::-webkit-outer-spin-button,
+.horquilla input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+.horquilla input { -moz-appearance: textfield; appearance: textfield; }
 
 select {
   background: var(--fondo);
@@ -192,6 +211,128 @@ select {
 }
 
 .chip input { accent-color: var(--acento); margin: 0; }
+
+/* --- Comparación --- */
+
+.comparador {
+  margin-top: 20px;
+  background: var(--superficie);
+  border: 1px solid var(--borde);
+  border-radius: var(--radio);
+  padding: 16px 18px 18px;
+}
+
+.comparador-cabecera {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 4px;
+}
+
+.comparador-cabecera h2 {
+  margin: 0;
+  font-size: 13px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--texto-suave);
+}
+
+.boton-texto {
+  background: none;
+  border: none;
+  color: var(--acento);
+  font: inherit;
+  font-size: 13px;
+  cursor: pointer;
+  padding: 2px 4px;
+  border-radius: 4px;
+}
+
+.boton-texto:hover { text-decoration: underline; }
+.boton-texto:focus-visible { outline: 2px solid var(--acento); outline-offset: 1px; }
+
+.comparador-cuerpo {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 24px;
+}
+
+.comparador-esquemas {
+  display: flex;
+  gap: 20px;
+  align-items: center;
+  flex: none;
+}
+
+.comparador-tabla { flex: 1 1 320px; overflow-x: auto; }
+
+.comparador-tabla table {
+  border-collapse: collapse;
+  width: 100%;
+  font-size: 14px;
+}
+
+.comparador-tabla th,
+.comparador-tabla td {
+  text-align: left;
+  padding: 6px 12px 6px 0;
+  border-bottom: 1px solid var(--borde);
+  white-space: nowrap;
+}
+
+.comparador-tabla tbody th {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  color: var(--texto-suave);
+}
+
+.comparador-tabla td {
+  font: 600 15px/1.3 ui-monospace, "SF Mono", Menlo, monospace;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Arriba, no abajo: si un subtítulo ocupa tres líneas y otro una, alinear por
+   abajo descoloca los puntos de color y las referencias entre columnas. */
+.comparador-tabla thead th { vertical-align: top; padding-bottom: 9px; }
+.comparador-tabla .ref { display: block; font: 600 14px/1.3 ui-monospace, Menlo, monospace; }
+.comparador-tabla .sub { display: block; font-size: 11px; font-weight: 400; color: var(--texto-suave); white-space: normal; max-width: 22ch; }
+
+.punto {
+  display: inline-block;
+  width: 9px; height: 9px;
+  border-radius: 50%;
+  margin-bottom: 3px;
+}
+
+.oculto {
+  position: absolute;
+  width: 1px; height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+}
+
+.comparar {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 13px;
+  color: var(--texto-suave);
+  cursor: pointer;
+  user-select: none;
+}
+
+.comparar input { accent-color: var(--acento); margin: 0; cursor: pointer; }
+.comparar:has(input:checked) { color: var(--comp, var(--acento)); font-weight: 500; }
+.comparar.lleno { opacity: 0.45; cursor: default; }
+.comparar.lleno input { cursor: default; }
+.comparar:focus-within { outline: 2px solid var(--acento); outline-offset: 3px; border-radius: 3px; }
+
+.tarjeta.comparada { border-color: var(--comp); box-shadow: inset 3px 0 0 var(--comp); }
 
 .resumen {
   margin: 22px 0 12px;

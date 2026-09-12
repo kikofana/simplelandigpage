@@ -39,6 +39,26 @@
       </div>
 
       <div class="campo">
+        <label for="volMin">Horquilla de volumen</label>
+        <div class="con-unidad horquilla">
+          <input type="number" id="volMin" placeholder="mín" step="5" min="0" inputmode="numeric">
+          <span class="separador">–</span>
+          <input type="number" id="volMax" placeholder="máx" step="5" min="0" inputmode="numeric">
+          <span class="unidad">cc</span>
+        </div>
+      </div>
+
+      <div class="campo">
+        <label for="proyeccion">Proyección</label>
+        <select id="proyeccion">
+          <option value="">Todas</option>
+          <option value="baja">Baja</option>
+          <option value="media">Media</option>
+          <option value="alta">Alta</option>
+        </select>
+      </div>
+
+      <div class="campo">
         <label for="forma">Forma</label>
         <select id="forma">
           <option value="">Todas</option>
@@ -68,6 +88,17 @@
       <legend>Marcas</legend>
       <div id="listaMarcas" class="chips"></div>
     </fieldset>
+  </section>
+
+  <section id="comparador" class="comparador" aria-label="Comparación" hidden>
+    <div class="comparador-cabecera">
+      <h2>Comparación</h2>
+      <button type="button" id="limpiarComparacion" class="boton-texto">Vaciar</button>
+    </div>
+    <div class="comparador-cuerpo">
+      <div id="comparadorEsquemas" class="comparador-esquemas"></div>
+      <div id="comparadorTabla" class="comparador-tabla"></div>
+    </div>
   </section>
 
   <p id="resumen" class="resumen" role="status"></p>

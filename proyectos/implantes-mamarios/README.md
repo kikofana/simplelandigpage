@@ -61,8 +61,29 @@ Nada de esto impide usarlo, pero conviene tenerlo presente:
 ## Uso
 
 Abre `web/index.html` en el navegador. Doble clic, sin servidor y sin conexión.
+`web/una-sola-pagina.html` es lo mismo en un único fichero, para llevarlo suelto.
 
 Ningún dato sale del ordenador: no hay backend.
+
+Filtros: base con tolerancia, horquilla de volumen, grupo de proyección, forma,
+superficie y marca. Y se pueden marcar hasta tres implantes para compararlos con
+las siluetas superpuestas a la misma escala.
+
+### Los grupos de proyección
+
+Los nombres comerciales no son comparables entre marcas, así que el grupo
+(baja / media / alta) se calcula del **índice de proyección** (proyección ÷
+base). Los cortes están en **0,39** y **0,45**, elegidos porque caen en huecos
+reales del catálogo: entre 0,370 y 0,407 no hay ni un implante, y entre 0,445 y
+0,456 tampoco.
+
+Cada perfil de cada marca cae entero en un grupo, salvo el CPG 313 de Mentor
+(altura baja con proyección alta), que se reparte 9/4 — en un implante bajo,
+una proyección "alta" sigue dando una relación modesta.
+
+Esto también deja ver cosas que los nombres esconden: el "Moderado Plus"
+redondo de Mentor (0,347) proyecta menos que su propio "Moderada Plus" de CPG
+(0,422), pese a llamarse casi igual.
 
 ## Cargar o corregir datos
 
