@@ -3905,7 +3905,7 @@ const IMPLANTES = [
     "gel": null,
     "catalogo": "Aportado sin referencia de catálogo",
     "pagina": null,
-    "notas": "Clasificación de SilkSurface como lisa, pendiente de confirmar"
+    "notas": null
   },
   {
     "marca": "Motiva",
@@ -3923,7 +3923,7 @@ const IMPLANTES = [
     "gel": null,
     "catalogo": "Aportado sin referencia de catálogo",
     "pagina": null,
-    "notas": "Clasificación de SilkSurface como lisa, pendiente de confirmar"
+    "notas": null
   },
   {
     "marca": "Motiva",
@@ -3941,7 +3941,7 @@ const IMPLANTES = [
     "gel": null,
     "catalogo": "Aportado sin referencia de catálogo",
     "pagina": null,
-    "notas": "Clasificación de SilkSurface como lisa, pendiente de confirmar"
+    "notas": null
   },
   {
     "marca": "Motiva",
@@ -3959,7 +3959,7 @@ const IMPLANTES = [
     "gel": null,
     "catalogo": "Aportado sin referencia de catálogo",
     "pagina": null,
-    "notas": "Clasificación de SilkSurface como lisa, pendiente de confirmar"
+    "notas": null
   },
   {
     "marca": "Motiva",
@@ -3977,7 +3977,7 @@ const IMPLANTES = [
     "gel": null,
     "catalogo": "Aportado sin referencia de catálogo",
     "pagina": null,
-    "notas": "Clasificación de SilkSurface como lisa, pendiente de confirmar"
+    "notas": null
   },
   {
     "marca": "Motiva",
@@ -3995,7 +3995,7 @@ const IMPLANTES = [
     "gel": null,
     "catalogo": "Aportado sin referencia de catálogo",
     "pagina": null,
-    "notas": "Clasificación de SilkSurface como lisa, pendiente de confirmar"
+    "notas": null
   },
   {
     "marca": "Motiva",
@@ -4013,7 +4013,7 @@ const IMPLANTES = [
     "gel": null,
     "catalogo": "Aportado sin referencia de catálogo",
     "pagina": null,
-    "notas": "Clasificación de SilkSurface como lisa, pendiente de confirmar"
+    "notas": null
   },
   {
     "marca": "Motiva",
@@ -4031,7 +4031,7 @@ const IMPLANTES = [
     "gel": null,
     "catalogo": "Aportado sin referencia de catálogo",
     "pagina": null,
-    "notas": "Clasificación de SilkSurface como lisa, pendiente de confirmar"
+    "notas": null
   },
   {
     "marca": "Motiva",
@@ -4049,7 +4049,7 @@ const IMPLANTES = [
     "gel": null,
     "catalogo": "Aportado sin referencia de catálogo",
     "pagina": null,
-    "notas": "Clasificación de SilkSurface como lisa, pendiente de confirmar"
+    "notas": null
   },
   {
     "marca": "Motiva",
@@ -4067,7 +4067,7 @@ const IMPLANTES = [
     "gel": null,
     "catalogo": "Aportado sin referencia de catálogo",
     "pagina": null,
-    "notas": "Clasificación de SilkSurface como lisa, pendiente de confirmar"
+    "notas": null
   },
   {
     "marca": "Motiva",
@@ -4085,7 +4085,7 @@ const IMPLANTES = [
     "gel": null,
     "catalogo": "Aportado sin referencia de catálogo",
     "pagina": null,
-    "notas": "Clasificación de SilkSurface como lisa, pendiente de confirmar"
+    "notas": null
   },
   {
     "marca": "Motiva",
@@ -4103,7 +4103,7 @@ const IMPLANTES = [
     "gel": null,
     "catalogo": "Aportado sin referencia de catálogo",
     "pagina": null,
-    "notas": "Clasificación de SilkSurface como lisa, pendiente de confirmar"
+    "notas": null
   },
   {
     "marca": "Motiva",
@@ -4121,7 +4121,7 @@ const IMPLANTES = [
     "gel": null,
     "catalogo": "Aportado sin referencia de catálogo",
     "pagina": null,
-    "notas": "Clasificación de SilkSurface como lisa, pendiente de confirmar"
+    "notas": null
   },
   {
     "marca": "Motiva",
@@ -4139,7 +4139,7 @@ const IMPLANTES = [
     "gel": null,
     "catalogo": "Aportado sin referencia de catálogo",
     "pagina": null,
-    "notas": "Clasificación de SilkSurface como lisa, pendiente de confirmar"
+    "notas": null
   },
   {
     "marca": "Motiva",
@@ -4157,7 +4157,7 @@ const IMPLANTES = [
     "gel": null,
     "catalogo": "Aportado sin referencia de catálogo",
     "pagina": null,
-    "notas": "Clasificación de SilkSurface como lisa, pendiente de confirmar"
+    "notas": null
   },
   {
     "marca": "Motiva",
@@ -4175,7 +4175,7 @@ const IMPLANTES = [
     "gel": null,
     "catalogo": "Aportado sin referencia de catálogo",
     "pagina": null,
-    "notas": "Clasificación de SilkSurface como lisa, pendiente de confirmar"
+    "notas": null
   },
   {
     "marca": "Motiva",
@@ -4193,7 +4193,7 @@ const IMPLANTES = [
     "gel": null,
     "catalogo": "Aportado sin referencia de catálogo",
     "pagina": null,
-    "notas": "Clasificación de SilkSurface como lisa, pendiente de confirmar"
+    "notas": null
   },
   {
     "marca": "Motiva",
@@ -4211,7 +4211,7 @@ const IMPLANTES = [
     "gel": null,
     "catalogo": "Aportado sin referencia de catálogo",
     "pagina": null,
-    "notas": "Clasificación de SilkSurface como lisa, pendiente de confirmar"
+    "notas": null
   },
   {
     "marca": "Motiva",
@@ -4229,7 +4229,7 @@ const IMPLANTES = [
     "gel": null,
     "catalogo": "Aportado sin referencia de catálogo",
     "pagina": null,
-    "notas": "Clasificación de SilkSurface como lisa, pendiente de confirmar"
+    "notas": null
   },
   {
     "marca": "Motiva",
@@ -4247,7 +4247,7 @@ const IMPLANTES = [
     "gel": null,
     "catalogo": "Aportado sin referencia de catálogo",
     "pagina": null,
-    "notas": "Clasificación de SilkSurface como lisa, pendiente de confirmar"
+    "notas": null
   },
   {
     "marca": "Motiva",
@@ -4265,7 +4265,7 @@ const IMPLANTES = [
     "gel": null,
     "catalogo": "Aportado sin referencia de catálogo",
     "pagina": null,
-    "notas": "Clasificación de SilkSurface como lisa, pendiente de confirmar"
+    "notas": null
   },
   {
     "marca": "Motiva",
@@ -4283,7 +4283,7 @@ const IMPLANTES = [
     "gel": null,
     "catalogo": "Aportado sin referencia de catálogo",
     "pagina": null,
-    "notas": "Clasificación de SilkSurface como lisa, pendiente de confirmar"
+    "notas": null
   },
   {
     "marca": "Motiva",
@@ -4301,7 +4301,7 @@ const IMPLANTES = [
     "gel": null,
     "catalogo": "Aportado sin referencia de catálogo",
     "pagina": null,
-    "notas": "Clasificación de SilkSurface como lisa, pendiente de confirmar"
+    "notas": null
   },
   {
     "marca": "Motiva",
@@ -4319,7 +4319,7 @@ const IMPLANTES = [
     "gel": null,
     "catalogo": "Aportado sin referencia de catálogo",
     "pagina": null,
-    "notas": "Clasificación de SilkSurface como lisa, pendiente de confirmar"
+    "notas": null
   },
   {
     "marca": "Motiva",
@@ -4337,7 +4337,7 @@ const IMPLANTES = [
     "gel": null,
     "catalogo": "Aportado sin referencia de catálogo",
     "pagina": null,
-    "notas": "Clasificación de SilkSurface como lisa, pendiente de confirmar"
+    "notas": null
   },
   {
     "marca": "Motiva",
@@ -4355,7 +4355,7 @@ const IMPLANTES = [
     "gel": null,
     "catalogo": "Aportado sin referencia de catálogo",
     "pagina": null,
-    "notas": "Clasificación de SilkSurface como lisa, pendiente de confirmar"
+    "notas": null
   },
   {
     "marca": "Motiva",
@@ -4373,7 +4373,7 @@ const IMPLANTES = [
     "gel": null,
     "catalogo": "Aportado sin referencia de catálogo",
     "pagina": null,
-    "notas": "Clasificación de SilkSurface como lisa, pendiente de confirmar"
+    "notas": null
   },
   {
     "marca": "Motiva",
@@ -4391,7 +4391,7 @@ const IMPLANTES = [
     "gel": null,
     "catalogo": "Aportado sin referencia de catálogo",
     "pagina": null,
-    "notas": "Clasificación de SilkSurface como lisa, pendiente de confirmar"
+    "notas": null
   },
   {
     "marca": "Motiva",
@@ -4409,7 +4409,7 @@ const IMPLANTES = [
     "gel": null,
     "catalogo": "Aportado sin referencia de catálogo",
     "pagina": null,
-    "notas": "Clasificación de SilkSurface como lisa, pendiente de confirmar"
+    "notas": null
   },
   {
     "marca": "Motiva",
@@ -4427,7 +4427,7 @@ const IMPLANTES = [
     "gel": null,
     "catalogo": "Aportado sin referencia de catálogo",
     "pagina": null,
-    "notas": "Clasificación de SilkSurface como lisa, pendiente de confirmar"
+    "notas": null
   },
   {
     "marca": "Motiva",
@@ -4445,7 +4445,7 @@ const IMPLANTES = [
     "gel": null,
     "catalogo": "Aportado sin referencia de catálogo",
     "pagina": null,
-    "notas": "Clasificación de SilkSurface como lisa, pendiente de confirmar"
+    "notas": null
   },
   {
     "marca": "Motiva",
@@ -4463,7 +4463,7 @@ const IMPLANTES = [
     "gel": null,
     "catalogo": "Aportado sin referencia de catálogo",
     "pagina": null,
-    "notas": "Clasificación de SilkSurface como lisa, pendiente de confirmar"
+    "notas": null
   },
   {
     "marca": "Motiva",
@@ -4481,7 +4481,7 @@ const IMPLANTES = [
     "gel": null,
     "catalogo": "Aportado sin referencia de catálogo",
     "pagina": null,
-    "notas": "Clasificación de SilkSurface como lisa, pendiente de confirmar"
+    "notas": null
   },
   {
     "marca": "Motiva",
@@ -4499,7 +4499,7 @@ const IMPLANTES = [
     "gel": null,
     "catalogo": "Aportado sin referencia de catálogo",
     "pagina": null,
-    "notas": "Clasificación de SilkSurface como lisa, pendiente de confirmar"
+    "notas": null
   },
   {
     "marca": "Motiva",
@@ -4517,7 +4517,7 @@ const IMPLANTES = [
     "gel": null,
     "catalogo": "Aportado sin referencia de catálogo",
     "pagina": null,
-    "notas": "Clasificación de SilkSurface como lisa, pendiente de confirmar"
+    "notas": null
   },
   {
     "marca": "Motiva",
@@ -4535,7 +4535,7 @@ const IMPLANTES = [
     "gel": null,
     "catalogo": "Aportado sin referencia de catálogo",
     "pagina": null,
-    "notas": "Clasificación de SilkSurface como lisa, pendiente de confirmar"
+    "notas": null
   },
   {
     "marca": "Motiva",
@@ -4553,7 +4553,7 @@ const IMPLANTES = [
     "gel": null,
     "catalogo": "Aportado sin referencia de catálogo",
     "pagina": null,
-    "notas": "Clasificación de SilkSurface como lisa, pendiente de confirmar"
+    "notas": null
   },
   {
     "marca": "Motiva",
@@ -4571,7 +4571,7 @@ const IMPLANTES = [
     "gel": null,
     "catalogo": "Aportado sin referencia de catálogo",
     "pagina": null,
-    "notas": "Clasificación de SilkSurface como lisa, pendiente de confirmar"
+    "notas": null
   },
   {
     "marca": "Motiva",
@@ -4589,7 +4589,7 @@ const IMPLANTES = [
     "gel": null,
     "catalogo": "Aportado sin referencia de catálogo",
     "pagina": null,
-    "notas": "Clasificación de SilkSurface como lisa, pendiente de confirmar"
+    "notas": null
   },
   {
     "marca": "Motiva",
@@ -4607,7 +4607,7 @@ const IMPLANTES = [
     "gel": null,
     "catalogo": "Aportado sin referencia de catálogo",
     "pagina": null,
-    "notas": "Clasificación de SilkSurface como lisa, pendiente de confirmar"
+    "notas": null
   },
   {
     "marca": "Motiva",
@@ -4625,7 +4625,7 @@ const IMPLANTES = [
     "gel": null,
     "catalogo": "Aportado sin referencia de catálogo",
     "pagina": null,
-    "notas": "Clasificación de SilkSurface como lisa, pendiente de confirmar"
+    "notas": null
   },
   {
     "marca": "Motiva",
@@ -4643,7 +4643,7 @@ const IMPLANTES = [
     "gel": null,
     "catalogo": "Aportado sin referencia de catálogo",
     "pagina": null,
-    "notas": "Clasificación de SilkSurface como lisa, pendiente de confirmar"
+    "notas": null
   },
   {
     "marca": "Motiva",
@@ -4661,7 +4661,7 @@ const IMPLANTES = [
     "gel": null,
     "catalogo": "Aportado sin referencia de catálogo",
     "pagina": null,
-    "notas": "Clasificación de SilkSurface como lisa, pendiente de confirmar"
+    "notas": null
   },
   {
     "marca": "Motiva",
@@ -4679,7 +4679,7 @@ const IMPLANTES = [
     "gel": null,
     "catalogo": "Aportado sin referencia de catálogo",
     "pagina": null,
-    "notas": "Clasificación de SilkSurface como lisa, pendiente de confirmar"
+    "notas": null
   },
   {
     "marca": "Motiva",
@@ -4697,7 +4697,7 @@ const IMPLANTES = [
     "gel": null,
     "catalogo": "Aportado sin referencia de catálogo",
     "pagina": null,
-    "notas": "Clasificación de SilkSurface como lisa, pendiente de confirmar"
+    "notas": null
   },
   {
     "marca": "Motiva",
@@ -4715,7 +4715,7 @@ const IMPLANTES = [
     "gel": null,
     "catalogo": "Aportado sin referencia de catálogo",
     "pagina": null,
-    "notas": "Clasificación de SilkSurface como lisa, pendiente de confirmar"
+    "notas": null
   },
   {
     "marca": "Motiva",
@@ -4733,7 +4733,7 @@ const IMPLANTES = [
     "gel": null,
     "catalogo": "Aportado sin referencia de catálogo",
     "pagina": null,
-    "notas": "Clasificación de SilkSurface como lisa, pendiente de confirmar"
+    "notas": null
   },
   {
     "marca": "Motiva",
@@ -4751,7 +4751,7 @@ const IMPLANTES = [
     "gel": null,
     "catalogo": "Aportado sin referencia de catálogo",
     "pagina": null,
-    "notas": "Clasificación de SilkSurface como lisa, pendiente de confirmar"
+    "notas": null
   },
   {
     "marca": "Motiva",
@@ -4769,7 +4769,7 @@ const IMPLANTES = [
     "gel": null,
     "catalogo": "Aportado sin referencia de catálogo",
     "pagina": null,
-    "notas": "Clasificación de SilkSurface como lisa, pendiente de confirmar"
+    "notas": null
   },
   {
     "marca": "Motiva",
@@ -4787,7 +4787,7 @@ const IMPLANTES = [
     "gel": null,
     "catalogo": "Aportado sin referencia de catálogo",
     "pagina": null,
-    "notas": "Clasificación de SilkSurface como lisa, pendiente de confirmar"
+    "notas": null
   },
   {
     "marca": "Motiva",
@@ -4805,7 +4805,7 @@ const IMPLANTES = [
     "gel": null,
     "catalogo": "Aportado sin referencia de catálogo",
     "pagina": null,
-    "notas": "Clasificación de SilkSurface como lisa, pendiente de confirmar"
+    "notas": null
   },
   {
     "marca": "Motiva",
@@ -4823,7 +4823,7 @@ const IMPLANTES = [
     "gel": null,
     "catalogo": "Aportado sin referencia de catálogo",
     "pagina": null,
-    "notas": "Clasificación de SilkSurface como lisa, pendiente de confirmar"
+    "notas": null
   },
   {
     "marca": "Motiva",
@@ -4841,7 +4841,7 @@ const IMPLANTES = [
     "gel": null,
     "catalogo": "Aportado sin referencia de catálogo",
     "pagina": null,
-    "notas": "Clasificación de SilkSurface como lisa, pendiente de confirmar"
+    "notas": null
   },
   {
     "marca": "Motiva",
@@ -4859,7 +4859,7 @@ const IMPLANTES = [
     "gel": null,
     "catalogo": "Aportado sin referencia de catálogo",
     "pagina": null,
-    "notas": "Clasificación de SilkSurface como lisa, pendiente de confirmar"
+    "notas": null
   },
   {
     "marca": "Motiva",
@@ -4877,7 +4877,7 @@ const IMPLANTES = [
     "gel": null,
     "catalogo": "Aportado sin referencia de catálogo",
     "pagina": null,
-    "notas": "Clasificación de SilkSurface como lisa, pendiente de confirmar"
+    "notas": null
   },
   {
     "marca": "Motiva",
@@ -4895,7 +4895,7 @@ const IMPLANTES = [
     "gel": null,
     "catalogo": "Aportado sin referencia de catálogo",
     "pagina": null,
-    "notas": "Clasificación de SilkSurface como lisa, pendiente de confirmar"
+    "notas": null
   },
   {
     "marca": "Motiva",
@@ -4913,7 +4913,7 @@ const IMPLANTES = [
     "gel": null,
     "catalogo": "Aportado sin referencia de catálogo",
     "pagina": null,
-    "notas": "Clasificación de SilkSurface como lisa, pendiente de confirmar"
+    "notas": null
   },
   {
     "marca": "Motiva",
@@ -4931,7 +4931,7 @@ const IMPLANTES = [
     "gel": null,
     "catalogo": "Aportado sin referencia de catálogo",
     "pagina": null,
-    "notas": "Clasificación de SilkSurface como lisa, pendiente de confirmar"
+    "notas": null
   },
   {
     "marca": "Motiva",
@@ -4949,7 +4949,7 @@ const IMPLANTES = [
     "gel": null,
     "catalogo": "Aportado sin referencia de catálogo",
     "pagina": null,
-    "notas": "Clasificación de SilkSurface como lisa, pendiente de confirmar"
+    "notas": null
   },
   {
     "marca": "Motiva",
@@ -4967,7 +4967,7 @@ const IMPLANTES = [
     "gel": null,
     "catalogo": "Aportado sin referencia de catálogo",
     "pagina": null,
-    "notas": "Clasificación de SilkSurface como lisa, pendiente de confirmar"
+    "notas": null
   },
   {
     "marca": "Motiva",
@@ -4985,7 +4985,7 @@ const IMPLANTES = [
     "gel": null,
     "catalogo": "Aportado sin referencia de catálogo",
     "pagina": null,
-    "notas": "Clasificación de SilkSurface como lisa, pendiente de confirmar"
+    "notas": null
   },
   {
     "marca": "Motiva",
@@ -5003,7 +5003,7 @@ const IMPLANTES = [
     "gel": null,
     "catalogo": "Aportado sin referencia de catálogo",
     "pagina": null,
-    "notas": "Clasificación de SilkSurface como lisa, pendiente de confirmar"
+    "notas": null
   },
   {
     "marca": "Motiva",
@@ -5021,7 +5021,7 @@ const IMPLANTES = [
     "gel": null,
     "catalogo": "Aportado sin referencia de catálogo",
     "pagina": null,
-    "notas": "Clasificación de SilkSurface como lisa, pendiente de confirmar"
+    "notas": null
   },
   {
     "marca": "Motiva",
@@ -5039,7 +5039,7 @@ const IMPLANTES = [
     "gel": null,
     "catalogo": "Aportado sin referencia de catálogo",
     "pagina": null,
-    "notas": "Clasificación de SilkSurface como lisa, pendiente de confirmar"
+    "notas": null
   },
   {
     "marca": "Motiva",
@@ -5057,7 +5057,7 @@ const IMPLANTES = [
     "gel": null,
     "catalogo": "Aportado sin referencia de catálogo",
     "pagina": null,
-    "notas": "Clasificación de SilkSurface como lisa, pendiente de confirmar"
+    "notas": null
   },
   {
     "marca": "Motiva",
@@ -5075,7 +5075,7 @@ const IMPLANTES = [
     "gel": null,
     "catalogo": "Aportado sin referencia de catálogo",
     "pagina": null,
-    "notas": "Clasificación de SilkSurface como lisa, pendiente de confirmar"
+    "notas": null
   },
   {
     "marca": "Motiva",
@@ -5093,7 +5093,7 @@ const IMPLANTES = [
     "gel": null,
     "catalogo": "Aportado sin referencia de catálogo",
     "pagina": null,
-    "notas": "Clasificación de SilkSurface como lisa, pendiente de confirmar"
+    "notas": null
   },
   {
     "marca": "Motiva",
@@ -5111,7 +5111,7 @@ const IMPLANTES = [
     "gel": null,
     "catalogo": "Aportado sin referencia de catálogo",
     "pagina": null,
-    "notas": "Clasificación de SilkSurface como lisa, pendiente de confirmar"
+    "notas": null
   },
   {
     "marca": "Motiva",
@@ -5129,7 +5129,7 @@ const IMPLANTES = [
     "gel": null,
     "catalogo": "Aportado sin referencia de catálogo",
     "pagina": null,
-    "notas": "Clasificación de SilkSurface como lisa, pendiente de confirmar"
+    "notas": null
   },
   {
     "marca": "Motiva",
@@ -5147,7 +5147,7 @@ const IMPLANTES = [
     "gel": null,
     "catalogo": "Aportado sin referencia de catálogo",
     "pagina": null,
-    "notas": "Clasificación de SilkSurface como lisa, pendiente de confirmar"
+    "notas": null
   },
   {
     "marca": "Motiva",
@@ -5165,7 +5165,7 @@ const IMPLANTES = [
     "gel": null,
     "catalogo": "Aportado sin referencia de catálogo",
     "pagina": null,
-    "notas": "Clasificación de SilkSurface como lisa, pendiente de confirmar"
+    "notas": null
   },
   {
     "marca": "Motiva",
@@ -5183,7 +5183,7 @@ const IMPLANTES = [
     "gel": null,
     "catalogo": "Aportado sin referencia de catálogo",
     "pagina": null,
-    "notas": "Clasificación de SilkSurface como lisa, pendiente de confirmar"
+    "notas": null
   },
   {
     "marca": "Motiva",
@@ -5201,7 +5201,7 @@ const IMPLANTES = [
     "gel": null,
     "catalogo": "Aportado sin referencia de catálogo",
     "pagina": null,
-    "notas": "Clasificación de SilkSurface como lisa, pendiente de confirmar"
+    "notas": null
   },
   {
     "marca": "Motiva",
@@ -5219,7 +5219,7 @@ const IMPLANTES = [
     "gel": null,
     "catalogo": "Aportado sin referencia de catálogo",
     "pagina": null,
-    "notas": "Clasificación de SilkSurface como lisa, pendiente de confirmar"
+    "notas": null
   },
   {
     "marca": "Motiva",
@@ -5237,7 +5237,7 @@ const IMPLANTES = [
     "gel": null,
     "catalogo": "Aportado sin referencia de catálogo",
     "pagina": null,
-    "notas": "Clasificación de SilkSurface como lisa, pendiente de confirmar"
+    "notas": null
   },
   {
     "marca": "Motiva",
@@ -5255,6 +5255,6 @@ const IMPLANTES = [
     "gel": null,
     "catalogo": "Aportado sin referencia de catálogo",
     "pagina": null,
-    "notas": "Clasificación de SilkSurface como lisa, pendiente de confirmar"
+    "notas": null
   }
 ];

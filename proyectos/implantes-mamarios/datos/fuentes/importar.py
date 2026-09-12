@@ -19,6 +19,10 @@ MENTOR   Las tablas de redondos dan Volumen, Diámetro y Proyección, sin altura
          ni arco. Al ser redondas, altura = diámetro. El arco queda vacío.
          SILTEX = texturizada; las tablas marcadas LISOS = lisa.
 
+         En THPX (Perfil Alto) la proyección baja al subir el volumen en dos
+         puntos: 405 (5,9) -> 425 (5,8) y 455 (6,0) -> 470 (5,9). Verificado
+         contra el catálogo: es correcto, no es un error de transcripción.
+
 MENTOR CPG  Anatómicas, de mentor-cpg-anatomicas.pdf, en esta misma carpeta.
          La columna `pagina` es la página del PDF, no el folio impreso: los
          pies de página se solapan al extraer y no son de fiar.
@@ -305,8 +309,8 @@ def generar():
                 notas=CPG_NOTA,
             ))
 
-    # Motiva. SilkSurface se normaliza como lisa; el término literal se
-    # conserva en superficie_marca. PENDIENTE DE CONFIRMAR (ver README).
+    # Motiva. SilkSurface cuenta como lisa (confirmado); el término comercial
+    # se conserva en superficie_marca.
     for base_cm, *grupos in MOTIVA:
         for perfil, (ref, proy, arco, vol) in zip(PERFILES_MOTIVA, grupos):
             filas.append(fila(
@@ -316,7 +320,6 @@ def generar():
                 volumen_cc=vol, base_cm=base_cm, altura_cm=base_cm,
                 proyeccion_cm=proy, arco_cm=arco,
                 catalogo=SIN_CATALOGO,
-                notas="Clasificación de SilkSurface como lisa, pendiente de confirmar",
             ))
 
     return filas

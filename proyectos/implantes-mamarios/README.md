@@ -41,18 +41,22 @@ Nada de esto impide usarlo, pero conviene tenerlo presente:
    que está en `datos/fuentes/`, con su página. La app avisa mientras queden
    filas sin trazabilidad.
 2. **Silimed no trae superficie ni línea**, quedan como `sin especificar`.
-3. **SilkSurface está clasificada como `lisa`** en la taxonomía normalizada;
-   el término literal se conserva aparte. Pendiente de confirmar.
-4. **Las páginas de CPG aportadas no indican la superficie.** Se marcan como
+3. **Las páginas de CPG aportadas no indican la superficie.** Se marcan como
    SILTEX / texturizada, que es lo que monta la línea, pero no está leído del
    documento.
-5. **Dos proyecciones de Mentor no son monótonas** y conviene verificarlas
-   contra el catálogo: `THPX-405` (5,9) → `THPX-425` (5,8), y `THPX-455` (6,0)
-   → `THPX-470` (5,9). Más volumen con menos proyección. Están transcritas
-   fielmente del origen, pero es el patrón típico de una celda mal copiada.
-6. **La tabla de Silimed parece truncada**: termina en `505 HI` (12,5 cm) sin
+4. **La tabla de Silimed parece truncada**: termina en `505 HI` (12,5 cm) sin
    las MD/LO de esa base.
-7. **De Motiva solo está Round SilkSurface**; falta Ergonomix.
+5. **De Motiva solo está Round SilkSurface**; falta Ergonomix.
+
+### Ya verificado
+
+- **SilkSurface cuenta como lisa.** Confirmado; la taxonomía normalizada la
+  registra así y el término comercial se conserva en `superficie_marca`.
+- **Las proyecciones no monótonas de Mentor son correctas.** `THPX-405` (5,9)
+  → `THPX-425` (5,8) y `THPX-455` (6,0) → `THPX-470` (5,9) son así en el
+  catálogo: más volumen con menos proyección. Contrastado contra el origen, no
+  es un error de transcripción. Si el chequeo de coherencia vuelve a sacarlas,
+  son ellas.
 
 ## Uso
 

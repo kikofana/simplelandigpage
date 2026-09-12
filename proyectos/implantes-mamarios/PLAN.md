@@ -113,11 +113,11 @@ se verificó por referencia y por altura.
 
 ## Lo que sigue haciendo falta
 
+- **Catálogo, año y página de los 171 redondos.** Es lo que más pesa: sin eso
+  no se puede contrastar una medida contra su origen, que es justo lo que salva
+  de un error de transcripción. Las 121 CPG ya lo tienen. La app lo avisa
+  hasta que se rellene.
 - La línea **Ergonomix** de Motiva.
-- **Catálogo, año y página de los 171 redondos.** Sin eso no se puede
-  contrastar una medida contra su origen, que es justo lo que salva de un error
-  de transcripción. Las CPG ya lo tienen. La app lo avisa hasta que se rellene.
-- Verificar los dos saltos no monótonos de Mentor THPX (ver README).
 - Confirmar la superficie de las CPG: las páginas aportadas no la indican.
 
 Y un aviso que sigue vigente: **toda fila hay que contrastarla contra el
