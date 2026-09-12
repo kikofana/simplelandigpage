@@ -15,8 +15,12 @@ const el = {
   tolerancia: $("tolerancia"),
   volMin: $("volMin"),
   volMax: $("volMax"),
+  volLectura: $("volLectura"),
+  rangoRelleno: $("rangoRelleno"),
   proyeccion: $("proyeccion"),
   forma: $("forma"),
+  campoAltura: $("campoAltura"),
+  altura: $("altura"),
   superficie: $("superficie"),
   orden: $("orden"),
   listaMarcas: $("listaMarcas"),
@@ -47,6 +51,19 @@ function grupoProyeccion(imp) {
   const i = indiceProyeccion(imp);
   if (i < CORTE_MEDIA) return "baja";
   return i < CORTE_ALTA ? "media" : "alta";
+}
+
+// La altura se agrupa igual, del índice altura ÷ base, y por el mismo motivo:
+// que siga funcionando cuando entren anatómicas de una marca que no use la
+// nomenclatura de Mentor. Los cortes caen en huecos del catálogo (entre 0,944 y
+// 1,019 no hay nada) y reproducen las etiquetas de las CPG en las 121 filas.
+const ALTURA_MEDIA = 0.91;
+const ALTURA_ALTA = 0.98;
+
+function grupoAltura(imp) {
+  const i = imp.alturaCm / imp.baseCm;
+  if (i < ALTURA_MEDIA) return "baja";
+  return i < ALTURA_ALTA ? "media" : "alta";
 }
 
 // El CSV guarda los valores sin tildes para no complicar la edición a mano;
@@ -206,6 +223,55 @@ function tarjeta(imp, objetivo) {
   </article>`;
 }
 
+// --- Deslizador de volumen --------------------------------------------------
+// Dos <input type="range"> superpuestos: cada asa sigue siendo un control real,
+// así que el teclado funciona sin escribir nada a mano. Se obliga a que queden
+// separadas al menos un paso para que nunca se solapen del todo, que es cuando
+// una taparía a la otra y ya no habría forma de volver a cogerla.
+
+const PASO_VOL = 5;
+let VOL_MIN = 0;
+let VOL_MAX = 0;
+
+function iniciarRangoVolumen() {
+  const vols = IMPLANTES.map((i) => i.volumenCc);
+  VOL_MIN = Math.floor(Math.min(...vols) / PASO_VOL) * PASO_VOL;
+  VOL_MAX = Math.ceil(Math.max(...vols) / PASO_VOL) * PASO_VOL;
+
+  for (const campo of [el.volMin, el.volMax]) {
+    campo.min = VOL_MIN;
+    campo.max = VOL_MAX;
+    campo.step = PASO_VOL;
+  }
+  el.volMin.value = VOL_MIN;
+  el.volMax.value = VOL_MAX;
+}
+
+function ajustarAsas(movida) {
+  let min = Number(el.volMin.value);
+  let max = Number(el.volMax.value);
+
+  if (min > max - PASO_VOL) {
+    if (movida === "min") min = max - PASO_VOL;
+    else max = min + PASO_VOL;
+    el.volMin.value = Math.max(VOL_MIN, min);
+    el.volMax.value = Math.min(VOL_MAX, max);
+  }
+  return { min: Number(el.volMin.value), max: Number(el.volMax.value) };
+}
+
+function pintarRangoVolumen({ min, max }) {
+  const span = VOL_MAX - VOL_MIN;
+  el.rangoRelleno.style.left = `${((min - VOL_MIN) / span) * 100}%`;
+  el.rangoRelleno.style.right = `${((VOL_MAX - max) / span) * 100}%`;
+
+  const completo = min === VOL_MIN && max === VOL_MAX;
+  el.volLectura.textContent = completo
+    ? `todos (${VOL_MIN}–${VOL_MAX} cc)`
+    : `${min}–${max} cc`;
+  el.volLectura.classList.toggle("activo", !completo);
+}
+
 // --- Comparación ------------------------------------------------------------
 // Hasta tres, superpuestas a la misma escala: es donde se ve de un vistazo la
 // diferencia entre proyecciones que en la tabla son dos decimales.
@@ -331,21 +397,24 @@ function buscar() {
   const max = objetivo + tol;
   const marcas = marcasSeleccionadas();
 
-  // La horquilla de volumen admite dejar un extremo en blanco: sin mínimo, sin
-  // máximo, o ninguno de los dos.
-  const volMin = parseFloat(el.volMin.value);
-  const volMax = parseFloat(el.volMax.value);
-  const hayVolMin = Number.isFinite(volMin);
-  const hayVolMax = Number.isFinite(volMax);
+  const vol = { min: Number(el.volMin.value), max: Number(el.volMax.value) };
+  pintarRangoVolumen(vol);
+
+  // La sub-selección de altura solo tiene sentido en anatómicas: en una redonda
+  // la altura es la base y todas caerían en el mismo grupo.
+  const soloAnatomicas = el.forma.value === "anatomica";
+  el.campoAltura.hidden = !soloAnatomicas;
+  if (!soloAnatomicas) el.altura.value = "";
 
   const encontrados = IMPLANTES.filter((i) =>
     i.baseCm >= min - 0.001 &&
     i.baseCm <= max + 0.001 &&
     marcas.includes(i.marca) &&
-    (!hayVolMin || i.volumenCc >= volMin) &&
-    (!hayVolMax || i.volumenCc <= volMax) &&
+    i.volumenCc >= vol.min &&
+    i.volumenCc <= vol.max &&
     (!el.proyeccion.value || grupoProyeccion(i) === el.proyeccion.value) &&
     (!el.forma.value || i.forma === el.forma.value) &&
+    (!el.altura.value || grupoAltura(i) === el.altura.value) &&
     (!el.superficie.value || i.superficie === el.superficie.value)
   );
 
@@ -359,14 +428,11 @@ function buscar() {
   });
 
   const criterios = [`base entre <strong>${num(min)}–${num(max)} cm</strong>`];
-  if (hayVolMin || hayVolMax) {
-    const desde = hayVolMin ? num(volMin, 0) : "";
-    const hasta = hayVolMax ? num(volMax, 0) : "";
-    criterios.push(hayVolMin && hayVolMax
-      ? `volumen <strong>${desde}–${hasta} cc</strong>`
-      : hayVolMin ? `desde <strong>${desde} cc</strong>` : `hasta <strong>${hasta} cc</strong>`);
+  if (vol.min > VOL_MIN || vol.max < VOL_MAX) {
+    criterios.push(`volumen <strong>${vol.min}–${vol.max} cc</strong>`);
   }
   if (el.proyeccion.value) criterios.push(`proyección <strong>${el.proyeccion.value}</strong>`);
+  if (el.altura.value) criterios.push(`altura <strong>${el.altura.value}</strong>`);
   const filtros = criterios.join(", ");
 
   el.resumen.innerHTML = encontrados.length
@@ -392,6 +458,7 @@ function guardarEstado() {
       volMax: el.volMax.value,
       proyeccion: el.proyeccion.value,
       forma: el.forma.value,
+      altura: el.altura.value,
       superficie: el.superficie.value,
       orden: el.orden.value,
       marcas: marcasSeleccionadas(),
@@ -438,6 +505,7 @@ function mostrarAvisoDatos() {
 
 function iniciar() {
   const previo = leerEstado();
+  iniciarRangoVolumen();
 
   const marcas = unicos("marca");
   el.listaMarcas.innerHTML = marcas.map((m) => {
@@ -454,10 +522,11 @@ function iniciar() {
   if (previo) {
     el.base.value = previo.base ?? el.base.value;
     el.tolerancia.value = previo.tolerancia ?? el.tolerancia.value;
-    el.volMin.value = previo.volMin ?? "";
-    el.volMax.value = previo.volMax ?? "";
+    if (previo.volMin) el.volMin.value = previo.volMin;
+    if (previo.volMax) el.volMax.value = previo.volMax;
     el.proyeccion.value = previo.proyeccion ?? "";
     el.forma.value = previo.forma ?? "";
+    el.altura.value = previo.altura ?? "";
     el.superficie.value = previo.superficie ?? "";
     el.orden.value = previo.orden ?? "cercania";
   }
@@ -475,6 +544,10 @@ function iniciar() {
     seleccion = [];
     buscar();
   });
+
+  for (const [campo, cual] of [[el.volMin, "min"], [el.volMax, "max"]]) {
+    campo.addEventListener("input", () => ajustarAsas(cual));
+  }
 
   document.querySelector(".panel").addEventListener("input", buscar);
   buscar();

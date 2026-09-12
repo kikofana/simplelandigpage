@@ -159,13 +159,93 @@ main { max-width: 1100px; margin: 0 auto; }
 select:focus-visible, .chip:focus-within { outline: 2px solid var(--acento); outline-offset: 1px; }
 .unidad, .prefijo, .separador { color: var(--texto-suave); font-size: 14px; flex: none; }
 
-.horquilla { min-width: 172px; }
-.horquilla input { width: 4.5em; text-align: center; font-size: 17px; }
-.horquilla input::placeholder { font-size: 13px; font-weight: 400; }
-/* Las flechas nativas se comen el hueco entre el campo y la unidad. */
-.horquilla input::-webkit-outer-spin-button,
-.horquilla input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
-.horquilla input { -moz-appearance: textfield; appearance: textfield; }
+/* --- Deslizador de volumen ---
+   Dos inputs range superpuestos sobre una pista dibujada. Los inputs no
+   reciben el puntero salvo en sus asas, para que el de abajo siga siendo
+   agarrable donde el de arriba no tiene asa. */
+
+.campo-rango { min-width: 210px; justify-content: flex-start; }
+
+.lectura {
+  text-transform: none;
+  letter-spacing: 0;
+  font-weight: 400;
+  color: var(--texto-suave);
+}
+
+.lectura.activo { color: var(--acento); font-weight: 600; }
+
+.rango {
+  position: relative;
+  height: 34px;
+  display: flex;
+  align-items: center;
+}
+
+.rango-pista {
+  position: absolute;
+  left: 8px; right: 8px;
+  height: 4px;
+  background: var(--borde);
+  border-radius: 2px;
+}
+
+.rango-relleno {
+  position: absolute;
+  top: 0; bottom: 0;
+  background: var(--acento);
+  border-radius: 2px;
+}
+
+.rango input[type="range"] {
+  position: absolute;
+  left: 0; right: 0;
+  width: 100%;
+  margin: 0;
+  background: none;
+  pointer-events: none;
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+.rango input[type="range"]::-webkit-slider-runnable-track {
+  background: none;
+  height: 16px;
+}
+
+.rango input[type="range"]::-moz-range-track { background: none; height: 16px; }
+
+.rango input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  pointer-events: auto;
+  width: 16px; height: 16px;
+  border-radius: 50%;
+  background: var(--superficie);
+  border: 2px solid var(--acento);
+  box-shadow: 0 1px 3px rgb(0 0 0 / 0.25);
+  cursor: grab;
+}
+
+.rango input[type="range"]::-moz-range-thumb {
+  pointer-events: auto;
+  width: 16px; height: 16px;
+  border-radius: 50%;
+  background: var(--superficie);
+  border: 2px solid var(--acento);
+  box-shadow: 0 1px 3px rgb(0 0 0 / 0.25);
+  cursor: grab;
+}
+
+.rango input[type="range"]:active::-webkit-slider-thumb { cursor: grabbing; }
+.rango input[type="range"]:focus-visible::-webkit-slider-thumb {
+  outline: 2px solid var(--acento);
+  outline-offset: 2px;
+}
+.rango input[type="range"]:focus-visible::-moz-range-thumb {
+  outline: 2px solid var(--acento);
+  outline-offset: 2px;
+}
+.rango input[type="range"]:focus { outline: none; }
 
 select {
   background: var(--fondo);

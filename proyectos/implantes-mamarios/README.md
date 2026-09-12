@@ -65,25 +65,37 @@ Abre `web/index.html` en el navegador. Doble clic, sin servidor y sin conexión.
 
 Ningún dato sale del ordenador: no hay backend.
 
-Filtros: base con tolerancia, horquilla de volumen, grupo de proyección, forma,
-superficie y marca. Y se pueden marcar hasta tres implantes para compararlos con
-las siluetas superpuestas a la misma escala.
+Filtros: base con tolerancia, volumen (deslizador de dos asas), grupo de
+proyección, forma, superficie y marca. Al elegir **anatómica** aparece además un
+filtro de **altura**. Y se pueden marcar hasta tres implantes para compararlos
+con las siluetas superpuestas a la misma escala.
 
-### Los grupos de proyección
+### Los grupos de proyección y de altura
 
-Los nombres comerciales no son comparables entre marcas, así que el grupo
-(baja / media / alta) se calcula del **índice de proyección** (proyección ÷
-base). Los cortes están en **0,39** y **0,45**, elegidos porque caen en huecos
-reales del catálogo: entre 0,370 y 0,407 no hay ni un implante, y entre 0,445 y
-0,456 tampoco.
+Los nombres comerciales no son comparables entre marcas, así que ambos grupos
+(baja / media / alta) se calculan de un índice normalizado, no de la etiqueta
+del fabricante. Así seguirán funcionando cuando entren marcas con otra
+nomenclatura.
 
-Cada perfil de cada marca cae entero en un grupo, salvo el CPG 313 de Mentor
-(altura baja con proyección alta), que se reparte 9/4 — en un implante bajo,
-una proyección "alta" sigue dando una relación modesta.
+| Grupo | Índice | Cortes | Huecos que los justifican |
+|---|---|---|---|
+| Proyección | proyección ÷ base | 0,39 y 0,45 | nada entre 0,370–0,407 ni entre 0,445–0,456 |
+| Altura | altura ÷ base | 0,91 y 0,98 | nada entre 0,944–1,019 |
+
+Los cortes no son a ojo: caen en huecos reales del catálogo, donde no existe
+ningún implante.
+
+El de altura **reproduce exactamente las etiquetas de Mentor en las 121 CPG**,
+sin leerlas. El de proyección clasifica entero cada perfil de cada marca salvo
+el CPG 313 (altura baja, proyección alta), que se reparte 9/4: en un implante
+bajo, una proyección "alta" sigue dando una relación modesta.
 
 Esto también deja ver cosas que los nombres esconden: el "Moderado Plus"
 redondo de Mentor (0,347) proyecta menos que su propio "Moderada Plus" de CPG
 (0,422), pese a llamarse casi igual.
+
+El filtro de altura solo aparece con anatómicas: en una redonda la altura **es**
+la base, así que todas caerían en el mismo grupo y no separaría nada.
 
 ## Cargar o corregir datos
 

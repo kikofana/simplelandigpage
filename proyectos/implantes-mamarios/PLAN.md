@@ -80,9 +80,10 @@ en estos datos".
 
 ### Fase 3 — Refinamiento 🟡 en curso
 Hecho:
-- Horquilla de volumen, con los dos extremos opcionales.
-- Grupo de proyección normalizado entre marcas (baja / media / alta), calculado
-  del índice proyección ÷ base. Ver README.
+- Volumen con deslizador de dos asas, acotado al rango real del catálogo.
+- Grupos normalizados entre marcas, calculados de un índice y no de la etiqueta
+  del fabricante: proyección (baja / media / alta) y altura, esta última solo
+  visible con anatómicas. Ver README.
 - Comparador de hasta tres implantes con las siluetas superpuestas a la misma
   escala, que es donde se ve la diferencia que en la tabla son dos decimales.
 

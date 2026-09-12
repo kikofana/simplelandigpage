@@ -38,13 +38,12 @@
         </div>
       </div>
 
-      <div class="campo">
-        <label for="volMin">Horquilla de volumen</label>
-        <div class="con-unidad horquilla">
-          <input type="number" id="volMin" placeholder="mín" step="5" min="0" inputmode="numeric">
-          <span class="separador">–</span>
-          <input type="number" id="volMax" placeholder="máx" step="5" min="0" inputmode="numeric">
-          <span class="unidad">cc</span>
+      <div class="campo campo-rango">
+        <label for="volMin">Volumen <span id="volLectura" class="lectura"></span></label>
+        <div class="rango">
+          <div class="rango-pista"><div class="rango-relleno" id="rangoRelleno"></div></div>
+          <input type="range" id="volMin" step="5" aria-label="Volumen mínimo">
+          <input type="range" id="volMax" step="5" aria-label="Volumen máximo">
         </div>
       </div>
 
@@ -64,6 +63,16 @@
           <option value="">Todas</option>
           <option value="redonda">Redonda</option>
           <option value="anatomica">Anatómica</option>
+        </select>
+      </div>
+
+      <div class="campo" id="campoAltura" hidden>
+        <label for="altura">Altura</label>
+        <select id="altura">
+          <option value="">Todas</option>
+          <option value="baja">Baja</option>
+          <option value="media">Media</option>
+          <option value="alta">Alta</option>
         </select>
       </div>
 
