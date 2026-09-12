@@ -15,8 +15,12 @@
   --radio: 8px;
 }
 
+/* El tema tiene tres estados, no dos: una elección explícita marca la raíz con
+   data-theme, y el ajuste "sistema" no marca nada. Por eso el bloque oscuro
+   aparece dos veces: una tras prefers-color-scheme (excluyendo una elección
+   explícita de claro) y otra tras data-theme="dark". */
 @media (prefers-color-scheme: dark) {
-  :root {
+  :root:not([data-theme="light"]) {
     --fondo: #16181c;
     --superficie: #1f2227;
     --borde: #343941;
@@ -24,13 +28,29 @@
     --texto-suave: #9aa1ac;
     --acento: #6fb3dd;
     --acento-suave: #1c2b36;
-    --aviso-fondo: #35291040;
+    --aviso-fondo: #2a2314;
     --aviso-borde: #b8892c;
     --aviso-texto: #e8c477;
     --implante: #2c4757;
     --implante-borde: #6fb3dd;
     --cota: #6b7280;
   }
+}
+
+:root[data-theme="dark"] {
+  --fondo: #16181c;
+  --superficie: #1f2227;
+  --borde: #343941;
+  --texto: #e8eaed;
+  --texto-suave: #9aa1ac;
+  --acento: #6fb3dd;
+  --acento-suave: #1c2b36;
+  --aviso-fondo: #2a2314;
+  --aviso-borde: #b8892c;
+  --aviso-texto: #e8c477;
+  --implante: #2c4757;
+  --implante-borde: #6fb3dd;
+  --cota: #6b7280;
 }
 
 * { box-sizing: border-box; }
@@ -117,12 +137,15 @@ main { max-width: 1100px; margin: 0 auto; }
   background: none;
   color: var(--texto);
   font: 600 20px/1 ui-monospace, "SF Mono", Menlo, monospace;
+  font-variant-numeric: tabular-nums;
   padding: 9px 0;
   width: 100%;
   min-width: 0;
 }
 
 .con-unidad input:focus { outline: none; }
+.con-unidad:focus-within { outline: 2px solid var(--acento); outline-offset: 1px; }
+select:focus-visible, .chip:focus-within { outline: 2px solid var(--acento); outline-offset: 1px; }
 .unidad, .prefijo { color: var(--texto-suave); font-size: 14px; flex: none; }
 
 select {
@@ -255,6 +278,7 @@ select {
 .medida dd {
   margin: 0;
   font: 600 16px/1.2 ui-monospace, "SF Mono", Menlo, monospace;
+  font-variant-numeric: tabular-nums;
 }
 
 .medida dd .u { font-size: 11px; font-weight: 400; color: var(--texto-suave); }

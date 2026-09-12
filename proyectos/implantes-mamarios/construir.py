@@ -11,12 +11,17 @@ Uso:
 
 import csv
 import json
+import re
 import sys
 from pathlib import Path
 
 RAIZ = Path(__file__).parent
 CSV_ENTRADA = RAIZ / "datos" / "implantes.csv"
-JS_SALIDA = RAIZ / "web" / "datos.js"
+WEB = RAIZ / "web"
+JS_SALIDA = WEB / "datos.js"
+# Version de un solo fichero: sirve para publicarla o para pasarla por correo
+# sin arrastrar la carpeta entera.
+SUELTA_SALIDA = WEB / "una-sola-pagina.html"
 
 OBLIGATORIAS = [
     "marca", "linea", "referencia", "forma", "superficie", "perfil_marca",
@@ -175,6 +180,29 @@ def validar(filas, cabeceras):
     return errores, avisos, limpias
 
 
+def generar_pagina_suelta(payload):
+    """Mete CSS, datos y JS dentro de un solo HTML autocontenido."""
+    html = (WEB / "index.html").read_text(encoding="utf-8")
+    cuerpo = html.split("<body>", 1)[1].split("</body>", 1)[0]
+    # Fuera las etiquetas <script src>: el codigo va incrustado mas abajo.
+    cuerpo = re.sub(r'\s*<script src="[^"]+"></script>', "", cuerpo).strip()
+
+    css = (WEB / "estilos.css").read_text(encoding="utf-8")
+    app = (WEB / "app.js").read_text(encoding="utf-8")
+
+    return (
+        "<!doctype html>\n<html lang=\"es\">\n<head>\n"
+        '<meta charset="utf-8">\n'
+        '<meta name="viewport" content="width=device-width, initial-scale=1">\n'
+        "<title>Buscador de implantes</title>\n"
+        f"<style>\n{css}\n</style>\n"
+        f"</head>\n<body>\n{cuerpo}\n"
+        f"<script>\nconst IMPLANTES = {payload};\n</script>\n"
+        f"<script>\n{app}\n</script>\n"
+        "</body>\n</html>\n"
+    )
+
+
 def main():
     solo_validar = "--validar" in sys.argv
 
@@ -212,6 +240,10 @@ def main():
         encoding="utf-8",
     )
     print(f"Escrito {JS_SALIDA.relative_to(RAIZ)}")
+
+    SUELTA_SALIDA.write_text(generar_pagina_suelta(payload), encoding="utf-8")
+    kb = SUELTA_SALIDA.stat().st_size / 1024
+    print(f"Escrito {SUELTA_SALIDA.relative_to(RAIZ)} ({kb:.0f} KB)")
     return 0
 
 

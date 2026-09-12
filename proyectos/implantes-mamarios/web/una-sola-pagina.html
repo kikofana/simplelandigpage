@@ -1,0 +1,5965 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Buscador de implantes</title>
+<style>
+:root {
+  --fondo: #f4f5f7;
+  --superficie: #ffffff;
+  --borde: #d8dbe0;
+  --texto: #1a1d21;
+  --texto-suave: #666d78;
+  --acento: #1b5e8c;
+  --acento-suave: #e8f1f7;
+  --aviso-fondo: #fff4e0;
+  --aviso-borde: #e0a838;
+  --aviso-texto: #6b4a05;
+  --implante: #b8d4e6;
+  --implante-borde: #1b5e8c;
+  --cota: #99a0ab;
+  --radio: 8px;
+}
+
+/* El tema tiene tres estados, no dos: una elección explícita marca la raíz con
+   data-theme, y el ajuste "sistema" no marca nada. Por eso el bloque oscuro
+   aparece dos veces: una tras prefers-color-scheme (excluyendo una elección
+   explícita de claro) y otra tras data-theme="dark". */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --fondo: #16181c;
+    --superficie: #1f2227;
+    --borde: #343941;
+    --texto: #e8eaed;
+    --texto-suave: #9aa1ac;
+    --acento: #6fb3dd;
+    --acento-suave: #1c2b36;
+    --aviso-fondo: #2a2314;
+    --aviso-borde: #b8892c;
+    --aviso-texto: #e8c477;
+    --implante: #2c4757;
+    --implante-borde: #6fb3dd;
+    --cota: #6b7280;
+  }
+}
+
+:root[data-theme="dark"] {
+  --fondo: #16181c;
+  --superficie: #1f2227;
+  --borde: #343941;
+  --texto: #e8eaed;
+  --texto-suave: #9aa1ac;
+  --acento: #6fb3dd;
+  --acento-suave: #1c2b36;
+  --aviso-fondo: #2a2314;
+  --aviso-borde: #b8892c;
+  --aviso-texto: #e8c477;
+  --implante: #2c4757;
+  --implante-borde: #6fb3dd;
+  --cota: #6b7280;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  padding: 0 16px 48px;
+  background: var(--fondo);
+  color: var(--texto);
+  font: 15px/1.5 system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+
+.cabecera {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding-block: 28px 16px;
+}
+
+h1 {
+  margin: 0;
+  font-size: 22px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+
+.subtitulo {
+  margin: 4px 0 0;
+  color: var(--texto-suave);
+  font-size: 14px;
+}
+
+.aviso-demo {
+  max-width: 1100px;
+  margin: 0 auto 20px;
+  padding: 12px 16px;
+  background: var(--aviso-fondo);
+  border: 1px solid var(--aviso-borde);
+  border-left-width: 4px;
+  border-radius: var(--radio);
+  color: var(--aviso-texto);
+  font-size: 14px;
+}
+
+main { max-width: 1100px; margin: 0 auto; }
+
+.panel {
+  background: var(--superficie);
+  border: 1px solid var(--borde);
+  border-radius: var(--radio);
+  padding: 18px;
+}
+
+.campos {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.campo { display: flex; flex-direction: column; gap: 5px; min-width: 130px; }
+.campo-principal { min-width: 160px; }
+
+.campo label {
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--texto-suave);
+}
+
+.con-unidad {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--fondo);
+  border: 1px solid var(--borde);
+  border-radius: 6px;
+  padding: 0 10px;
+}
+
+.con-unidad:focus-within { border-color: var(--acento); }
+
+.con-unidad input {
+  border: none;
+  background: none;
+  color: var(--texto);
+  font: 600 20px/1 ui-monospace, "SF Mono", Menlo, monospace;
+  font-variant-numeric: tabular-nums;
+  padding: 9px 0;
+  width: 100%;
+  min-width: 0;
+}
+
+.con-unidad input:focus { outline: none; }
+.con-unidad:focus-within { outline: 2px solid var(--acento); outline-offset: 1px; }
+select:focus-visible, .chip:focus-within { outline: 2px solid var(--acento); outline-offset: 1px; }
+.unidad, .prefijo { color: var(--texto-suave); font-size: 14px; flex: none; }
+
+select {
+  background: var(--fondo);
+  border: 1px solid var(--borde);
+  border-radius: 6px;
+  color: var(--texto);
+  font-size: 14px;
+  padding: 10px 8px;
+  min-width: 130px;
+}
+
+.marcas { border: none; margin: 16px 0 0; padding: 0; }
+
+.marcas legend {
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--texto-suave);
+  padding: 0 0 7px;
+}
+
+.chips { display: flex; flex-wrap: wrap; gap: 8px; }
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--fondo);
+  border: 1px solid var(--borde);
+  border-radius: 999px;
+  padding: 6px 13px 6px 10px;
+  font-size: 14px;
+  cursor: pointer;
+  user-select: none;
+}
+
+.chip:has(input:checked) {
+  background: var(--acento-suave);
+  border-color: var(--acento);
+  color: var(--acento);
+  font-weight: 500;
+}
+
+.chip input { accent-color: var(--acento); margin: 0; }
+
+.resumen {
+  margin: 22px 0 12px;
+  color: var(--texto-suave);
+  font-size: 14px;
+}
+
+.resumen strong { color: var(--texto); }
+
+.resultados {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(330px, 1fr));
+  gap: 14px;
+}
+
+.tarjeta {
+  background: var(--superficie);
+  border: 1px solid var(--borde);
+  border-radius: var(--radio);
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.tarjeta.exacta { border-color: var(--acento); box-shadow: inset 3px 0 0 var(--acento); }
+
+.tarjeta-cabecera { display: flex; justify-content: space-between; gap: 10px; align-items: start; }
+
+.marca-linea { font-weight: 600; font-size: 15px; }
+.referencia {
+  color: var(--texto-suave);
+  font: 13px/1.4 ui-monospace, "SF Mono", Menlo, monospace;
+  margin-top: 2px;
+}
+
+.delta {
+  flex: none;
+  font: 600 12px/1 ui-monospace, Menlo, monospace;
+  padding: 5px 8px;
+  border-radius: 999px;
+  background: var(--fondo);
+  color: var(--texto-suave);
+  white-space: nowrap;
+}
+
+.delta.cero { background: var(--acento-suave); color: var(--acento); }
+
+.etiquetas { display: flex; flex-wrap: wrap; gap: 6px; }
+
+.etiqueta {
+  font-size: 12px;
+  padding: 3px 9px;
+  border-radius: 4px;
+  background: var(--fondo);
+  border: 1px solid var(--borde);
+  color: var(--texto-suave);
+}
+
+.etiqueta.perfil { background: var(--acento-suave); border-color: transparent; color: var(--acento); font-weight: 500; }
+
+.esquemas { display: flex; gap: 18px; justify-content: center; align-items: flex-end; padding: 4px 0; }
+.esquema { text-align: center; margin: 0; }
+.esquema svg { display: block; margin: 0 auto; }
+.esquema figcaption { font-size: 11px; color: var(--texto-suave); margin-top: 3px; }
+
+.medidas {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px 8px;
+  border-top: 1px solid var(--borde);
+  padding-top: 12px;
+}
+
+.medida { display: flex; flex-direction: column; gap: 1px; }
+
+.medida dt {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  color: var(--texto-suave);
+}
+
+.medida dd {
+  margin: 0;
+  font: 600 16px/1.2 ui-monospace, "SF Mono", Menlo, monospace;
+  font-variant-numeric: tabular-nums;
+}
+
+.medida dd .u { font-size: 11px; font-weight: 400; color: var(--texto-suave); }
+.medida dd.vacio { color: var(--texto-suave); font-weight: 400; }
+
+.fuente {
+  font-size: 11px;
+  color: var(--texto-suave);
+  border-top: 1px solid var(--borde);
+  padding-top: 9px;
+  line-height: 1.45;
+}
+
+.vacio-total {
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: 48px 20px;
+  color: var(--texto-suave);
+  background: var(--superficie);
+  border: 1px dashed var(--borde);
+  border-radius: var(--radio);
+}
+
+.pie {
+  max-width: 1100px;
+  margin: 36px auto 0;
+  padding-top: 16px;
+  border-top: 1px solid var(--borde);
+  color: var(--texto-suave);
+  font-size: 12px;
+}
+
+@media (max-width: 520px) {
+  .campo, .campo-principal { min-width: 100%; }
+  .resultados { grid-template-columns: 1fr; }
+}
+
+</style>
+</head>
+<body>
+<header class="cabecera">
+  <h1>Buscador de implantes</h1>
+  <p class="subtitulo">Búsqueda por base mamaria con tolerancia</p>
+</header>
+
+<div id="avisoDemo" class="aviso-demo" hidden>
+  <strong>Revisar los datos.</strong>
+  <span id="avisoDemoTexto"></span>
+</div>
+
+<main>
+  <section class="panel" aria-label="Criterios de búsqueda">
+    <div class="campos">
+      <div class="campo campo-principal">
+        <label for="base">Base de la paciente</label>
+        <div class="con-unidad">
+          <input type="number" id="base" value="11" step="0.1" min="6" max="18" inputmode="decimal">
+          <span class="unidad">cm</span>
+        </div>
+      </div>
+
+      <div class="campo">
+        <label for="tolerancia">Tolerancia</label>
+        <div class="con-unidad">
+          <span class="prefijo">±</span>
+          <input type="number" id="tolerancia" value="0.5" step="0.1" min="0" max="3" inputmode="decimal">
+          <span class="unidad">cm</span>
+        </div>
+      </div>
+
+      <div class="campo">
+        <label for="forma">Forma</label>
+        <select id="forma">
+          <option value="">Todas</option>
+          <option value="redonda">Redonda</option>
+          <option value="anatomica">Anatómica</option>
+        </select>
+      </div>
+
+      <div class="campo">
+        <label for="superficie">Superficie</label>
+        <select id="superficie">
+          <option value="">Todas</option>
+        </select>
+      </div>
+
+      <div class="campo">
+        <label for="orden">Ordenar por</label>
+        <select id="orden">
+          <option value="cercania">Cercanía a la base</option>
+          <option value="volumen">Volumen</option>
+          <option value="proyeccion">Proyección</option>
+        </select>
+      </div>
+    </div>
+
+    <fieldset class="marcas">
+      <legend>Marcas</legend>
+      <div id="listaMarcas" class="chips"></div>
+    </fieldset>
+  </section>
+
+  <p id="resumen" class="resumen" role="status"></p>
+  <div id="resultados" class="resultados"></div>
+</main>
+
+<footer class="pie">
+  Herramienta interna de consulta. Cada medida debe contrastarse con el catálogo
+  del fabricante antes de usarse en planificación quirúrgica.
+</footer>
+<script>
+const IMPLANTES = [
+  {
+    "marca": "Silimed",
+    "linea": "Redondos",
+    "referencia": "255 XH",
+    "forma": "redonda",
+    "superficie": "sin especificar",
+    "superficieMarca": null,
+    "perfilMarca": "XH (Extra High)",
+    "volumenCc": 255.0,
+    "baseCm": 9.2,
+    "alturaCm": 9.2,
+    "proyeccionCm": 5.6,
+    "arcoCm": 7.8,
+    "gel": null,
+    "catalogo": "Aportado sin referencia de catálogo",
+    "pagina": null,
+    "notas": "Superficie y línea sin especificar en el origen"
+  },
+  {
+    "marca": "Silimed",
+    "linea": "Redondos",
+    "referencia": "225 HI",
+    "forma": "redonda",
+    "superficie": "sin especificar",
+    "superficieMarca": null,
+    "perfilMarca": "HI (High)",
+    "volumenCc": 225.0,
+    "baseCm": 9.2,
+    "alturaCm": 9.2,
+    "proyeccionCm": 4.8,
+    "arcoCm": 7.2,
+    "gel": null,
+    "catalogo": "Aportado sin referencia de catálogo",
+    "pagina": null,
+    "notas": "Superficie y línea sin especificar en el origen"
+  },
+  {
+    "marca": "Silimed",
+    "linea": "Redondos",
+    "referencia": "190 MD",
+    "forma": "redonda",
+    "superficie": "sin especificar",
+    "superficieMarca": null,
+    "perfilMarca": "MD (Moderate)",
+    "volumenCc": 190.0,
+    "baseCm": 9.2,
+    "alturaCm": 9.2,
+    "proyeccionCm": 4.0,
+    "arcoCm": 6.7,
+    "gel": null,
+    "catalogo": "Aportado sin referencia de catálogo",
+    "pagina": null,
+    "notas": "Superficie y línea sin especificar en el origen"
+  },
+  {
+    "marca": "Silimed",
+    "linea": "Redondos",
+    "referencia": "155 LO",
+    "forma": "redonda",
+    "superficie": "sin especificar",
+    "superficieMarca": null,
+    "perfilMarca": "LO (Low)",
+    "volumenCc": 155.0,
+    "baseCm": 9.2,
+    "alturaCm": 9.2,
+    "proyeccionCm": 3.2,
+    "arcoCm": 6.2,
+    "gel": null,
+    "catalogo": "Aportado sin referencia de catálogo",
+    "pagina": null,
+    "notas": "Superficie y línea sin especificar en el origen"
+  },
+  {
+    "marca": "Silimed",
+    "linea": "Redondos",
+    "referencia": "280 XH",
+    "forma": "redonda",
+    "superficie": "sin especificar",
+    "superficieMarca": null,
+    "perfilMarca": "XH (Extra High)",
+    "volumenCc": 280.0,
+    "baseCm": 9.5,
+    "alturaCm": 9.5,
+    "proyeccionCm": 5.7,
+    "arcoCm": 8.0,
+    "gel": null,
+    "catalogo": "Aportado sin referencia de catálogo",
+    "pagina": null,
+    "notas": "Superficie y línea sin especificar en el origen"
+  },
+  {
+    "marca": "Silimed",
+    "linea": "Redondos",
+    "referencia": "245 HI",
+    "forma": "redonda",
+    "superficie": "sin especificar",
+    "superficieMarca": null,
+    "perfilMarca": "HI (High)",
+    "volumenCc": 245.0,
+    "baseCm": 9.5,
+    "alturaCm": 9.5,
+    "proyeccionCm": 4.9,
+    "arcoCm": 7.3,
+    "gel": null,
+    "catalogo": "Aportado sin referencia de catálogo",
+    "pagina": null,
+    "notas": "Superficie y línea sin especificar en el origen"
+  },
+  {
+    "marca": "Silimed",
+    "linea": "Redondos",
+    "referencia": "205 MD",
+    "forma": "redonda",
+    "superficie": "sin especificar",
+    "superficieMarca": null,
+    "perfilMarca": "MD (Moderate)",
+    "volumenCc": 205.0,
+    "baseCm": 9.5,
+    "alturaCm": 9.5,
+    "proyeccionCm": 4.1,
+    "arcoCm": 6.8,
+    "gel": null,
+    "catalogo": "Aportado sin referencia de catálogo",
+    "pagina": null,
+    "notas": "Superficie y línea sin especificar en el origen"
+  },
+  {
+    "marca": "Silimed",
+    "linea": "Redondos",
+    "referencia": "170 LO",
+    "forma": "redonda",
+    "superficie": "sin especificar",
+    "superficieMarca": null,
+    "perfilMarca": "LO (Low)",
+    "volumenCc": 170.0,
+    "baseCm": 9.5,
+    "alturaCm": 9.5,
+    "proyeccionCm": 3.3,
+    "arcoCm": 6.4,
+    "gel": null,
+    "catalogo": "Aportado sin referencia de catálogo",
+    "pagina": null,
+    "notas": "Superficie y línea sin especificar en el origen"
+  },
+  {
+    "marca": "Silimed",
+    "linea": "Redondos",
+    "referencia": "305 XH",
+    "forma": "redonda",
+    "superficie": "sin especificar",
+    "superficieMarca": null,
+    "perfilMarca": "XH (Extra High)",
+    "volumenCc": 305.0,
+    "baseCm": 9.8,
+    "alturaCm": 9.8,
+    "proyeccionCm": 5.8,
+    "arcoCm": 8.4,
+    "gel": null,
+    "catalogo": "Aportado sin referencia de catálogo",
+    "pagina": null,
+    "notas": "Superficie y línea sin especificar en el origen"
+  },
+  {
+    "marca": "Silimed",
+    "linea": "Redondos",
+    "referencia": "270 HI",
+    "forma": "redonda",
+    "superficie": "sin especificar",
+    "superficieMarca": null,
+    "perfilMarca": "HI (High)",
+    "volumenCc": 270.0,
+    "baseCm": 9.8,
+    "alturaCm": 9.8,
+    "proyeccionCm": 5.0,
+    "arcoCm": 7.6,
+    "gel": null,
+    "catalogo": "Aportado sin referencia de catálogo",
+    "pagina": null,
+    "notas": "Superficie y línea sin especificar en el origen"
+  },
+  {
+    "marca": "Silimed",
+    "linea": "Redondos",
+    "referencia": "225 MD",
+    "forma": "redonda",
+    "superficie": "sin especificar",
+    "superficieMarca": null,
+    "perfilMarca": "MD (Moderate)",
+    "volumenCc": 225.0,
+    "baseCm": 9.8,
+    "alturaCm": 9.8,
+    "proyeccionCm": 4.2,
+    "arcoCm": 7.0,
+    "gel": null,
+    "catalogo": "Aportado sin referencia de catálogo",
+    "pagina": null,
+    "notas": "Superficie y línea sin especificar en el origen"
+  },
+  {
+    "marca": "Silimed",
+    "linea": "Redondos",
+    "referencia": "185 LO",
+    "forma": "redonda",
+    "superficie": "sin especificar",
+    "superficieMarca": null,
+    "perfilMarca": "LO (Low)",
+    "volumenCc": 185.0,
+    "baseCm": 9.8,
+    "alturaCm": 9.8,
+    "proyeccionCm": 3.4,
+    "arcoCm": 6.6,
+    "gel": null,
+    "catalogo": "Aportado sin referencia de catálogo",
+    "pagina": null,
+    "notas": "Superficie y línea sin especificar en el origen"
+  },
+  {
+    "marca": "Silimed",
+    "linea": "Redondos",
+    "referencia": "325 XH",
+    "forma": "redonda",
+    "superficie": "sin especificar",
+    "superficieMarca": null,
+    "perfilMarca": "XH (Extra High)",
+    "volumenCc": 325.0,
+    "baseCm": 10.1,
+    "alturaCm": 10.1,
+    "proyeccionCm": 5.9,
+    "arcoCm": 8.6,
+    "gel": null,
+    "catalogo": "Aportado sin referencia de catálogo",
+    "pagina": null,
+    "notas": "Superficie y línea sin especificar en el origen"
+  },
+  {
+    "marca": "Silimed",
+    "linea": "Redondos",
+    "referencia": "285 HI",
+    "forma": "redonda",
+    "superficie": "sin especificar",
+    "superficieMarca": null,
+    "perfilMarca": "HI (High)",
+    "volumenCc": 285.0,
+    "baseCm": 10.1,
+    "alturaCm": 10.1,
+    "proyeccionCm": 5.1,
+    "arcoCm": 7.8,
+    "gel": null,
+    "catalogo": "Aportado sin referencia de catálogo",
+    "pagina": null,
+    "notas": "Superficie y línea sin especificar en el origen"
+  },
+  {
+    "marca": "Silimed",
+    "linea": "Redondos",
+    "referencia": "240 MD",
+    "forma": "redonda",
+    "superficie": "sin especificar",
+    "superficieMarca": null,
+    "perfilMarca": "MD (Moderate)",
+    "volumenCc": 240.0,
+    "baseCm": 10.1,
+    "alturaCm": 10.1,
+    "proyeccionCm": 4.3,
+    "arcoCm": 7.2,
+    "gel": null,
+    "catalogo": "Aportado sin referencia de catálogo",
+    "pagina": null,
+    "notas": "Superficie y línea sin especificar en el origen"
+  },
+  {
+    "marca": "Silimed",
+    "linea": "Redondos",
+    "referencia": "200 LO",
+    "forma": "redonda",
+    "superficie": "sin especificar",
+    "superficieMarca": null,
+    "perfilMarca": "LO (Low)",
+    "volumenCc": 200.0,
+    "baseCm": 10.1,
+    "alturaCm": 10.1,
+    "proyeccionCm": 3.5,
+    "arcoCm": 6.8,
+    "gel": null,
+    "catalogo": "Aportado sin referencia de catálogo",
+    "pagina": null,
+    "notas": "Superficie y línea sin especificar en el origen"
+  },
+  {
+    "marca": "Silimed",
+    "linea": "Redondos",
+    "referencia": "360 XH",
+    "forma": "redonda",
+    "superficie": "sin especificar",
+    "superficieMarca": null,
+    "perfilMarca": "XH (Extra High)",
+    "volumenCc": 360.0,
+    "baseCm": 10.4,
+    "alturaCm": 10.4,
+    "proyeccionCm": 6.0,
+    "arcoCm": 8.8,
+    "gel": null,
+    "catalogo": "Aportado sin referencia de catálogo",
+    "pagina": null,
+    "notas": "Superficie y línea sin especificar en el origen"
+  },
+  {
+    "marca": "Silimed",
+    "linea": "Redondos",
+    "referencia": "305 HI",
+    "forma": "redonda",
+    "superficie": "sin especificar",
+    "superficieMarca": null,
+    "perfilMarca": "HI (High)",
+    "volumenCc": 305.0,
+    "baseCm": 10.4,
+    "alturaCm": 10.4,
+    "proyeccionCm": 5.2,
+    "arcoCm": 8.1,
+    "gel": null,
+    "catalogo": "Aportado sin referencia de catálogo",
+    "pagina": null,
+    "notas": "Superficie y línea sin especificar en el origen"
+  },
+  {
+    "marca": "Silimed",
+    "linea": "Redondos",
+    "referencia": "255 MD",
+    "forma": "redonda",
+    "superficie": "sin especificar",
+    "superficieMarca": null,
+    "perfilMarca": "MD (Moderate)",
+    "volumenCc": 255.0,
+    "baseCm": 10.4,
+    "alturaCm": 10.4,
+    "proyeccionCm": 4.4,
+    "arcoCm": 7.4,
+    "gel": null,
+    "catalogo": "Aportado sin referencia de catálogo",
+    "pagina": null,
+    "notas": "Superficie y línea sin especificar en el origen"
+  },
+  {
+    "marca": "Silimed",
+    "linea": "Redondos",
+    "referencia": "215 LO",
+    "forma": "redonda",
+    "superficie": "sin especificar",
+    "superficieMarca": null,
+    "perfilMarca": "LO (Low)",
+    "volumenCc": 215.0,
+    "baseCm": 10.4,
+    "alturaCm": 10.4,
+    "proyeccionCm": 3.6,
+    "arcoCm": 7.0,
+    "gel": null,
+    "catalogo": "Aportado sin referencia de catálogo",
+    "pagina": null,
+    "notas": "Superficie y línea sin especificar en el origen"
+  },
+  {
+    "marca": "Silimed",
+    "linea": "Redondos",
+    "referencia": "380 XH",
+    "forma": "redonda",
+    "superficie": "sin especificar",
+    "superficieMarca": null,
+    "perfilMarca": "XH (Extra High)",
+    "volumenCc": 380.0,
+    "baseCm": 10.7,
+    "alturaCm": 10.7,
+    "proyeccionCm": 6.1,
+    "arcoCm": 9.0,
+    "gel": null,
+    "catalogo": "Aportado sin referencia de catálogo",
+    "pagina": null,
+    "notas": "Superficie y línea sin especificar en el origen"
+  },
+  {
+    "marca": "Silimed",
+    "linea": "Redondos",
+    "referencia": "335 HI",
+    "forma": "redonda",
+    "superficie": "sin especificar",
+    "superficieMarca": null,
+    "perfilMarca": "HI (High)",
+    "volumenCc": 335.0,
+    "baseCm": 10.7,
+    "alturaCm": 10.7,
+    "proyeccionCm": 5.3,
+    "arcoCm": 8.3,
+    "gel": null,
+    "catalogo": "Aportado sin referencia de catálogo",
+    "pagina": null,
+    "notas": "Superficie y línea sin especificar en el origen"
+  },
+  {
+    "marca": "Silimed",
+    "linea": "Redondos",
+    "referencia": "280 MD",
+    "forma": "redonda",
+    "superficie": "sin especificar",
+    "superficieMarca": null,
+    "perfilMarca": "MD (Moderate)",
+    "volumenCc": 280.0,
+    "baseCm": 10.7,
+    "alturaCm": 10.7,
+    "proyeccionCm": 4.5,
+    "arcoCm": 7.6,
+    "gel": null,
+    "catalogo": "Aportado sin referencia de catálogo",
+    "pagina": null,
+    "notas": "Superficie y línea sin especificar en el origen"
+  },
+  {
+    "marca": "Silimed",
+    "linea": "Redondos",
+    "referencia": "240 LO",
+    "forma": "redonda",
+    "superficie": "sin especificar",
+    "superficieMarca": null,
+    "perfilMarca": "LO (Low)",
+    "volumenCc": 240.0,
+    "baseCm": 10.7,
+    "alturaCm": 10.7,
+    "proyeccionCm": 3.7,
+    "arcoCm": 7.2,
+    "gel": null,
+    "catalogo": "Aportado sin referencia de catálogo",
+    "pagina": null,
+    "notas": "Superficie y línea sin especificar en el origen"
+  },
+  {
+    "marca": "Silimed",
+    "linea": "Redondos",
+    "referencia": "410 XH",
+    "forma": "redonda",
+    "superficie": "sin especificar",
+    "superficieMarca": null,
+    "perfilMarca": "XH (Extra High)",
+    "volumenCc": 410.0,
+    "baseCm": 11.0,
+    "alturaCm": 11.0,
+    "proyeccionCm": 6.2,
+    "arcoCm": 9.1,
+    "gel": null,
+    "catalogo": "Aportado sin referencia de catálogo",
+    "pagina": null,
+    "notas": "Superficie y línea sin especificar en el origen"
+  },
+  {
+    "marca": "Silimed",
+    "linea": "Redondos",
+    "referencia": "365 HI",
+    "forma": "redonda",
+    "superficie": "sin especificar",
+    "superficieMarca": null,
+    "perfilMarca": "HI (High)",
+    "volumenCc": 365.0,
+    "baseCm": 11.0,
+    "alturaCm": 11.0,
+    "proyeccionCm": 5.4,
+    "arcoCm": 8.5,
+    "gel": null,
+    "catalogo": "Aportado sin referencia de catálogo",
+    "pagina": null,
+    "notas": "Superficie y línea sin especificar en el origen"
+  },
+  {
+    "marca": "Silimed",
+    "linea": "Redondos",
+    "referencia": "305 MD",
+    "forma": "redonda",
+    "superficie": "sin especificar",
+    "superficieMarca": null,
+    "perfilMarca": "MD (Moderate)",
+    "volumenCc": 305.0,
+    "baseCm": 11.0,
+    "alturaCm": 11.0,
+    "proyeccionCm": 4.6,
+    "arcoCm": 7.8,
+    "gel": null,
+    "catalogo": "Aportado sin referencia de catálogo",
+    "pagina": null,
+    "notas": "Superficie y línea sin especificar en el origen"
+  },
+  {
+    "marca": "Silimed",
+    "linea": "Redondos",
+    "referencia": "260 LO",
+    "forma": "redonda",
+    "superficie": "sin especificar",
+    "superficieMarca": null,
+    "perfilMarca": "LO (Low)",
+    "volumenCc": 260.0,
+    "baseCm": 11.0,
+    "alturaCm": 11.0,
+    "proyeccionCm": 3.8,
+    "arcoCm": 7.4,
+    "gel": null,
+    "catalogo": "Aportado sin referencia de catálogo",
+    "pagina": null,
+    "notas": "Superficie y línea sin especificar en el origen"
+  },
+  {
+    "marca": "Silimed",
+    "linea": "Redondos",
+    "referencia": "430 XH",
+    "forma": "redonda",
+    "superficie": "sin especificar",
+    "superficieMarca": null,
+    "perfilMarca": "XH (Extra High)",
+    "volumenCc": 430.0,
+    "baseCm": 11.3,
+    "alturaCm": 11.3,
+    "proyeccionCm": 6.3,
+    "arcoCm": 9.2,
+    "gel": null,
+    "catalogo": "Aportado sin referencia de catálogo",
+    "pagina": null,
+    "notas": "Superficie y línea sin especificar en el origen"
+  },
+  {
+    "marca": "Silimed",
+    "linea": "Redondos",
+    "referencia": "390 HI",
+    "forma": "redonda",
+    "superficie": "sin especificar",
+    "superficieMarca": null,
+    "perfilMarca": "HI (High)",
+    "volumenCc": 390.0,
+    "baseCm": 11.3,
+    "alturaCm": 11.3,
+    "proyeccionCm": 5.5,
+    "arcoCm": 8.6,
+    "gel": null,
+    "catalogo": "Aportado sin referencia de catálogo",
+    "pagina": null,
+    "notas": "Superficie y línea sin especificar en el origen"
+  },
+  {
+    "marca": "Silimed",
+    "linea": "Redondos",
+    "referencia": "330 MD",
+    "forma": "redonda",
+    "superficie": "sin especificar",
+    "superficieMarca": null,
+    "perfilMarca": "MD (Moderate)",
+    "volumenCc": 330.0,
+    "baseCm": 11.3,
+    "alturaCm": 11.3,
+    "proyeccionCm": 4.7,
+    "arcoCm": 8.0,
+    "gel": null,
+    "catalogo": "Aportado sin referencia de catálogo",
+    "pagina": null,
+    "notas": "Superficie y línea sin especificar en el origen"
+  },
+  {
+    "marca": "Silimed",
+    "linea": "Redondos",
+    "referencia": "275 LO",
+    "forma": "redonda",
+    "superficie": "sin especificar",
+    "superficieMarca": null,
+    "perfilMarca": "LO (Low)",
+    "volumenCc": 275.0,
+    "baseCm": 11.3,
+    "alturaCm": 11.3,
+    "proyeccionCm": 3.9,
+    "arcoCm": 7.5,
+    "gel": null,
+    "catalogo": "Aportado sin referencia de catálogo",
+    "pagina": null,
+    "notas": "Superficie y línea sin especificar en el origen"
+  },
+  {
+    "marca": "Silimed",
+    "linea": "Redondos",
+    "referencia": "470 XH",
+    "forma": "redonda",
+    "superficie": "sin especificar",
+    "superficieMarca": null,
+    "perfilMarca": "XH (Extra High)",
+    "volumenCc": 470.0,
+    "baseCm": 11.6,
+    "alturaCm": 11.6,
+    "proyeccionCm": 6.4,
+    "arcoCm": 9.4,
+    "gel": null,
+    "catalogo": "Aportado sin referencia de catálogo",
+    "pagina": null,
+    "notas": "Superficie y línea sin especificar en el origen"
+  },
+  {
+    "marca": "Silimed",
+    "linea": "Redondos",
+    "referencia": "420 HI",
+    "forma": "redonda",
+    "superficie": "sin especificar",
+    "superficieMarca": null,
+    "perfilMarca": "HI (High)",
+    "volumenCc": 420.0,
+    "baseCm": 11.6,
+    "alturaCm": 11.6,
+    "proyeccionCm": 5.6,
+    "arcoCm": 8.8,
+    "gel": null,
+    "catalogo": "Aportado sin referencia de catálogo",
+    "pagina": null,
+    "notas": "Superficie y línea sin especificar en el origen"
+  },
+  {
+    "marca": "Silimed",
+    "linea": "Redondos",
+    "referencia": "350 MD",
+    "forma": "redonda",
+    "superficie": "sin especificar",
+    "superficieMarca": null,
+    "perfilMarca": "MD (Moderate)",
+    "volumenCc": 350.0,
+    "baseCm": 11.6,
+    "alturaCm": 11.6,
+    "proyeccionCm": 4.8,
+    "arcoCm": 8.2,
+    "gel": null,
+    "catalogo": "Aportado sin referencia de catálogo",
+    "pagina": null,
+    "notas": "Superficie y línea sin especificar en el origen"
+  },
+  {
+    "marca": "Silimed",
+    "linea": "Redondos",
+    "referencia": "305 LO",
+    "forma": "redonda",
+    "superficie": "sin especificar",
+    "superficieMarca": null,
+    "perfilMarca": "LO (Low)",
+    "volumenCc": 305.0,
+    "baseCm": 11.6,
+    "alturaCm": 11.6,
+    "proyeccionCm": 4.0,
+    "arcoCm": 7.7,
+    "gel": null,
+    "catalogo": "Aportado sin referencia de catálogo",
+    "pagina": null,
+    "notas": "Superficie y línea sin especificar en el origen"
+  },
+  {
+    "marca": "Silimed",
+    "linea": "Redondos",
+    "referencia": "500 XH",
+    "forma": "redonda",
+    "superficie": "sin especificar",
+    "superficieMarca": null,
+    "perfilMarca": "XH (Extra High)",
+    "volumenCc": 500.0,
+    "baseCm": 11.9,
+    "alturaCm": 11.9,
+    "proyeccionCm": 6.5,
+    "arcoCm": 9.6,
+    "gel": null,
+    "catalogo": "Aportado sin referencia de catálogo",
+    "pagina": null,
+    "notas": "Superficie y línea sin especificar en el origen"
+  },
+  {
+    "marca": "Silimed",
+    "linea": "Redondos",
+    "referencia": "445 HI",
+    "forma": "redonda",
+    "superficie": "sin especificar",
+    "superficieMarca": null,
+    "perfilMarca": "HI (High)",
+    "volumenCc": 445.0,
+    "baseCm": 11.9,
+    "alturaCm": 11.9,
+    "proyeccionCm": 5.7,
+    "arcoCm": 9.0,
+    "gel": null,
+    "catalogo": "Aportado sin referencia de catálogo",
+    "pagina": null,
+    "notas": "Superficie y línea sin especificar en el origen"
+  },
+  {
+    "marca": "Silimed",
+    "linea": "Redondos",
+    "referencia": "385 MD",
+    "forma": "redonda",
+    "superficie": "sin especificar",
+    "superficieMarca": null,
+    "perfilMarca": "MD (Moderate)",
+    "volumenCc": 385.0,
+    "baseCm": 11.9,
+    "alturaCm": 11.9,
+    "proyeccionCm": 4.9,
+    "arcoCm": 8.4,
+    "gel": null,
+    "catalogo": "Aportado sin referencia de catálogo",
+    "pagina": null,
+    "notas": "Superficie y línea sin especificar en el origen"
+  },
+  {
+    "marca": "Silimed",
+    "linea": "Redondos",
+    "referencia": "335 LO",
+    "forma": "redonda",
+    "superficie": "sin especificar",
+    "superficieMarca": null,
+    "perfilMarca": "LO (Low)",
+    "volumenCc": 335.0,
+    "baseCm": 11.9,
+    "alturaCm": 11.9,
+    "proyeccionCm": 4.1,
+    "arcoCm": 8.0,
+    "gel": null,
+    "catalogo": "Aportado sin referencia de catálogo",
+    "pagina": null,
+    "notas": "Superficie y línea sin especificar en el origen"
+  },
+  {
+    "marca": "Silimed",
+    "linea": "Redondos",
+    "referencia": "570 XH",
+    "forma": "redonda",
+    "superficie": "sin especificar",
+    "superficieMarca": null,
+    "perfilMarca": "XH (Extra High)",
+    "volumenCc": 570.0,
+    "baseCm": 12.5,
+    "alturaCm": 12.5,
+    "proyeccionCm": 6.7,
+    "arcoCm": 10.0,
+    "gel": null,
+    "catalogo": "Aportado sin referencia de catálogo",
+    "pagina": null,
+    "notas": "Superficie y línea sin especificar en el origen"
+  },
+  {
+    "marca": "Silimed",
+    "linea": "Redondos",
+    "referencia": "505 HI",
+    "forma": "redonda",
+    "superficie": "sin especificar",
+    "superficieMarca": null,
+    "perfilMarca": "HI (High)",
+    "volumenCc": 505.0,
+    "baseCm": 12.5,
+    "alturaCm": 12.5,
+    "proyeccionCm": 5.9,
+    "arcoCm": 9.4,
+    "gel": null,
+    "catalogo": "Aportado sin referencia de catálogo",
+    "pagina": null,
+    "notas": "Superficie y línea sin especificar en el origen"
+  },
+  {
+    "marca": "Mentor",
+    "linea": "MemoryGel Xtra",
+    "referencia": "TMPX-130",
+    "forma": "redonda",
+    "superficie": "texturizada",
+    "superficieMarca": "SILTEX",
+    "perfilMarca": "Perfil Moderado Plus",
+    "volumenCc": 130.0,
+    "baseCm": 9.1,
+    "alturaCm": 9.1,
+    "proyeccionCm": 3.1,
+    "arcoCm": null,
+    "gel": null,
+    "catalogo": "Aportado sin referencia de catálogo",
+    "pagina": null,
+    "notas": "El catálogo de redondos no publica arco vertical"
+  },
+  {
+    "marca": "Mentor",
+    "linea": "MemoryGel Xtra",
+    "referencia": "TMPX-160",
+    "forma": "redonda",
+    "superficie": "texturizada",
+    "superficieMarca": "SILTEX",
+    "perfilMarca": "Perfil Moderado Plus",
+    "volumenCc": 160.0,
+    "baseCm": 9.5,
+    "alturaCm": 9.5,
+    "proyeccionCm": 3.3,
+    "arcoCm": null,
+    "gel": null,
+    "catalogo": "Aportado sin referencia de catálogo",
+    "pagina": null,
+    "notas": "El catálogo de redondos no publica arco vertical"
+  },
+  {
+    "marca": "Mentor",
+    "linea": "MemoryGel Xtra",
+    "referencia": "TMPX-190",
+    "forma": "redonda",
+    "superficie": "texturizada",
+    "superficieMarca": "SILTEX",
+    "perfilMarca": "Perfil Moderado Plus",
+    "volumenCc": 190.0,
+    "baseCm": 10.1,
+    "alturaCm": 10.1,
+    "proyeccionCm": 3.5,
+    "arcoCm": null,
+    "gel": null,
+    "catalogo": "Aportado sin referencia de catálogo",
+    "pagina": null,
+    "notas": "El catálogo de redondos no publica arco vertical"
+  },
+  {
+    "marca": "Mentor",
+    "linea": "MemoryGel Xtra",
+    "referencia": "TMPX-215",
+    "forma": "redonda",
+    "superficie": "texturizada",
+    "superficieMarca": "SILTEX",
+    "perfilMarca": "Perfil Moderado Plus",
+    "volumenCc": 215.0,
+    "baseCm": 10.5,
+    "alturaCm": 10.5,
+    "proyeccionCm": 3.6,
+    "arcoCm": null,
+    "gel": null,
+    "catalogo": "Aportado sin referencia de catálogo",
+    "pagina": null,
+    "notas": "El catálogo de redondos no publica arco vertical"
+  },
+  {
+    "marca": "Mentor",
+    "linea": "MemoryGel Xtra",
+    "referencia": "TMPX-240",
+    "forma": "redonda",
+    "superficie": "texturizada",
+    "superficieMarca": "SILTEX",
+    "perfilMarca": "Perfil Moderado Plus",
+    "volumenCc": 240.0,
+    "baseCm": 10.9,
+    "alturaCm": 10.9,
+    "proyeccionCm": 3.8,
+    "arcoCm": null,
+    "gel": null,
+    "catalogo": "Aportado sin referencia de catálogo",
+    "pagina": null,
+    "notas": "El catálogo de redondos no publica arco vertical"
+  },
+  {
+    "marca": "Mentor",
+    "linea": "MemoryGel Xtra",
+    "referencia": "TMPX-270",
+    "forma": "redonda",
+    "superficie": "texturizada",
+    "superficieMarca": "SILTEX",
+    "perfilMarca": "Perfil Moderado Plus",
+    "volumenCc": 270.0,
+    "baseCm": 11.4,
+    "alturaCm": 11.4,
+    "proyeccionCm": 3.9,
+    "arcoCm": null,
+    "gel": null,
+    "catalogo": "Aportado sin referencia de catálogo",
+    "pagina": null,
+    "notas": "El catálogo de redondos no publica arco vertical"
+  },
+  {
+    "marca": "Mentor",
+    "linea": "MemoryGel Xtra",
+    "referencia": "TMPX-295",
+    "forma": "redonda",
+    "superficie": "texturizada",
+    "superficieMarca": "SILTEX",
+    "perfilMarca": "Perfil Moderado Plus",
+    "volumenCc": 295.0,
+    "baseCm": 11.6,
+    "alturaCm": 11.6,
+    "proyeccionCm": 4.1,
+    "arcoCm": null,
+    "gel": null,
+    "catalogo": "Aportado sin referencia de catálogo",
+    "pagina": null,
+    "notas": "El catálogo de redondos no publica arco vertical"
+  },
+  {
+    "marca": "Mentor",
+    "linea": "MemoryGel Xtra",
+    "referencia": "TMPX-325",
+    "forma": "redonda",
+    "superficie": "texturizada",
+    "superficieMarca": "SILTEX",
+    "perfilMarca": "Perfil Moderado Plus",
+    "volumenCc": 325.0,
+    "baseCm": 11.9,
+    "alturaCm": 11.9,
+    "proyeccionCm": 4.2,
+    "arcoCm": null,
+    "gel": null,
+    "catalogo": "Aportado sin referencia de catálogo",
+    "pagina": null,
+    "notas": "El catálogo de redondos no publica arco vertical"
+  },
+  {
+    "marca": "Mentor",
+    "linea": "MemoryGel Xtra",
+    "referencia": "TMPX-350",
+    "forma": "redonda",
+    "superficie": "texturizada",
+    "superficieMarca": "SILTEX",
+    "perfilMarca": "Perfil Moderado Plus",
+    "volumenCc": 350.0,
+    "baseCm": 12.2,
+    "alturaCm": 12.2,
+    "proyeccionCm": 4.3,
+    "arcoCm": null,
+    "gel": null,
+    "catalogo": "Aportado sin referencia de catálogo",
+    "pagina": null,
+    "notas": "El catálogo de redondos no publica arco vertical"
+  },
+  {
+    "marca": "Mentor",
+    "linea": "MemoryGel Xtra",
+    "referencia": "TMPX-370",
+    "forma": "redonda",
+    "superficie": "texturizada",
+    "superficieMarca": "SILTEX",
+    "perfilMarca": "Perfil Moderado Plus",
+    "volumenCc": 370.0,
+    "baseCm": 12.7,
+    "alturaCm": 12.7,
+    "proyeccionCm": 4.3,
+    "arcoCm": null,
+    "gel": null,
+    "catalogo": "Aportado sin referencia de catálogo",
+    "pagina": null,
+    "notas": "El catálogo de redondos no publica arco vertical"
+  },
+  {
+    "marca": "Mentor",
+    "linea": "MemoryGel Xtra",
+    "referencia": "TMPX-405",
+    "forma": "redonda",
+    "superficie": "texturizada",
+    "superficieMarca": "SILTEX",
+    "perfilMarca": "Perfil Moderado Plus",
+    "volumenCc": 405.0,
+    "baseCm": 12.8,
+    "alturaCm": 12.8,
+    "proyeccionCm": 4.5,
+    "arcoCm": null,
+    "gel": null,
+    "catalogo": "Aportado sin referencia de catálogo",
+    "pagina": null,
+    "notas": "El catálogo de redondos no publica arco vertical"
+  },
+  {
+    "marca": "Mentor",
+    "linea": "MemoryGel Xtra",
+    "referencia": "TMPX-440",
+    "forma": "redonda",
+    "superficie": "texturizada",
+    "superficieMarca": "SILTEX",
+    "perfilMarca": "Perfil Moderado Plus",
+    "volumenCc": 440.0,
+    "baseCm": 13.1,
+    "alturaCm": 13.1,
+    "proyeccionCm": 4.8,
+    "arcoCm": null,
+    "gel": null,
+    "catalogo": "Aportado sin referencia de catálogo",
+    "pagina": null,
+    "notas": "El catálogo de redondos no publica arco vertical"
+  },
+  {
+    "marca": "Mentor",
+    "linea": "MemoryGel Xtra",
+    "referencia": "TMPX-490",
+    "forma": "redonda",
+    "superficie": "texturizada",
+    "superficieMarca": "SILTEX",
+    "perfilMarca": "Perfil Moderado Plus",
+    "volumenCc": 490.0,
+    "baseCm": 13.6,
+    "alturaCm": 13.6,
+    "proyeccionCm": 4.8,
+    "arcoCm": null,
+    "gel": null,
+    "catalogo": "Aportado sin referencia de catálogo",
+    "pagina": null,
+    "notas": "El catálogo de redondos no publica arco vertical"
+  },
+  {
+    "marca": "Mentor",
+    "linea": "MemoryGel Xtra",
+    "referencia": "TMPX-545",
+    "forma": "redonda",
+    "superficie": "texturizada",
+    "superficieMarca": "SILTEX",
+    "perfilMarca": "Perfil Moderado Plus",
+    "volumenCc": 545.0,
+    "baseCm": 14.1,
+    "alturaCm": 14.1,
+    "proyeccionCm": 5.0,
+    "arcoCm": null,
+    "gel": null,
+    "catalogo": "Aportado sin referencia de catálogo",
+    "pagina": null,
+    "notas": "El catálogo de redondos no publica arco vertical"
+  },
+  {
+    "marca": "Mentor",
+    "linea": "MemoryGel Xtra",
+    "referencia": "TMPX-605",
+    "forma": "redonda",
+    "superficie": "texturizada",
+    "superficieMarca": "SILTEX",
+    "perfilMarca": "Perfil Moderado Plus",
+    "volumenCc": 605.0,
+    "baseCm": 14.4,
+    "alturaCm": 14.4,
+    "proyeccionCm": 5.3,
+    "arcoCm": null,
+    "gel": null,
+    "catalogo": "Aportado sin referencia de catálogo",
+    "pagina": null,
+    "notas": "El catálogo de redondos no publica arco vertical"
+  },
+  {
+    "marca": "Mentor",
+    "linea": "MemoryGel Xtra",
+    "referencia": "TMPX-645",
+    "forma": "redonda",
+    "superficie": "texturizada",
+    "superficieMarca": "SILTEX",
+    "perfilMarca": "Perfil Moderado Plus",
+    "volumenCc": 645.0,
+    "baseCm": 15.0,
+    "alturaCm": 15.0,
+    "proyeccionCm": 5.3,
+    "arcoCm": null,
+    "gel": null,
+    "catalogo": "Aportado sin referencia de catálogo",
+    "pagina": null,
+    "notas": "El catálogo de redondos no publica arco vertical"
+  },
+  {
+    "marca": "Mentor",
+    "linea": "MemoryGel Xtra",
+    "referencia": "TMPX-755",
+    "forma": "redonda",
+    "superficie": "texturizada",
+    "superficieMarca": "SILTEX",
+    "perfilMarca": "Perfil Moderado Plus",
+    "volumenCc": 755.0,
+    "baseCm": 15.7,
+    "alturaCm": 15.7,
+    "proyeccionCm": 5.6,
+    "arcoCm": null,
+    "gel": null,
+    "catalogo": "Aportado sin referencia de catálogo",
+    "pagina": null,
+    "notas": "El catálogo de redondos no publica arco vertical"
+  },
+  {
+    "marca": "Mentor",
+    "linea": "MemoryGel Xtra",
+    "referencia": "THPX-150",
+    "forma": "redonda",
+    "superficie": "texturizada",
+    "superficieMarca": "SILTEX",
+    "perfilMarca": "Perfil Alto",
+    "volumenCc": 150.0,
+    "baseCm": 8.4,
+    "alturaCm": 8.4,
+    "proyeccionCm": 4.2,
+    "arcoCm": null,
+    "gel": null,
+    "catalogo": "Aportado sin referencia de catálogo",
+    "pagina": null,
+    "notas": "El catálogo de redondos no publica arco vertical"
+  },
+  {
+    "marca": "Mentor",
+    "linea": "MemoryGel Xtra",
+    "referencia": "THPX-175",
+    "forma": "redonda",
+    "superficie": "texturizada",
+    "superficieMarca": "SILTEX",
+    "perfilMarca": "Perfil Alto",
+    "volumenCc": 175.0,
+    "baseCm": 9.0,
+    "alturaCm": 9.0,
+    "proyeccionCm": 4.4,
+    "arcoCm": null,
+    "gel": null,
+    "catalogo": "Aportado sin referencia de catálogo",
+    "pagina": null,
+    "notas": "El catálogo de redondos no publica arco vertical"
+  },
+  {
+    "marca": "Mentor",
+    "linea": "MemoryGel Xtra",
+    "referencia": "THPX-200",
+    "forma": "redonda",
+    "superficie": "texturizada",
+    "superficieMarca": "SILTEX",
+    "perfilMarca": "Perfil Alto",
+    "volumenCc": 200.0,
+    "baseCm": 9.4,
+    "alturaCm": 9.4,
+    "proyeccionCm": 4.5,
+    "arcoCm": null,
+    "gel": null,
+    "catalogo": "Aportado sin referencia de catálogo",
+    "pagina": null,
+    "notas": "El catálogo de redondos no publica arco vertical"
+  },
+  {
+    "marca": "Mentor",
+    "linea": "MemoryGel Xtra",
+    "referencia": "THPX-230",
+    "forma": "redonda",
+    "superficie": "texturizada",
+    "superficieMarca": "SILTEX",
+    "perfilMarca": "Perfil Alto",
+    "volumenCc": 230.0,
+    "baseCm": 9.8,
+    "alturaCm": 9.8,
+    "proyeccionCm": 4.8,
+    "arcoCm": null,
+    "gel": null,
+    "catalogo": "Aportado sin referencia de catálogo",
+    "pagina": null,
+    "notas": "El catálogo de redondos no publica arco vertical"
+  },
+  {
+    "marca": "Mentor",
+    "linea": "MemoryGel Xtra",
+    "referencia": "THPX-255",
+    "forma": "redonda",
+    "superficie": "texturizada",
+    "superficieMarca": "SILTEX",
+    "perfilMarca": "Perfil Alto",
+    "volumenCc": 255.0,
+    "baseCm": 10.1,
+    "alturaCm": 10.1,
+    "proyeccionCm": 4.9,
+    "arcoCm": null,
+    "gel": null,
+    "catalogo": "Aportado sin referencia de catálogo",
+    "pagina": null,
+    "notas": "El catálogo de redondos no publica arco vertical"
+  },
+  {
+    "marca": "Mentor",
+    "linea": "MemoryGel Xtra",
+    "referencia": "THPX-285",
+    "forma": "redonda",
+    "superficie": "texturizada",
+    "superficieMarca": "SILTEX",
+    "perfilMarca": "Perfil Alto",
+    "volumenCc": 285.0,
+    "baseCm": 10.5,
+    "alturaCm": 10.5,
+    "proyeccionCm": 5.1,
+    "arcoCm": null,
+    "gel": null,
+    "catalogo": "Aportado sin referencia de catálogo",
+    "pagina": null,
+    "notas": "El catálogo de redondos no publica arco vertical"
+  },
+  {
+    "marca": "Mentor",
+    "linea": "MemoryGel Xtra",
+    "referencia": "THPX-325",
+    "forma": "redonda",
+    "superficie": "texturizada",
+    "superficieMarca": "SILTEX",
+    "perfilMarca": "Perfil Alto",
+    "volumenCc": 325.0,
+    "baseCm": 10.8,
+    "alturaCm": 10.8,
+    "proyeccionCm": 5.4,
+    "arcoCm": null,
+    "gel": null,
+    "catalogo": "Aportado sin referencia de catálogo",
+    "pagina": null,
+    "notas": "El catálogo de redondos no publica arco vertical"
+  },
+  {
+    "marca": "Mentor",
+    "linea": "MemoryGel Xtra",
+    "referencia": "THPX-340",
+    "forma": "redonda",
+    "superficie": "texturizada",
+    "superficieMarca": "SILTEX",
+    "perfilMarca": "Perfil Alto",
+    "volumenCc": 340.0,
+    "baseCm": 11.1,
+    "alturaCm": 11.1,
+    "proyeccionCm": 5.4,
+    "arcoCm": null,
+    "gel": null,
+    "catalogo": "Aportado sin referencia de catálogo",
+    "pagina": null,
+    "notas": "El catálogo de redondos no publica arco vertical"
+  },
+  {
+    "marca": "Mentor",
+    "linea": "MemoryGel Xtra",
+    "referencia": "THPX-365",
+    "forma": "redonda",
+    "superficie": "texturizada",
+    "superficieMarca": "SILTEX",
+    "perfilMarca": "Perfil Alto",
+    "volumenCc": 365.0,
+    "baseCm": 11.4,
+    "alturaCm": 11.4,
+    "proyeccionCm": 5.5,
+    "arcoCm": null,
+    "gel": null,
+    "catalogo": "Aportado sin referencia de catálogo",
+    "pagina": null,
+    "notas": "El catálogo de redondos no publica arco vertical"
+  },
+  {
+    "marca": "Mentor",
+    "linea": "MemoryGel Xtra",
+    "referencia": "THPX-405",
+    "forma": "redonda",
+    "superficie": "texturizada",
+    "superficieMarca": "SILTEX",
+    "perfilMarca": "Perfil Alto",
+    "volumenCc": 405.0,
+    "baseCm": 11.6,
+    "alturaCm": 11.6,
+    "proyeccionCm": 5.9,
+    "arcoCm": null,
+    "gel": null,
+    "catalogo": "Aportado sin referencia de catálogo",
+    "pagina": null,
+    "notas": "El catálogo de redondos no publica arco vertical"
+  },
+  {
+    "marca": "Mentor",
+    "linea": "MemoryGel Xtra",
+    "referencia": "THPX-425",
+    "forma": "redonda",
+    "superficie": "texturizada",
+    "superficieMarca": "SILTEX",
+    "perfilMarca": "Perfil Alto",
+    "volumenCc": 425.0,
+    "baseCm": 11.9,
+    "alturaCm": 11.9,
+    "proyeccionCm": 5.8,
+    "arcoCm": null,
+    "gel": null,
+    "catalogo": "Aportado sin referencia de catálogo",
+    "pagina": null,
+    "notas": "El catálogo de redondos no publica arco vertical"
+  },
+  {
+    "marca": "Mentor",
+    "linea": "MemoryGel Xtra",
+    "referencia": "THPX-455",
+    "forma": "redonda",
+    "superficie": "texturizada",
+    "superficieMarca": "SILTEX",
+    "perfilMarca": "Perfil Alto",
+    "volumenCc": 455.0,
+    "baseCm": 12.1,
+    "alturaCm": 12.1,
+    "proyeccionCm": 6.0,
+    "arcoCm": null,
+    "gel": null,
+    "catalogo": "Aportado sin referencia de catálogo",
+    "pagina": null,
+    "notas": "El catálogo de redondos no publica arco vertical"
+  },
+  {
+    "marca": "Mentor",
+    "linea": "MemoryGel Xtra",
+    "referencia": "THPX-470",
+    "forma": "redonda",
+    "superficie": "texturizada",
+    "superficieMarca": "SILTEX",
+    "perfilMarca": "Perfil Alto",
+    "volumenCc": 470.0,
+    "baseCm": 12.3,
+    "alturaCm": 12.3,
+    "proyeccionCm": 5.9,
+    "arcoCm": null,
+    "gel": null,
+    "catalogo": "Aportado sin referencia de catálogo",
+    "pagina": null,
+    "notas": "El catálogo de redondos no publica arco vertical"
+  },
+  {
+    "marca": "Mentor",
+    "linea": "MemoryGel Xtra",
+    "referencia": "THPX-515",
+    "forma": "redonda",
+    "superficie": "texturizada",
+    "superficieMarca": "SILTEX",
+    "perfilMarca": "Perfil Alto",
+    "volumenCc": 515.0,
+    "baseCm": 12.6,
+    "alturaCm": 12.6,
+    "proyeccionCm": 6.2,
+    "arcoCm": null,
+    "gel": null,
+    "catalogo": "Aportado sin referencia de catálogo",
+    "pagina": null,
+    "notas": "El catálogo de redondos no publica arco vertical"
+  },
+  {
+    "marca": "Mentor",
+    "linea": "MemoryGel Xtra",
+    "referencia": "THPX-570",
+    "forma": "redonda",
+    "superficie": "texturizada",
+    "superficieMarca": "SILTEX",
+    "perfilMarca": "Perfil Alto",
+    "volumenCc": 570.0,
+    "baseCm": 13.2,
+    "alturaCm": 13.2,
+    "proyeccionCm": 6.3,
+    "arcoCm": null,
+    "gel": null,
+    "catalogo": "Aportado sin referencia de catálogo",
+    "pagina": null,
+    "notas": "El catálogo de redondos no publica arco vertical"
+  },
+  {
+    "marca": "Mentor",
+    "linea": "MemoryGel Xtra",
+    "referencia": "THPX-620",
+    "forma": "redonda",
+    "superficie": "texturizada",
+    "superficieMarca": "SILTEX",
+    "perfilMarca": "Perfil Alto",
+    "volumenCc": 620.0,
+    "baseCm": 13.4,
+    "alturaCm": 13.4,
+    "proyeccionCm": 6.5,
+    "arcoCm": null,
+    "gel": null,
+    "catalogo": "Aportado sin referencia de catálogo",
+    "pagina": null,
+    "notas": "El catálogo de redondos no publica arco vertical"
+  },
+  {
+    "marca": "Mentor",
+    "linea": "MemoryGel Xtra",
+    "referencia": "THPX-680",
+    "forma": "redonda",
+    "superficie": "texturizada",
+    "superficieMarca": "SILTEX",
+    "perfilMarca": "Perfil Alto",
+    "volumenCc": 680.0,
+    "baseCm": 14.0,
+    "alturaCm": 14.0,
+    "proyeccionCm": 6.6,
+    "arcoCm": null,
+    "gel": null,
+    "catalogo": "Aportado sin referencia de catálogo",
+    "pagina": null,
+    "notas": "El catálogo de redondos no publica arco vertical"
+  },
+  {
+    "marca": "Mentor",
+    "linea": "MemoryGel Xtra",
+    "referencia": "THPX-725",
+    "forma": "redonda",
+    "superficie": "texturizada",
+    "superficieMarca": "SILTEX",
+    "perfilMarca": "Perfil Alto",
+    "volumenCc": 725.0,
+    "baseCm": 14.5,
+    "alturaCm": 14.5,
+    "proyeccionCm": 6.7,
+    "arcoCm": null,
+    "gel": null,
+    "catalogo": "Aportado sin referencia de catálogo",
+    "pagina": null,
+    "notas": "El catálogo de redondos no publica arco vertical"
+  },
+  {
+    "marca": "Mentor",
+    "linea": "MemoryGel Xtra",
+    "referencia": "THPX-765",
+    "forma": "redonda",
+    "superficie": "texturizada",
+    "superficieMarca": "SILTEX",
+    "perfilMarca": "Perfil Alto",
+    "volumenCc": 765.0,
+    "baseCm": 14.7,
+    "alturaCm": 14.7,
+    "proyeccionCm": 6.7,
+    "arcoCm": null,
+    "gel": null,
+    "catalogo": "Aportado sin referencia de catálogo",
+    "pagina": null,
+    "notas": "El catálogo de redondos no publica arco vertical"
+  },
+  {
+    "marca": "Mentor",
+    "linea": "MemoryGel Xtra",
+    "referencia": "SMPX-130",
+    "forma": "redonda",
+    "superficie": "lisa",
+    "superficieMarca": "Liso",
+    "perfilMarca": "Perfil Moderado Plus",
+    "volumenCc": 130.0,
+    "baseCm": 8.9,
+    "alturaCm": 8.9,
+    "proyeccionCm": 3.1,
+    "arcoCm": null,
+    "gel": null,
+    "catalogo": "Aportado sin referencia de catálogo",
+    "pagina": null,
+    "notas": "El catálogo de redondos no publica arco vertical"
+  },
+  {
+    "marca": "Mentor",
+    "linea": "MemoryGel Xtra",
+    "referencia": "SMPX-160",
+    "forma": "redonda",
+    "superficie": "lisa",
+    "superficieMarca": "Liso",
+    "perfilMarca": "Perfil Moderado Plus",
+    "volumenCc": 160.0,
+    "baseCm": 9.5,
+    "alturaCm": 9.5,
+    "proyeccionCm": 3.3,
+    "arcoCm": null,
+    "gel": null,
+    "catalogo": "Aportado sin referencia de catálogo",
+    "pagina": null,
+    "notas": "El catálogo de redondos no publica arco vertical"
+  },
+  {
+    "marca": "Mentor",
+    "linea": "MemoryGel Xtra",
+    "referencia": "SMPX-190",
+    "forma": "redonda",
+    "superficie": "lisa",
+    "superficieMarca": "Liso",
+    "perfilMarca": "Perfil Moderado Plus",
+    "volumenCc": 190.0,
+    "baseCm": 10.0,
+    "alturaCm": 10.0,
+    "proyeccionCm": 3.4,
+    "arcoCm": null,
+    "gel": null,
+    "catalogo": "Aportado sin referencia de catálogo",
+    "pagina": null,
+    "notas": "El catálogo de redondos no publica arco vertical"
+  },
+  {
+    "marca": "Mentor",
+    "linea": "MemoryGel Xtra",
+    "referencia": "SMPX-215",
+    "forma": "redonda",
+    "superficie": "lisa",
+    "superficieMarca": "Liso",
+    "perfilMarca": "Perfil Moderado Plus",
+    "volumenCc": 215.0,
+    "baseCm": 10.4,
+    "alturaCm": 10.4,
+    "proyeccionCm": 3.6,
+    "arcoCm": null,
+    "gel": null,
+    "catalogo": "Aportado sin referencia de catálogo",
+    "pagina": null,
+    "notas": "El catálogo de redondos no publica arco vertical"
+  },
+  {
+    "marca": "Mentor",
+    "linea": "MemoryGel Xtra",
+    "referencia": "SMPX-240",
+    "forma": "redonda",
+    "superficie": "lisa",
+    "superficieMarca": "Liso",
+    "perfilMarca": "Perfil Moderado Plus",
+    "volumenCc": 240.0,
+    "baseCm": 10.8,
+    "alturaCm": 10.8,
+    "proyeccionCm": 3.7,
+    "arcoCm": null,
+    "gel": null,
+    "catalogo": "Aportado sin referencia de catálogo",
+    "pagina": null,
+    "notas": "El catálogo de redondos no publica arco vertical"
+  },
+  {
+    "marca": "Mentor",
+    "linea": "MemoryGel Xtra",
+    "referencia": "SMPX-270",
+    "forma": "redonda",
+    "superficie": "lisa",
+    "superficieMarca": "Liso",
+    "perfilMarca": "Perfil Moderado Plus",
+    "volumenCc": 270.0,
+    "baseCm": 11.4,
+    "alturaCm": 11.4,
+    "proyeccionCm": 3.8,
+    "arcoCm": null,
+    "gel": null,
+    "catalogo": "Aportado sin referencia de catálogo",
+    "pagina": null,
+    "notas": "El catálogo de redondos no publica arco vertical"
+  },
+  {
+    "marca": "Mentor",
+    "linea": "MemoryGel Xtra",
+    "referencia": "SMPX-295",
+    "forma": "redonda",
+    "superficie": "lisa",
+    "superficieMarca": "Liso",
+    "perfilMarca": "Perfil Moderado Plus",
+    "volumenCc": 295.0,
+    "baseCm": 11.5,
+    "alturaCm": 11.5,
+    "proyeccionCm": 4.0,
+    "arcoCm": null,
+    "gel": null,
+    "catalogo": "Aportado sin referencia de catálogo",
+    "pagina": null,
+    "notas": "El catálogo de redondos no publica arco vertical"
+  },
+  {
+    "marca": "Mentor",
+    "linea": "MemoryGel Xtra",
+    "referencia": "SMPX-325",
+    "forma": "redonda",
+    "superficie": "lisa",
+    "superficieMarca": "Liso",
+    "perfilMarca": "Perfil Moderado Plus",
+    "volumenCc": 325.0,
+    "baseCm": 11.9,
+    "alturaCm": 11.9,
+    "proyeccionCm": 4.1,
+    "arcoCm": null,
+    "gel": null,
+    "catalogo": "Aportado sin referencia de catálogo",
+    "pagina": null,
+    "notas": "El catálogo de redondos no publica arco vertical"
+  },
+  {
+    "marca": "Mentor",
+    "linea": "MemoryGel Xtra",
+    "referencia": "SMPX-350",
+    "forma": "redonda",
+    "superficie": "lisa",
+    "superficieMarca": "Liso",
+    "perfilMarca": "Perfil Moderado Plus",
+    "volumenCc": 350.0,
+    "baseCm": 12.3,
+    "alturaCm": 12.3,
+    "proyeccionCm": 4.1,
+    "arcoCm": null,
+    "gel": null,
+    "catalogo": "Aportado sin referencia de catálogo",
+    "pagina": null,
+    "notas": "El catálogo de redondos no publica arco vertical"
+  },
+  {
+    "marca": "Mentor",
+    "linea": "MemoryGel Xtra",
+    "referencia": "SMPX-370",
+    "forma": "redonda",
+    "superficie": "lisa",
+    "superficieMarca": "Liso",
+    "perfilMarca": "Perfil Moderado Plus",
+    "volumenCc": 370.0,
+    "baseCm": 12.6,
+    "alturaCm": 12.6,
+    "proyeccionCm": 4.1,
+    "arcoCm": null,
+    "gel": null,
+    "catalogo": "Aportado sin referencia de catálogo",
+    "pagina": null,
+    "notas": "El catálogo de redondos no publica arco vertical"
+  },
+  {
+    "marca": "Mentor",
+    "linea": "MemoryGel Xtra",
+    "referencia": "SMPX-405",
+    "forma": "redonda",
+    "superficie": "lisa",
+    "superficieMarca": "Liso",
+    "perfilMarca": "Perfil Moderado Plus",
+    "volumenCc": 405.0,
+    "baseCm": 12.7,
+    "alturaCm": 12.7,
+    "proyeccionCm": 4.4,
+    "arcoCm": null,
+    "gel": null,
+    "catalogo": "Aportado sin referencia de catálogo",
+    "pagina": null,
+    "notas": "El catálogo de redondos no publica arco vertical"
+  },
+  {
+    "marca": "Mentor",
+    "linea": "MemoryGel Xtra",
+    "referencia": "SMPX-440",
+    "forma": "redonda",
+    "superficie": "lisa",
+    "superficieMarca": "Liso",
+    "perfilMarca": "Perfil Moderado Plus",
+    "volumenCc": 440.0,
+    "baseCm": 13.1,
+    "alturaCm": 13.1,
+    "proyeccionCm": 4.5,
+    "arcoCm": null,
+    "gel": null,
+    "catalogo": "Aportado sin referencia de catálogo",
+    "pagina": null,
+    "notas": "El catálogo de redondos no publica arco vertical"
+  },
+  {
+    "marca": "Mentor",
+    "linea": "MemoryGel Xtra",
+    "referencia": "SMPX-490",
+    "forma": "redonda",
+    "superficie": "lisa",
+    "superficieMarca": "Liso",
+    "perfilMarca": "Perfil Moderado Plus",
+    "volumenCc": 490.0,
+    "baseCm": 13.6,
+    "alturaCm": 13.6,
+    "proyeccionCm": 4.7,
+    "arcoCm": null,
+    "gel": null,
+    "catalogo": "Aportado sin referencia de catálogo",
+    "pagina": null,
+    "notas": "El catálogo de redondos no publica arco vertical"
+  },
+  {
+    "marca": "Mentor",
+    "linea": "MemoryGel Xtra",
+    "referencia": "SMPX-545",
+    "forma": "redonda",
+    "superficie": "lisa",
+    "superficieMarca": "Liso",
+    "perfilMarca": "Perfil Moderado Plus",
+    "volumenCc": 545.0,
+    "baseCm": 14.0,
+    "alturaCm": 14.0,
+    "proyeccionCm": 4.9,
+    "arcoCm": null,
+    "gel": null,
+    "catalogo": "Aportado sin referencia de catálogo",
+    "pagina": null,
+    "notas": "El catálogo de redondos no publica arco vertical"
+  },
+  {
+    "marca": "Mentor",
+    "linea": "MemoryGel Xtra",
+    "referencia": "SMPX-605",
+    "forma": "redonda",
+    "superficie": "lisa",
+    "superficieMarca": "Liso",
+    "perfilMarca": "Perfil Moderado Plus",
+    "volumenCc": 605.0,
+    "baseCm": 14.5,
+    "alturaCm": 14.5,
+    "proyeccionCm": 5.1,
+    "arcoCm": null,
+    "gel": null,
+    "catalogo": "Aportado sin referencia de catálogo",
+    "pagina": null,
+    "notas": "El catálogo de redondos no publica arco vertical"
+  },
+  {
+    "marca": "Mentor",
+    "linea": "MemoryGel Xtra",
+    "referencia": "SMPX-645",
+    "forma": "redonda",
+    "superficie": "lisa",
+    "superficieMarca": "Liso",
+    "perfilMarca": "Perfil Moderado Plus",
+    "volumenCc": 645.0,
+    "baseCm": 14.9,
+    "alturaCm": 14.9,
+    "proyeccionCm": 5.1,
+    "arcoCm": null,
+    "gel": null,
+    "catalogo": "Aportado sin referencia de catálogo",
+    "pagina": null,
+    "notas": "El catálogo de redondos no publica arco vertical"
+  },
+  {
+    "marca": "Mentor",
+    "linea": "MemoryGel Xtra",
+    "referencia": "SMPX-755",
+    "forma": "redonda",
+    "superficie": "lisa",
+    "superficieMarca": "Liso",
+    "perfilMarca": "Perfil Moderado Plus",
+    "volumenCc": 755.0,
+    "baseCm": 15.7,
+    "alturaCm": 15.7,
+    "proyeccionCm": 5.4,
+    "arcoCm": null,
+    "gel": null,
+    "catalogo": "Aportado sin referencia de catálogo",
+    "pagina": null,
+    "notas": "El catálogo de redondos no publica arco vertical"
+  },
+  {
+    "marca": "Mentor",
+    "linea": "CPG Cohesive III",
+    "referencia": "334-0903",
+    "forma": "anatomica",
+    "superficie": "texturizada",
+    "superficieMarca": "SILTEX",
+    "perfilMarca": "CPG 331 · Altura Alta, Proyección Moderada",
+    "volumenCc": 125.0,
+    "baseCm": 9.0,
+    "alturaCm": 9.2,
+    "proyeccionCm": 3.2,
+    "arcoCm": 7.3,
+    "gel": "Cohesive III",
+    "catalogo": "Mentor CPG — datos/fuentes/mentor-cpg-anatomicas.pdf",
+    "pagina": "2",
+    "notas": "Arco = API de Mentor: polo inferior al punto medio, incluye 0,5 cm de cubierta tisular. No comparable con el arco de Motiva o Silimed"
+  },
+  {
+    "marca": "Mentor",
+    "linea": "CPG Cohesive III",
+    "referencia": "334-0953",
+    "forma": "anatomica",
+    "superficie": "texturizada",
+    "superficieMarca": "SILTEX",
+    "perfilMarca": "CPG 331 · Altura Alta, Proyección Moderada",
+    "volumenCc": 150.0,
+    "baseCm": 9.5,
+    "alturaCm": 9.7,
+    "proyeccionCm": 3.3,
+    "arcoCm": 7.7,
+    "gel": "Cohesive III",
+    "catalogo": "Mentor CPG — datos/fuentes/mentor-cpg-anatomicas.pdf",
+    "pagina": "2",
+    "notas": "Arco = API de Mentor: polo inferior al punto medio, incluye 0,5 cm de cubierta tisular. No comparable con el arco de Motiva o Silimed"
+  },
+  {
+    "marca": "Mentor",
+    "linea": "CPG Cohesive III",
+    "referencia": "334-1003",
+    "forma": "anatomica",
+    "superficie": "texturizada",
+    "superficieMarca": "SILTEX",
+    "perfilMarca": "CPG 331 · Altura Alta, Proyección Moderada",
+    "volumenCc": 175.0,
+    "baseCm": 10.0,
+    "alturaCm": 10.2,
+    "proyeccionCm": 3.4,
+    "arcoCm": 8.1,
+    "gel": "Cohesive III",
+    "catalogo": "Mentor CPG — datos/fuentes/mentor-cpg-anatomicas.pdf",
+    "pagina": "2",
+    "notas": "Arco = API de Mentor: polo inferior al punto medio, incluye 0,5 cm de cubierta tisular. No comparable con el arco de Motiva o Silimed"
+  },
+  {
+    "marca": "Mentor",
+    "linea": "CPG Cohesive III",
+    "referencia": "334-1053",
+    "forma": "anatomica",
+    "superficie": "texturizada",
+    "superficieMarca": "SILTEX",
+    "perfilMarca": "CPG 331 · Altura Alta, Proyección Moderada",
+    "volumenCc": 200.0,
+    "baseCm": 10.5,
+    "alturaCm": 10.7,
+    "proyeccionCm": 3.5,
+    "arcoCm": 8.4,
+    "gel": "Cohesive III",
+    "catalogo": "Mentor CPG — datos/fuentes/mentor-cpg-anatomicas.pdf",
+    "pagina": "2",
+    "notas": "Arco = API de Mentor: polo inferior al punto medio, incluye 0,5 cm de cubierta tisular. No comparable con el arco de Motiva o Silimed"
+  },
+  {
+    "marca": "Mentor",
+    "linea": "CPG Cohesive III",
+    "referencia": "334-1103",
+    "forma": "anatomica",
+    "superficie": "texturizada",
+    "superficieMarca": "SILTEX",
+    "perfilMarca": "CPG 331 · Altura Alta, Proyección Moderada",
+    "volumenCc": 230.0,
+    "baseCm": 11.0,
+    "alturaCm": 11.3,
+    "proyeccionCm": 3.6,
+    "arcoCm": 8.8,
+    "gel": "Cohesive III",
+    "catalogo": "Mentor CPG — datos/fuentes/mentor-cpg-anatomicas.pdf",
+    "pagina": "2",
+    "notas": "Arco = API de Mentor: polo inferior al punto medio, incluye 0,5 cm de cubierta tisular. No comparable con el arco de Motiva o Silimed"
+  },
+  {
+    "marca": "Mentor",
+    "linea": "CPG Cohesive III",
+    "referencia": "334-1153",
+    "forma": "anatomica",
+    "superficie": "texturizada",
+    "superficieMarca": "SILTEX",
+    "perfilMarca": "CPG 331 · Altura Alta, Proyección Moderada",
+    "volumenCc": 265.0,
+    "baseCm": 11.5,
+    "alturaCm": 11.8,
+    "proyeccionCm": 3.7,
+    "arcoCm": 9.1,
+    "gel": "Cohesive III",
+    "catalogo": "Mentor CPG — datos/fuentes/mentor-cpg-anatomicas.pdf",
+    "pagina": "2",
+    "notas": "Arco = API de Mentor: polo inferior al punto medio, incluye 0,5 cm de cubierta tisular. No comparable con el arco de Motiva o Silimed"
+  },
+  {
+    "marca": "Mentor",
+    "linea": "CPG Cohesive III",
+    "referencia": "334-1203",
+    "forma": "anatomica",
+    "superficie": "texturizada",
+    "superficieMarca": "SILTEX",
+    "perfilMarca": "CPG 331 · Altura Alta, Proyección Moderada",
+    "volumenCc": 300.0,
+    "baseCm": 12.0,
+    "alturaCm": 12.3,
+    "proyeccionCm": 3.9,
+    "arcoCm": 9.5,
+    "gel": "Cohesive III",
+    "catalogo": "Mentor CPG — datos/fuentes/mentor-cpg-anatomicas.pdf",
+    "pagina": "2",
+    "notas": "Arco = API de Mentor: polo inferior al punto medio, incluye 0,5 cm de cubierta tisular. No comparable con el arco de Motiva o Silimed"
+  },
+  {
+    "marca": "Mentor",
+    "linea": "CPG Cohesive III",
+    "referencia": "334-1253",
+    "forma": "anatomica",
+    "superficie": "texturizada",
+    "superficieMarca": "SILTEX",
+    "perfilMarca": "CPG 331 · Altura Alta, Proyección Moderada",
+    "volumenCc": 340.0,
+    "baseCm": 12.5,
+    "alturaCm": 12.8,
+    "proyeccionCm": 4.0,
+    "arcoCm": 9.9,
+    "gel": "Cohesive III",
+    "catalogo": "Mentor CPG — datos/fuentes/mentor-cpg-anatomicas.pdf",
+    "pagina": "2",
+    "notas": "Arco = API de Mentor: polo inferior al punto medio, incluye 0,5 cm de cubierta tisular. No comparable con el arco de Motiva o Silimed"
+  },
+  {
+    "marca": "Mentor",
+    "linea": "CPG Cohesive III",
+    "referencia": "334-1303",
+    "forma": "anatomica",
+    "superficie": "texturizada",
+    "superficieMarca": "SILTEX",
+    "perfilMarca": "CPG 331 · Altura Alta, Proyección Moderada",
+    "volumenCc": 380.0,
+    "baseCm": 13.0,
+    "alturaCm": 13.3,
+    "proyeccionCm": 4.1,
+    "arcoCm": 10.2,
+    "gel": "Cohesive III",
+    "catalogo": "Mentor CPG — datos/fuentes/mentor-cpg-anatomicas.pdf",
+    "pagina": "2",
+    "notas": "Arco = API de Mentor: polo inferior al punto medio, incluye 0,5 cm de cubierta tisular. No comparable con el arco de Motiva o Silimed"
+  },
+  {
+    "marca": "Mentor",
+    "linea": "CPG Cohesive III",
+    "referencia": "334-1353",
+    "forma": "anatomica",
+    "superficie": "texturizada",
+    "superficieMarca": "SILTEX",
+    "perfilMarca": "CPG 331 · Altura Alta, Proyección Moderada",
+    "volumenCc": 425.0,
+    "baseCm": 13.5,
+    "alturaCm": 13.8,
+    "proyeccionCm": 4.3,
+    "arcoCm": 10.6,
+    "gel": "Cohesive III",
+    "catalogo": "Mentor CPG — datos/fuentes/mentor-cpg-anatomicas.pdf",
+    "pagina": "2",
+    "notas": "Arco = API de Mentor: polo inferior al punto medio, incluye 0,5 cm de cubierta tisular. No comparable con el arco de Motiva o Silimed"
+  },
+  {
+    "marca": "Mentor",
+    "linea": "CPG Cohesive III",
+    "referencia": "334-1403",
+    "forma": "anatomica",
+    "superficie": "texturizada",
+    "superficieMarca": "SILTEX",
+    "perfilMarca": "CPG 331 · Altura Alta, Proyección Moderada",
+    "volumenCc": 475.0,
+    "baseCm": 14.0,
+    "alturaCm": 14.3,
+    "proyeccionCm": 4.5,
+    "arcoCm": 11.0,
+    "gel": "Cohesive III",
+    "catalogo": "Mentor CPG — datos/fuentes/mentor-cpg-anatomicas.pdf",
+    "pagina": "2",
+    "notas": "Arco = API de Mentor: polo inferior al punto medio, incluye 0,5 cm de cubierta tisular. No comparable con el arco de Motiva o Silimed"
+  },
+  {
+    "marca": "Mentor",
+    "linea": "CPG Cohesive III",
+    "referencia": "334-1453",
+    "forma": "anatomica",
+    "superficie": "texturizada",
+    "superficieMarca": "SILTEX",
+    "perfilMarca": "CPG 331 · Altura Alta, Proyección Moderada",
+    "volumenCc": 530.0,
+    "baseCm": 14.5,
+    "alturaCm": 14.8,
+    "proyeccionCm": 4.6,
+    "arcoCm": 11.3,
+    "gel": "Cohesive III",
+    "catalogo": "Mentor CPG — datos/fuentes/mentor-cpg-anatomicas.pdf",
+    "pagina": "2",
+    "notas": "Arco = API de Mentor: polo inferior al punto medio, incluye 0,5 cm de cubierta tisular. No comparable con el arco de Motiva o Silimed"
+  },
+  {
+    "marca": "Mentor",
+    "linea": "CPG Cohesive III",
+    "referencia": "334-1503",
+    "forma": "anatomica",
+    "superficie": "texturizada",
+    "superficieMarca": "SILTEX",
+    "perfilMarca": "CPG 331 · Altura Alta, Proyección Moderada",
+    "volumenCc": 585.0,
+    "baseCm": 15.0,
+    "alturaCm": 15.3,
+    "proyeccionCm": 4.8,
+    "arcoCm": 11.7,
+    "gel": "Cohesive III",
+    "catalogo": "Mentor CPG — datos/fuentes/mentor-cpg-anatomicas.pdf",
+    "pagina": "2",
+    "notas": "Arco = API de Mentor: polo inferior al punto medio, incluye 0,5 cm de cubierta tisular. No comparable con el arco de Motiva o Silimed"
+  },
+  {
+    "marca": "Mentor",
+    "linea": "CPG Cohesive III",
+    "referencia": "334-1553",
+    "forma": "anatomica",
+    "superficie": "texturizada",
+    "superficieMarca": "SILTEX",
+    "perfilMarca": "CPG 331 · Altura Alta, Proyección Moderada",
+    "volumenCc": 645.0,
+    "baseCm": 15.5,
+    "alturaCm": 15.9,
+    "proyeccionCm": 5.0,
+    "arcoCm": 12.1,
+    "gel": "Cohesive III",
+    "catalogo": "Mentor CPG — datos/fuentes/mentor-cpg-anatomicas.pdf",
+    "pagina": "2",
+    "notas": "Arco = API de Mentor: polo inferior al punto medio, incluye 0,5 cm de cubierta tisular. No comparable con el arco de Motiva o Silimed"
+  },
+  {
+    "marca": "Mentor",
+    "linea": "CPG Cohesive III",
+    "referencia": "354-0908",
+    "forma": "anatomica",
+    "superficie": "texturizada",
+    "superficieMarca": "SILTEX",
+    "perfilMarca": "CPG 321 · Altura Media, Proyección Moderada",
+    "volumenCc": 120.0,
+    "baseCm": 9.0,
+    "alturaCm": 8.5,
+    "proyeccionCm": 3.3,
+    "arcoCm": 7.0,
+    "gel": "Cohesive III",
+    "catalogo": "Mentor CPG — datos/fuentes/mentor-cpg-anatomicas.pdf",
+    "pagina": "2",
+    "notas": "Arco = API de Mentor: polo inferior al punto medio, incluye 0,5 cm de cubierta tisular. No comparable con el arco de Motiva o Silimed"
+  },
+  {
+    "marca": "Mentor",
+    "linea": "CPG Cohesive III",
+    "referencia": "354-0958",
+    "forma": "anatomica",
+    "superficie": "texturizada",
+    "superficieMarca": "SILTEX",
+    "perfilMarca": "CPG 321 · Altura Media, Proyección Moderada",
+    "volumenCc": 135.0,
+    "baseCm": 9.5,
+    "alturaCm": 8.9,
+    "proyeccionCm": 3.5,
+    "arcoCm": 7.3,
+    "gel": "Cohesive III",
+    "catalogo": "Mentor CPG — datos/fuentes/mentor-cpg-anatomicas.pdf",
+    "pagina": "2",
+    "notas": "Arco = API de Mentor: polo inferior al punto medio, incluye 0,5 cm de cubierta tisular. No comparable con el arco de Motiva o Silimed"
+  },
+  {
+    "marca": "Mentor",
+    "linea": "CPG Cohesive III",
+    "referencia": "354-1008",
+    "forma": "anatomica",
+    "superficie": "texturizada",
+    "superficieMarca": "SILTEX",
+    "perfilMarca": "CPG 321 · Altura Media, Proyección Moderada",
+    "volumenCc": 155.0,
+    "baseCm": 10.0,
+    "alturaCm": 9.4,
+    "proyeccionCm": 3.7,
+    "arcoCm": 7.7,
+    "gel": "Cohesive III",
+    "catalogo": "Mentor CPG — datos/fuentes/mentor-cpg-anatomicas.pdf",
+    "pagina": "2",
+    "notas": "Arco = API de Mentor: polo inferior al punto medio, incluye 0,5 cm de cubierta tisular. No comparable con el arco de Motiva o Silimed"
+  },
+  {
+    "marca": "Mentor",
+    "linea": "CPG Cohesive III",
+    "referencia": "354-1058",
+    "forma": "anatomica",
+    "superficie": "texturizada",
+    "superficieMarca": "SILTEX",
+    "perfilMarca": "CPG 321 · Altura Media, Proyección Moderada",
+    "volumenCc": 180.0,
+    "baseCm": 10.5,
+    "alturaCm": 9.9,
+    "proyeccionCm": 3.8,
+    "arcoCm": 8.0,
+    "gel": "Cohesive III",
+    "catalogo": "Mentor CPG — datos/fuentes/mentor-cpg-anatomicas.pdf",
+    "pagina": "2",
+    "notas": "Arco = API de Mentor: polo inferior al punto medio, incluye 0,5 cm de cubierta tisular. No comparable con el arco de Motiva o Silimed"
+  },
+  {
+    "marca": "Mentor",
+    "linea": "CPG Cohesive III",
+    "referencia": "354-1108",
+    "forma": "anatomica",
+    "superficie": "texturizada",
+    "superficieMarca": "SILTEX",
+    "perfilMarca": "CPG 321 · Altura Media, Proyección Moderada",
+    "volumenCc": 215.0,
+    "baseCm": 11.0,
+    "alturaCm": 10.3,
+    "proyeccionCm": 3.9,
+    "arcoCm": 8.2,
+    "gel": "Cohesive III",
+    "catalogo": "Mentor CPG — datos/fuentes/mentor-cpg-anatomicas.pdf",
+    "pagina": "2",
+    "notas": "Arco = API de Mentor: polo inferior al punto medio, incluye 0,5 cm de cubierta tisular. No comparable con el arco de Motiva o Silimed"
+  },
+  {
+    "marca": "Mentor",
+    "linea": "CPG Cohesive III",
+    "referencia": "354-1158",
+    "forma": "anatomica",
+    "superficie": "texturizada",
+    "superficieMarca": "SILTEX",
+    "perfilMarca": "CPG 321 · Altura Media, Proyección Moderada",
+    "volumenCc": 245.0,
+    "baseCm": 11.5,
+    "alturaCm": 10.8,
+    "proyeccionCm": 4.0,
+    "arcoCm": 8.6,
+    "gel": "Cohesive III",
+    "catalogo": "Mentor CPG — datos/fuentes/mentor-cpg-anatomicas.pdf",
+    "pagina": "2",
+    "notas": "Arco = API de Mentor: polo inferior al punto medio, incluye 0,5 cm de cubierta tisular. No comparable con el arco de Motiva o Silimed"
+  },
+  {
+    "marca": "Mentor",
+    "linea": "CPG Cohesive III",
+    "referencia": "354-1208",
+    "forma": "anatomica",
+    "superficie": "texturizada",
+    "superficieMarca": "SILTEX",
+    "perfilMarca": "CPG 321 · Altura Media, Proyección Moderada",
+    "volumenCc": 280.0,
+    "baseCm": 12.0,
+    "alturaCm": 11.3,
+    "proyeccionCm": 4.2,
+    "arcoCm": 8.9,
+    "gel": "Cohesive III",
+    "catalogo": "Mentor CPG — datos/fuentes/mentor-cpg-anatomicas.pdf",
+    "pagina": "2",
+    "notas": "Arco = API de Mentor: polo inferior al punto medio, incluye 0,5 cm de cubierta tisular. No comparable con el arco de Motiva o Silimed"
+  },
+  {
+    "marca": "Mentor",
+    "linea": "CPG Cohesive III",
+    "referencia": "354-1258",
+    "forma": "anatomica",
+    "superficie": "texturizada",
+    "superficieMarca": "SILTEX",
+    "perfilMarca": "CPG 321 · Altura Media, Proyección Moderada",
+    "volumenCc": 315.0,
+    "baseCm": 12.5,
+    "alturaCm": 11.8,
+    "proyeccionCm": 4.4,
+    "arcoCm": 9.2,
+    "gel": "Cohesive III",
+    "catalogo": "Mentor CPG — datos/fuentes/mentor-cpg-anatomicas.pdf",
+    "pagina": "2",
+    "notas": "Arco = API de Mentor: polo inferior al punto medio, incluye 0,5 cm de cubierta tisular. No comparable con el arco de Motiva o Silimed"
+  },
+  {
+    "marca": "Mentor",
+    "linea": "CPG Cohesive III",
+    "referencia": "354-1308",
+    "forma": "anatomica",
+    "superficie": "texturizada",
+    "superficieMarca": "SILTEX",
+    "perfilMarca": "CPG 321 · Altura Media, Proyección Moderada",
+    "volumenCc": 355.0,
+    "baseCm": 13.0,
+    "alturaCm": 12.2,
+    "proyeccionCm": 4.6,
+    "arcoCm": 9.6,
+    "gel": "Cohesive III",
+    "catalogo": "Mentor CPG — datos/fuentes/mentor-cpg-anatomicas.pdf",
+    "pagina": "2",
+    "notas": "Arco = API de Mentor: polo inferior al punto medio, incluye 0,5 cm de cubierta tisular. No comparable con el arco de Motiva o Silimed"
+  },
+  {
+    "marca": "Mentor",
+    "linea": "CPG Cohesive III",
+    "referencia": "354-1358",
+    "forma": "anatomica",
+    "superficie": "texturizada",
+    "superficieMarca": "SILTEX",
+    "perfilMarca": "CPG 321 · Altura Media, Proyección Moderada",
+    "volumenCc": 395.0,
+    "baseCm": 13.5,
+    "alturaCm": 12.7,
+    "proyeccionCm": 4.7,
+    "arcoCm": 9.9,
+    "gel": "Cohesive III",
+    "catalogo": "Mentor CPG — datos/fuentes/mentor-cpg-anatomicas.pdf",
+    "pagina": "2",
+    "notas": "Arco = API de Mentor: polo inferior al punto medio, incluye 0,5 cm de cubierta tisular. No comparable con el arco de Motiva o Silimed"
+  },
+  {
+    "marca": "Mentor",
+    "linea": "CPG Cohesive III",
+    "referencia": "354-1408",
+    "forma": "anatomica",
+    "superficie": "texturizada",
+    "superficieMarca": "SILTEX",
+    "perfilMarca": "CPG 321 · Altura Media, Proyección Moderada",
+    "volumenCc": 440.0,
+    "baseCm": 14.0,
+    "alturaCm": 13.2,
+    "proyeccionCm": 4.9,
+    "arcoCm": 10.3,
+    "gel": "Cohesive III",
+    "catalogo": "Mentor CPG — datos/fuentes/mentor-cpg-anatomicas.pdf",
+    "pagina": "2",
+    "notas": "Arco = API de Mentor: polo inferior al punto medio, incluye 0,5 cm de cubierta tisular. No comparable con el arco de Motiva o Silimed"
+  },
+  {
+    "marca": "Mentor",
+    "linea": "CPG Cohesive III",
+    "referencia": "354-1458",
+    "forma": "anatomica",
+    "superficie": "texturizada",
+    "superficieMarca": "SILTEX",
+    "perfilMarca": "CPG 321 · Altura Media, Proyección Moderada",
+    "volumenCc": 480.0,
+    "baseCm": 14.5,
+    "alturaCm": 13.3,
+    "proyeccionCm": 5.0,
+    "arcoCm": 10.5,
+    "gel": "Cohesive III",
+    "catalogo": "Mentor CPG — datos/fuentes/mentor-cpg-anatomicas.pdf",
+    "pagina": "2",
+    "notas": "Arco = API de Mentor: polo inferior al punto medio, incluye 0,5 cm de cubierta tisular. No comparable con el arco de Motiva o Silimed"
+  },
+  {
+    "marca": "Mentor",
+    "linea": "CPG Cohesive III",
+    "referencia": "354-1508",
+    "forma": "anatomica",
+    "superficie": "texturizada",
+    "superficieMarca": "SILTEX",
+    "perfilMarca": "CPG 321 · Altura Media, Proyección Moderada",
+    "volumenCc": 530.0,
+    "baseCm": 15.0,
+    "alturaCm": 14.1,
+    "proyeccionCm": 5.2,
+    "arcoCm": 10.9,
+    "gel": "Cohesive III",
+    "catalogo": "Mentor CPG — datos/fuentes/mentor-cpg-anatomicas.pdf",
+    "pagina": "2",
+    "notas": "Arco = API de Mentor: polo inferior al punto medio, incluye 0,5 cm de cubierta tisular. No comparable con el arco de Motiva o Silimed"
+  },
+  {
+    "marca": "Mentor",
+    "linea": "CPG Cohesive III",
+    "referencia": "354-1608",
+    "forma": "anatomica",
+    "superficie": "texturizada",
+    "superficieMarca": "SILTEX",
+    "perfilMarca": "CPG 321 · Altura Media, Proyección Moderada",
+    "volumenCc": 640.0,
+    "baseCm": 16.0,
+    "alturaCm": 15.0,
+    "proyeccionCm": 5.6,
+    "arcoCm": 11.5,
+    "gel": "Cohesive III",
+    "catalogo": "Mentor CPG — datos/fuentes/mentor-cpg-anatomicas.pdf",
+    "pagina": "2",
+    "notas": "Arco = API de Mentor: polo inferior al punto medio, incluye 0,5 cm de cubierta tisular. No comparable con el arco de Motiva o Silimed"
+  },
+  {
+    "marca": "Mentor",
+    "linea": "CPG Cohesive III",
+    "referencia": "354-1708",
+    "forma": "anatomica",
+    "superficie": "texturizada",
+    "superficieMarca": "SILTEX",
+    "perfilMarca": "CPG 321 · Altura Media, Proyección Moderada",
+    "volumenCc": 775.0,
+    "baseCm": 17.0,
+    "alturaCm": 16.0,
+    "proyeccionCm": 5.9,
+    "arcoCm": 12.2,
+    "gel": "Cohesive III",
+    "catalogo": "Mentor CPG — datos/fuentes/mentor-cpg-anatomicas.pdf",
+    "pagina": "2",
+    "notas": "Arco = API de Mentor: polo inferior al punto medio, incluye 0,5 cm de cubierta tisular. No comparable con el arco de Motiva o Silimed"
+  },
+  {
+    "marca": "Mentor",
+    "linea": "CPG Cohesive III",
+    "referencia": "334-0951",
+    "forma": "anatomica",
+    "superficie": "texturizada",
+    "superficieMarca": "SILTEX",
+    "perfilMarca": "CPG 311 · Altura Baja, Proyección Moderada",
+    "volumenCc": 120.0,
+    "baseCm": 9.5,
+    "alturaCm": 8.5,
+    "proyeccionCm": 3.2,
+    "arcoCm": 6.9,
+    "gel": "Cohesive III",
+    "catalogo": "Mentor CPG — datos/fuentes/mentor-cpg-anatomicas.pdf",
+    "pagina": "3",
+    "notas": "Arco = API de Mentor: polo inferior al punto medio, incluye 0,5 cm de cubierta tisular. No comparable con el arco de Motiva o Silimed"
+  },
+  {
+    "marca": "Mentor",
+    "linea": "CPG Cohesive III",
+    "referencia": "334-1001",
+    "forma": "anatomica",
+    "superficie": "texturizada",
+    "superficieMarca": "SILTEX",
+    "perfilMarca": "CPG 311 · Altura Baja, Proyección Moderada",
+    "volumenCc": 140.0,
+    "baseCm": 10.0,
+    "alturaCm": 8.9,
+    "proyeccionCm": 3.4,
+    "arcoCm": 7.2,
+    "gel": "Cohesive III",
+    "catalogo": "Mentor CPG — datos/fuentes/mentor-cpg-anatomicas.pdf",
+    "pagina": "3",
+    "notas": "Arco = API de Mentor: polo inferior al punto medio, incluye 0,5 cm de cubierta tisular. No comparable con el arco de Motiva o Silimed"
+  },
+  {
+    "marca": "Mentor",
+    "linea": "CPG Cohesive III",
+    "referencia": "334-1051",
+    "forma": "anatomica",
+    "superficie": "texturizada",
+    "superficieMarca": "SILTEX",
+    "perfilMarca": "CPG 311 · Altura Baja, Proyección Moderada",
+    "volumenCc": 160.0,
+    "baseCm": 10.5,
+    "alturaCm": 9.4,
+    "proyeccionCm": 3.6,
+    "arcoCm": 7.5,
+    "gel": "Cohesive III",
+    "catalogo": "Mentor CPG — datos/fuentes/mentor-cpg-anatomicas.pdf",
+    "pagina": "3",
+    "notas": "Arco = API de Mentor: polo inferior al punto medio, incluye 0,5 cm de cubierta tisular. No comparable con el arco de Motiva o Silimed"
+  },
+  {
+    "marca": "Mentor",
+    "linea": "CPG Cohesive III",
+    "referencia": "334-1101",
+    "forma": "anatomica",
+    "superficie": "texturizada",
+    "superficieMarca": "SILTEX",
+    "perfilMarca": "CPG 311 · Altura Baja, Proyección Moderada",
+    "volumenCc": 180.0,
+    "baseCm": 11.0,
+    "alturaCm": 9.8,
+    "proyeccionCm": 3.7,
+    "arcoCm": 7.9,
+    "gel": "Cohesive III",
+    "catalogo": "Mentor CPG — datos/fuentes/mentor-cpg-anatomicas.pdf",
+    "pagina": "3",
+    "notas": "Arco = API de Mentor: polo inferior al punto medio, incluye 0,5 cm de cubierta tisular. No comparable con el arco de Motiva o Silimed"
+  },
+  {
+    "marca": "Mentor",
+    "linea": "CPG Cohesive III",
+    "referencia": "334-1151",
+    "forma": "anatomica",
+    "superficie": "texturizada",
+    "superficieMarca": "SILTEX",
+    "perfilMarca": "CPG 311 · Altura Baja, Proyección Moderada",
+    "volumenCc": 210.0,
+    "baseCm": 11.5,
+    "alturaCm": 10.3,
+    "proyeccionCm": 3.9,
+    "arcoCm": 8.2,
+    "gel": "Cohesive III",
+    "catalogo": "Mentor CPG — datos/fuentes/mentor-cpg-anatomicas.pdf",
+    "pagina": "3",
+    "notas": "Arco = API de Mentor: polo inferior al punto medio, incluye 0,5 cm de cubierta tisular. No comparable con el arco de Motiva o Silimed"
+  },
+  {
+    "marca": "Mentor",
+    "linea": "CPG Cohesive III",
+    "referencia": "334-1201",
+    "forma": "anatomica",
+    "superficie": "texturizada",
+    "superficieMarca": "SILTEX",
+    "perfilMarca": "CPG 311 · Altura Baja, Proyección Moderada",
+    "volumenCc": 235.0,
+    "baseCm": 12.0,
+    "alturaCm": 10.7,
+    "proyeccionCm": 4.1,
+    "arcoCm": 8.5,
+    "gel": "Cohesive III",
+    "catalogo": "Mentor CPG — datos/fuentes/mentor-cpg-anatomicas.pdf",
+    "pagina": "3",
+    "notas": "Arco = API de Mentor: polo inferior al punto medio, incluye 0,5 cm de cubierta tisular. No comparable con el arco de Motiva o Silimed"
+  },
+  {
+    "marca": "Mentor",
+    "linea": "CPG Cohesive III",
+    "referencia": "334-1251",
+    "forma": "anatomica",
+    "superficie": "texturizada",
+    "superficieMarca": "SILTEX",
+    "perfilMarca": "CPG 311 · Altura Baja, Proyección Moderada",
+    "volumenCc": 270.0,
+    "baseCm": 12.5,
+    "alturaCm": 11.2,
+    "proyeccionCm": 4.2,
+    "arcoCm": 8.8,
+    "gel": "Cohesive III",
+    "catalogo": "Mentor CPG — datos/fuentes/mentor-cpg-anatomicas.pdf",
+    "pagina": "3",
+    "notas": "Arco = API de Mentor: polo inferior al punto medio, incluye 0,5 cm de cubierta tisular. No comparable con el arco de Motiva o Silimed"
+  },
+  {
+    "marca": "Mentor",
+    "linea": "CPG Cohesive III",
+    "referencia": "334-1301",
+    "forma": "anatomica",
+    "superficie": "texturizada",
+    "superficieMarca": "SILTEX",
+    "perfilMarca": "CPG 311 · Altura Baja, Proyección Moderada",
+    "volumenCc": 300.0,
+    "baseCm": 13.0,
+    "alturaCm": 11.6,
+    "proyeccionCm": 4.4,
+    "arcoCm": 9.2,
+    "gel": "Cohesive III",
+    "catalogo": "Mentor CPG — datos/fuentes/mentor-cpg-anatomicas.pdf",
+    "pagina": "3",
+    "notas": "Arco = API de Mentor: polo inferior al punto medio, incluye 0,5 cm de cubierta tisular. No comparable con el arco de Motiva o Silimed"
+  },
+  {
+    "marca": "Mentor",
+    "linea": "CPG Cohesive III",
+    "referencia": "334-1351",
+    "forma": "anatomica",
+    "superficie": "texturizada",
+    "superficieMarca": "SILTEX",
+    "perfilMarca": "CPG 311 · Altura Baja, Proyección Moderada",
+    "volumenCc": 335.0,
+    "baseCm": 13.5,
+    "alturaCm": 12.0,
+    "proyeccionCm": 4.6,
+    "arcoCm": 9.5,
+    "gel": "Cohesive III",
+    "catalogo": "Mentor CPG — datos/fuentes/mentor-cpg-anatomicas.pdf",
+    "pagina": "3",
+    "notas": "Arco = API de Mentor: polo inferior al punto medio, incluye 0,5 cm de cubierta tisular. No comparable con el arco de Motiva o Silimed"
+  },
+  {
+    "marca": "Mentor",
+    "linea": "CPG Cohesive III",
+    "referencia": "334-1401",
+    "forma": "anatomica",
+    "superficie": "texturizada",
+    "superficieMarca": "SILTEX",
+    "perfilMarca": "CPG 311 · Altura Baja, Proyección Moderada",
+    "volumenCc": 375.0,
+    "baseCm": 14.0,
+    "alturaCm": 12.5,
+    "proyeccionCm": 4.7,
+    "arcoCm": 9.8,
+    "gel": "Cohesive III",
+    "catalogo": "Mentor CPG — datos/fuentes/mentor-cpg-anatomicas.pdf",
+    "pagina": "3",
+    "notas": "Arco = API de Mentor: polo inferior al punto medio, incluye 0,5 cm de cubierta tisular. No comparable con el arco de Motiva o Silimed"
+  },
+  {
+    "marca": "Mentor",
+    "linea": "CPG Cohesive III",
+    "referencia": "334-1451",
+    "forma": "anatomica",
+    "superficie": "texturizada",
+    "superficieMarca": "SILTEX",
+    "perfilMarca": "CPG 311 · Altura Baja, Proyección Moderada",
+    "volumenCc": 415.0,
+    "baseCm": 14.5,
+    "alturaCm": 12.9,
+    "proyeccionCm": 4.9,
+    "arcoCm": 10.1,
+    "gel": "Cohesive III",
+    "catalogo": "Mentor CPG — datos/fuentes/mentor-cpg-anatomicas.pdf",
+    "pagina": "3",
+    "notas": "Arco = API de Mentor: polo inferior al punto medio, incluye 0,5 cm de cubierta tisular. No comparable con el arco de Motiva o Silimed"
+  },
+  {
+    "marca": "Mentor",
+    "linea": "CPG Cohesive III",
+    "referencia": "334-1501",
+    "forma": "anatomica",
+    "superficie": "texturizada",
+    "superficieMarca": "SILTEX",
+    "perfilMarca": "CPG 311 · Altura Baja, Proyección Moderada",
+    "volumenCc": 460.0,
+    "baseCm": 15.0,
+    "alturaCm": 13.4,
+    "proyeccionCm": 5.1,
+    "arcoCm": 10.5,
+    "gel": "Cohesive III",
+    "catalogo": "Mentor CPG — datos/fuentes/mentor-cpg-anatomicas.pdf",
+    "pagina": "3",
+    "notas": "Arco = API de Mentor: polo inferior al punto medio, incluye 0,5 cm de cubierta tisular. No comparable con el arco de Motiva o Silimed"
+  },
+  {
+    "marca": "Mentor",
+    "linea": "CPG Cohesive III",
+    "referencia": "334-1551",
+    "forma": "anatomica",
+    "superficie": "texturizada",
+    "superficieMarca": "SILTEX",
+    "perfilMarca": "CPG 311 · Altura Baja, Proyección Moderada",
+    "volumenCc": 510.0,
+    "baseCm": 15.5,
+    "alturaCm": 13.8,
+    "proyeccionCm": 5.2,
+    "arcoCm": 10.8,
+    "gel": "Cohesive III",
+    "catalogo": "Mentor CPG — datos/fuentes/mentor-cpg-anatomicas.pdf",
+    "pagina": "3",
+    "notas": "Arco = API de Mentor: polo inferior al punto medio, incluye 0,5 cm de cubierta tisular. No comparable con el arco de Motiva o Silimed"
+  },
+  {
+    "marca": "Mentor",
+    "linea": "CPG Cohesive III",
+    "referencia": "334-1601",
+    "forma": "anatomica",
+    "superficie": "texturizada",
+    "superficieMarca": "SILTEX",
+    "perfilMarca": "CPG 311 · Altura Baja, Proyección Moderada",
+    "volumenCc": 560.0,
+    "baseCm": 16.0,
+    "alturaCm": 14.3,
+    "proyeccionCm": 5.4,
+    "arcoCm": 11.1,
+    "gel": "Cohesive III",
+    "catalogo": "Mentor CPG — datos/fuentes/mentor-cpg-anatomicas.pdf",
+    "pagina": "3",
+    "notas": "Arco = API de Mentor: polo inferior al punto medio, incluye 0,5 cm de cubierta tisular. No comparable con el arco de Motiva o Silimed"
+  },
+  {
+    "marca": "Mentor",
+    "linea": "CPG Cohesive III",
+    "referencia": "334-1651",
+    "forma": "anatomica",
+    "superficie": "texturizada",
+    "superficieMarca": "SILTEX",
+    "perfilMarca": "CPG 311 · Altura Baja, Proyección Moderada",
+    "volumenCc": 615.0,
+    "baseCm": 16.5,
+    "alturaCm": 14.7,
+    "proyeccionCm": 5.6,
+    "arcoCm": 11.4,
+    "gel": "Cohesive III",
+    "catalogo": "Mentor CPG — datos/fuentes/mentor-cpg-anatomicas.pdf",
+    "pagina": "3",
+    "notas": "Arco = API de Mentor: polo inferior al punto medio, incluye 0,5 cm de cubierta tisular. No comparable con el arco de Motiva o Silimed"
+  },
+  {
+    "marca": "Mentor",
+    "linea": "CPG Cohesive III",
+    "referencia": "334-0909",
+    "forma": "anatomica",
+    "superficie": "texturizada",
+    "superficieMarca": "SILTEX",
+    "perfilMarca": "CPG 332 · Altura Alta, Proyección Moderada Plus",
+    "volumenCc": 145.0,
+    "baseCm": 9.0,
+    "alturaCm": 9.4,
+    "proyeccionCm": 3.8,
+    "arcoCm": 8.1,
+    "gel": "Cohesive III",
+    "catalogo": "Mentor CPG — datos/fuentes/mentor-cpg-anatomicas.pdf",
+    "pagina": "4",
+    "notas": "Arco = API de Mentor: polo inferior al punto medio, incluye 0,5 cm de cubierta tisular. No comparable con el arco de Motiva o Silimed"
+  },
+  {
+    "marca": "Mentor",
+    "linea": "CPG Cohesive III",
+    "referencia": "334-0959",
+    "forma": "anatomica",
+    "superficie": "texturizada",
+    "superficieMarca": "SILTEX",
+    "perfilMarca": "CPG 332 · Altura Alta, Proyección Moderada Plus",
+    "volumenCc": 175.0,
+    "baseCm": 9.5,
+    "alturaCm": 9.9,
+    "proyeccionCm": 4.0,
+    "arcoCm": 8.5,
+    "gel": "Cohesive III",
+    "catalogo": "Mentor CPG — datos/fuentes/mentor-cpg-anatomicas.pdf",
+    "pagina": "4",
+    "notas": "Arco = API de Mentor: polo inferior al punto medio, incluye 0,5 cm de cubierta tisular. No comparable con el arco de Motiva o Silimed"
+  },
+  {
+    "marca": "Mentor",
+    "linea": "CPG Cohesive III",
+    "referencia": "334-1009",
+    "forma": "anatomica",
+    "superficie": "texturizada",
+    "superficieMarca": "SILTEX",
+    "perfilMarca": "CPG 332 · Altura Alta, Proyección Moderada Plus",
+    "volumenCc": 205.0,
+    "baseCm": 10.0,
+    "alturaCm": 10.4,
+    "proyeccionCm": 4.2,
+    "arcoCm": 8.9,
+    "gel": "Cohesive III",
+    "catalogo": "Mentor CPG — datos/fuentes/mentor-cpg-anatomicas.pdf",
+    "pagina": "4",
+    "notas": "Arco = API de Mentor: polo inferior al punto medio, incluye 0,5 cm de cubierta tisular. No comparable con el arco de Motiva o Silimed"
+  },
+  {
+    "marca": "Mentor",
+    "linea": "CPG Cohesive III",
+    "referencia": "334-1059",
+    "forma": "anatomica",
+    "superficie": "texturizada",
+    "superficieMarca": "SILTEX",
+    "perfilMarca": "CPG 332 · Altura Alta, Proyección Moderada Plus",
+    "volumenCc": 235.0,
+    "baseCm": 10.5,
+    "alturaCm": 10.9,
+    "proyeccionCm": 4.4,
+    "arcoCm": 9.3,
+    "gel": "Cohesive III",
+    "catalogo": "Mentor CPG — datos/fuentes/mentor-cpg-anatomicas.pdf",
+    "pagina": "4",
+    "notas": "Arco = API de Mentor: polo inferior al punto medio, incluye 0,5 cm de cubierta tisular. No comparable con el arco de Motiva o Silimed"
+  },
+  {
+    "marca": "Mentor",
+    "linea": "CPG Cohesive III",
+    "referencia": "334-1109",
+    "forma": "anatomica",
+    "superficie": "texturizada",
+    "superficieMarca": "SILTEX",
+    "perfilMarca": "CPG 332 · Altura Alta, Proyección Moderada Plus",
+    "volumenCc": 270.0,
+    "baseCm": 11.0,
+    "alturaCm": 11.5,
+    "proyeccionCm": 4.7,
+    "arcoCm": 9.7,
+    "gel": "Cohesive III",
+    "catalogo": "Mentor CPG — datos/fuentes/mentor-cpg-anatomicas.pdf",
+    "pagina": "4",
+    "notas": "Arco = API de Mentor: polo inferior al punto medio, incluye 0,5 cm de cubierta tisular. No comparable con el arco de Motiva o Silimed"
+  },
+  {
+    "marca": "Mentor",
+    "linea": "CPG Cohesive III",
+    "referencia": "334-1159",
+    "forma": "anatomica",
+    "superficie": "texturizada",
+    "superficieMarca": "SILTEX",
+    "perfilMarca": "CPG 332 · Altura Alta, Proyección Moderada Plus",
+    "volumenCc": 305.0,
+    "baseCm": 11.5,
+    "alturaCm": 12.0,
+    "proyeccionCm": 4.9,
+    "arcoCm": 10.1,
+    "gel": "Cohesive III",
+    "catalogo": "Mentor CPG — datos/fuentes/mentor-cpg-anatomicas.pdf",
+    "pagina": "4",
+    "notas": "Arco = API de Mentor: polo inferior al punto medio, incluye 0,5 cm de cubierta tisular. No comparable con el arco de Motiva o Silimed"
+  },
+  {
+    "marca": "Mentor",
+    "linea": "CPG Cohesive III",
+    "referencia": "334-1209",
+    "forma": "anatomica",
+    "superficie": "texturizada",
+    "superficieMarca": "SILTEX",
+    "perfilMarca": "CPG 332 · Altura Alta, Proyección Moderada Plus",
+    "volumenCc": 350.0,
+    "baseCm": 12.0,
+    "alturaCm": 12.5,
+    "proyeccionCm": 5.1,
+    "arcoCm": 10.5,
+    "gel": "Cohesive III",
+    "catalogo": "Mentor CPG — datos/fuentes/mentor-cpg-anatomicas.pdf",
+    "pagina": "4",
+    "notas": "Arco = API de Mentor: polo inferior al punto medio, incluye 0,5 cm de cubierta tisular. No comparable con el arco de Motiva o Silimed"
+  },
+  {
+    "marca": "Mentor",
+    "linea": "CPG Cohesive III",
+    "referencia": "334-1259",
+    "forma": "anatomica",
+    "superficie": "texturizada",
+    "superficieMarca": "SILTEX",
+    "perfilMarca": "CPG 332 · Altura Alta, Proyección Moderada Plus",
+    "volumenCc": 395.0,
+    "baseCm": 12.5,
+    "alturaCm": 13.0,
+    "proyeccionCm": 5.3,
+    "arcoCm": 10.9,
+    "gel": "Cohesive III",
+    "catalogo": "Mentor CPG — datos/fuentes/mentor-cpg-anatomicas.pdf",
+    "pagina": "4",
+    "notas": "Arco = API de Mentor: polo inferior al punto medio, incluye 0,5 cm de cubierta tisular. No comparable con el arco de Motiva o Silimed"
+  },
+  {
+    "marca": "Mentor",
+    "linea": "CPG Cohesive III",
+    "referencia": "334-1309",
+    "forma": "anatomica",
+    "superficie": "texturizada",
+    "superficieMarca": "SILTEX",
+    "perfilMarca": "CPG 332 · Altura Alta, Proyección Moderada Plus",
+    "volumenCc": 445.0,
+    "baseCm": 13.0,
+    "alturaCm": 13.5,
+    "proyeccionCm": 5.5,
+    "arcoCm": 11.3,
+    "gel": "Cohesive III",
+    "catalogo": "Mentor CPG — datos/fuentes/mentor-cpg-anatomicas.pdf",
+    "pagina": "4",
+    "notas": "Arco = API de Mentor: polo inferior al punto medio, incluye 0,5 cm de cubierta tisular. No comparable con el arco de Motiva o Silimed"
+  },
+  {
+    "marca": "Mentor",
+    "linea": "CPG Cohesive III",
+    "referencia": "334-1359",
+    "forma": "anatomica",
+    "superficie": "texturizada",
+    "superficieMarca": "SILTEX",
+    "perfilMarca": "CPG 332 · Altura Alta, Proyección Moderada Plus",
+    "volumenCc": 495.0,
+    "baseCm": 13.5,
+    "alturaCm": 14.1,
+    "proyeccionCm": 5.7,
+    "arcoCm": 11.7,
+    "gel": "Cohesive III",
+    "catalogo": "Mentor CPG — datos/fuentes/mentor-cpg-anatomicas.pdf",
+    "pagina": "4",
+    "notas": "Arco = API de Mentor: polo inferior al punto medio, incluye 0,5 cm de cubierta tisular. No comparable con el arco de Motiva o Silimed"
+  },
+  {
+    "marca": "Mentor",
+    "linea": "CPG Cohesive III",
+    "referencia": "334-1409",
+    "forma": "anatomica",
+    "superficie": "texturizada",
+    "superficieMarca": "SILTEX",
+    "perfilMarca": "CPG 332 · Altura Alta, Proyección Moderada Plus",
+    "volumenCc": 555.0,
+    "baseCm": 14.0,
+    "alturaCm": 14.6,
+    "proyeccionCm": 5.9,
+    "arcoCm": 12.1,
+    "gel": "Cohesive III",
+    "catalogo": "Mentor CPG — datos/fuentes/mentor-cpg-anatomicas.pdf",
+    "pagina": "4",
+    "notas": "Arco = API de Mentor: polo inferior al punto medio, incluye 0,5 cm de cubierta tisular. No comparable con el arco de Motiva o Silimed"
+  },
+  {
+    "marca": "Mentor",
+    "linea": "CPG Cohesive III",
+    "referencia": "334-1459",
+    "forma": "anatomica",
+    "superficie": "texturizada",
+    "superficieMarca": "SILTEX",
+    "perfilMarca": "CPG 332 · Altura Alta, Proyección Moderada Plus",
+    "volumenCc": 615.0,
+    "baseCm": 14.5,
+    "alturaCm": 15.1,
+    "proyeccionCm": 6.1,
+    "arcoCm": 12.6,
+    "gel": "Cohesive III",
+    "catalogo": "Mentor CPG — datos/fuentes/mentor-cpg-anatomicas.pdf",
+    "pagina": "4",
+    "notas": "Arco = API de Mentor: polo inferior al punto medio, incluye 0,5 cm de cubierta tisular. No comparable con el arco de Motiva o Silimed"
+  },
+  {
+    "marca": "Mentor",
+    "linea": "CPG Cohesive III",
+    "referencia": "334-1509",
+    "forma": "anatomica",
+    "superficie": "texturizada",
+    "superficieMarca": "SILTEX",
+    "perfilMarca": "CPG 332 · Altura Alta, Proyección Moderada Plus",
+    "volumenCc": 680.0,
+    "baseCm": 15.0,
+    "alturaCm": 15.6,
+    "proyeccionCm": 6.3,
+    "arcoCm": 13.0,
+    "gel": "Cohesive III",
+    "catalogo": "Mentor CPG — datos/fuentes/mentor-cpg-anatomicas.pdf",
+    "pagina": "4",
+    "notas": "Arco = API de Mentor: polo inferior al punto medio, incluye 0,5 cm de cubierta tisular. No comparable con el arco de Motiva o Silimed"
+  },
+  {
+    "marca": "Mentor",
+    "linea": "CPG Cohesive III",
+    "referencia": "334-0905",
+    "forma": "anatomica",
+    "superficie": "texturizada",
+    "superficieMarca": "SILTEX",
+    "perfilMarca": "CPG 322 · Altura Media, Proyección Moderada Plus",
+    "volumenCc": 140.0,
+    "baseCm": 9.0,
+    "alturaCm": 8.5,
+    "proyeccionCm": 3.8,
+    "arcoCm": 7.6,
+    "gel": "Cohesive III",
+    "catalogo": "Mentor CPG — datos/fuentes/mentor-cpg-anatomicas.pdf",
+    "pagina": "4",
+    "notas": "Arco = API de Mentor: polo inferior al punto medio, incluye 0,5 cm de cubierta tisular. No comparable con el arco de Motiva o Silimed"
+  },
+  {
+    "marca": "Mentor",
+    "linea": "CPG Cohesive III",
+    "referencia": "334-0955",
+    "forma": "anatomica",
+    "superficie": "texturizada",
+    "superficieMarca": "SILTEX",
+    "perfilMarca": "CPG 322 · Altura Media, Proyección Moderada Plus",
+    "volumenCc": 165.0,
+    "baseCm": 9.5,
+    "alturaCm": 8.9,
+    "proyeccionCm": 4.0,
+    "arcoCm": 8.0,
+    "gel": "Cohesive III",
+    "catalogo": "Mentor CPG — datos/fuentes/mentor-cpg-anatomicas.pdf",
+    "pagina": "4",
+    "notas": "Arco = API de Mentor: polo inferior al punto medio, incluye 0,5 cm de cubierta tisular. No comparable con el arco de Motiva o Silimed"
+  },
+  {
+    "marca": "Mentor",
+    "linea": "CPG Cohesive III",
+    "referencia": "334-1005",
+    "forma": "anatomica",
+    "superficie": "texturizada",
+    "superficieMarca": "SILTEX",
+    "perfilMarca": "CPG 322 · Altura Media, Proyección Moderada Plus",
+    "volumenCc": 195.0,
+    "baseCm": 10.0,
+    "alturaCm": 9.4,
+    "proyeccionCm": 4.2,
+    "arcoCm": 8.4,
+    "gel": "Cohesive III",
+    "catalogo": "Mentor CPG — datos/fuentes/mentor-cpg-anatomicas.pdf",
+    "pagina": "4",
+    "notas": "Arco = API de Mentor: polo inferior al punto medio, incluye 0,5 cm de cubierta tisular. No comparable con el arco de Motiva o Silimed"
+  },
+  {
+    "marca": "Mentor",
+    "linea": "CPG Cohesive III",
+    "referencia": "334-1055",
+    "forma": "anatomica",
+    "superficie": "texturizada",
+    "superficieMarca": "SILTEX",
+    "perfilMarca": "CPG 322 · Altura Media, Proyección Moderada Plus",
+    "volumenCc": 225.0,
+    "baseCm": 10.5,
+    "alturaCm": 9.9,
+    "proyeccionCm": 4.4,
+    "arcoCm": 8.8,
+    "gel": "Cohesive III",
+    "catalogo": "Mentor CPG — datos/fuentes/mentor-cpg-anatomicas.pdf",
+    "pagina": "4",
+    "notas": "Arco = API de Mentor: polo inferior al punto medio, incluye 0,5 cm de cubierta tisular. No comparable con el arco de Motiva o Silimed"
+  },
+  {
+    "marca": "Mentor",
+    "linea": "CPG Cohesive III",
+    "referencia": "334-1105",
+    "forma": "anatomica",
+    "superficie": "texturizada",
+    "superficieMarca": "SILTEX",
+    "perfilMarca": "CPG 322 · Altura Media, Proyección Moderada Plus",
+    "volumenCc": 255.0,
+    "baseCm": 11.0,
+    "alturaCm": 10.3,
+    "proyeccionCm": 4.7,
+    "arcoCm": 9.2,
+    "gel": "Cohesive III",
+    "catalogo": "Mentor CPG — datos/fuentes/mentor-cpg-anatomicas.pdf",
+    "pagina": "4",
+    "notas": "Arco = API de Mentor: polo inferior al punto medio, incluye 0,5 cm de cubierta tisular. No comparable con el arco de Motiva o Silimed"
+  },
+  {
+    "marca": "Mentor",
+    "linea": "CPG Cohesive III",
+    "referencia": "334-1155",
+    "forma": "anatomica",
+    "superficie": "texturizada",
+    "superficieMarca": "SILTEX",
+    "perfilMarca": "CPG 322 · Altura Media, Proyección Moderada Plus",
+    "volumenCc": 295.0,
+    "baseCm": 11.5,
+    "alturaCm": 10.8,
+    "proyeccionCm": 4.9,
+    "arcoCm": 9.5,
+    "gel": "Cohesive III",
+    "catalogo": "Mentor CPG — datos/fuentes/mentor-cpg-anatomicas.pdf",
+    "pagina": "4",
+    "notas": "Arco = API de Mentor: polo inferior al punto medio, incluye 0,5 cm de cubierta tisular. No comparable con el arco de Motiva o Silimed"
+  },
+  {
+    "marca": "Mentor",
+    "linea": "CPG Cohesive III",
+    "referencia": "334-1205",
+    "forma": "anatomica",
+    "superficie": "texturizada",
+    "superficieMarca": "SILTEX",
+    "perfilMarca": "CPG 322 · Altura Media, Proyección Moderada Plus",
+    "volumenCc": 330.0,
+    "baseCm": 12.0,
+    "alturaCm": 11.3,
+    "proyeccionCm": 5.1,
+    "arcoCm": 9.9,
+    "gel": "Cohesive III",
+    "catalogo": "Mentor CPG — datos/fuentes/mentor-cpg-anatomicas.pdf",
+    "pagina": "4",
+    "notas": "Arco = API de Mentor: polo inferior al punto medio, incluye 0,5 cm de cubierta tisular. No comparable con el arco de Motiva o Silimed"
+  },
+  {
+    "marca": "Mentor",
+    "linea": "CPG Cohesive III",
+    "referencia": "334-1255",
+    "forma": "anatomica",
+    "superficie": "texturizada",
+    "superficieMarca": "SILTEX",
+    "perfilMarca": "CPG 322 · Altura Media, Proyección Moderada Plus",
+    "volumenCc": 375.0,
+    "baseCm": 12.5,
+    "alturaCm": 11.8,
+    "proyeccionCm": 5.3,
+    "arcoCm": 10.3,
+    "gel": "Cohesive III",
+    "catalogo": "Mentor CPG — datos/fuentes/mentor-cpg-anatomicas.pdf",
+    "pagina": "4",
+    "notas": "Arco = API de Mentor: polo inferior al punto medio, incluye 0,5 cm de cubierta tisular. No comparable con el arco de Motiva o Silimed"
+  },
+  {
+    "marca": "Mentor",
+    "linea": "CPG Cohesive III",
+    "referencia": "334-1305",
+    "forma": "anatomica",
+    "superficie": "texturizada",
+    "superficieMarca": "SILTEX",
+    "perfilMarca": "CPG 322 · Altura Media, Proyección Moderada Plus",
+    "volumenCc": 420.0,
+    "baseCm": 13.0,
+    "alturaCm": 12.2,
+    "proyeccionCm": 5.5,
+    "arcoCm": 10.7,
+    "gel": "Cohesive III",
+    "catalogo": "Mentor CPG — datos/fuentes/mentor-cpg-anatomicas.pdf",
+    "pagina": "4",
+    "notas": "Arco = API de Mentor: polo inferior al punto medio, incluye 0,5 cm de cubierta tisular. No comparable con el arco de Motiva o Silimed"
+  },
+  {
+    "marca": "Mentor",
+    "linea": "CPG Cohesive III",
+    "referencia": "334-1355",
+    "forma": "anatomica",
+    "superficie": "texturizada",
+    "superficieMarca": "SILTEX",
+    "perfilMarca": "CPG 322 · Altura Media, Proyección Moderada Plus",
+    "volumenCc": 475.0,
+    "baseCm": 13.5,
+    "alturaCm": 12.7,
+    "proyeccionCm": 5.7,
+    "arcoCm": 11.1,
+    "gel": "Cohesive III",
+    "catalogo": "Mentor CPG — datos/fuentes/mentor-cpg-anatomicas.pdf",
+    "pagina": "4",
+    "notas": "Arco = API de Mentor: polo inferior al punto medio, incluye 0,5 cm de cubierta tisular. No comparable con el arco de Motiva o Silimed"
+  },
+  {
+    "marca": "Mentor",
+    "linea": "CPG Cohesive III",
+    "referencia": "334-1405",
+    "forma": "anatomica",
+    "superficie": "texturizada",
+    "superficieMarca": "SILTEX",
+    "perfilMarca": "CPG 322 · Altura Media, Proyección Moderada Plus",
+    "volumenCc": 525.0,
+    "baseCm": 14.0,
+    "alturaCm": 13.2,
+    "proyeccionCm": 5.9,
+    "arcoCm": 11.4,
+    "gel": "Cohesive III",
+    "catalogo": "Mentor CPG — datos/fuentes/mentor-cpg-anatomicas.pdf",
+    "pagina": "4",
+    "notas": "Arco = API de Mentor: polo inferior al punto medio, incluye 0,5 cm de cubierta tisular. No comparable con el arco de Motiva o Silimed"
+  },
+  {
+    "marca": "Mentor",
+    "linea": "CPG Cohesive III",
+    "referencia": "334-1455",
+    "forma": "anatomica",
+    "superficie": "texturizada",
+    "superficieMarca": "SILTEX",
+    "perfilMarca": "CPG 322 · Altura Media, Proyección Moderada Plus",
+    "volumenCc": 585.0,
+    "baseCm": 14.5,
+    "alturaCm": 13.6,
+    "proyeccionCm": 6.1,
+    "arcoCm": 11.8,
+    "gel": "Cohesive III",
+    "catalogo": "Mentor CPG — datos/fuentes/mentor-cpg-anatomicas.pdf",
+    "pagina": "4",
+    "notas": "Arco = API de Mentor: polo inferior al punto medio, incluye 0,5 cm de cubierta tisular. No comparable con el arco de Motiva o Silimed"
+  },
+  {
+    "marca": "Mentor",
+    "linea": "CPG Cohesive III",
+    "referencia": "334-1505",
+    "forma": "anatomica",
+    "superficie": "texturizada",
+    "superficieMarca": "SILTEX",
+    "perfilMarca": "CPG 322 · Altura Media, Proyección Moderada Plus",
+    "volumenCc": 650.0,
+    "baseCm": 15.0,
+    "alturaCm": 14.1,
+    "proyeccionCm": 6.3,
+    "arcoCm": 12.2,
+    "gel": "Cohesive III",
+    "catalogo": "Mentor CPG — datos/fuentes/mentor-cpg-anatomicas.pdf",
+    "pagina": "4",
+    "notas": "Arco = API de Mentor: polo inferior al punto medio, incluye 0,5 cm de cubierta tisular. No comparable con el arco de Motiva o Silimed"
+  },
+  {
+    "marca": "Mentor",
+    "linea": "CPG Cohesive III",
+    "referencia": "334-0907",
+    "forma": "anatomica",
+    "superficie": "texturizada",
+    "superficieMarca": "SILTEX",
+    "perfilMarca": "CPG 312 · Altura Baja, Proyección Moderada Plus",
+    "volumenCc": 125.0,
+    "baseCm": 9.0,
+    "alturaCm": 8.0,
+    "proyeccionCm": 3.8,
+    "arcoCm": 7.2,
+    "gel": "Cohesive III",
+    "catalogo": "Mentor CPG — datos/fuentes/mentor-cpg-anatomicas.pdf",
+    "pagina": "5",
+    "notas": "Arco = API de Mentor: polo inferior al punto medio, incluye 0,5 cm de cubierta tisular. No comparable con el arco de Motiva o Silimed"
+  },
+  {
+    "marca": "Mentor",
+    "linea": "CPG Cohesive III",
+    "referencia": "334-0957",
+    "forma": "anatomica",
+    "superficie": "texturizada",
+    "superficieMarca": "SILTEX",
+    "perfilMarca": "CPG 312 · Altura Baja, Proyección Moderada Plus",
+    "volumenCc": 145.0,
+    "baseCm": 9.5,
+    "alturaCm": 8.4,
+    "proyeccionCm": 4.0,
+    "arcoCm": 7.5,
+    "gel": "Cohesive III",
+    "catalogo": "Mentor CPG — datos/fuentes/mentor-cpg-anatomicas.pdf",
+    "pagina": "5",
+    "notas": "Arco = API de Mentor: polo inferior al punto medio, incluye 0,5 cm de cubierta tisular. No comparable con el arco de Motiva o Silimed"
+  },
+  {
+    "marca": "Mentor",
+    "linea": "CPG Cohesive III",
+    "referencia": "334-1007",
+    "forma": "anatomica",
+    "superficie": "texturizada",
+    "superficieMarca": "SILTEX",
+    "perfilMarca": "CPG 312 · Altura Baja, Proyección Moderada Plus",
+    "volumenCc": 170.0,
+    "baseCm": 10.0,
+    "alturaCm": 8.8,
+    "proyeccionCm": 4.2,
+    "arcoCm": 7.9,
+    "gel": "Cohesive III",
+    "catalogo": "Mentor CPG — datos/fuentes/mentor-cpg-anatomicas.pdf",
+    "pagina": "5",
+    "notas": "Arco = API de Mentor: polo inferior al punto medio, incluye 0,5 cm de cubierta tisular. No comparable con el arco de Motiva o Silimed"
+  },
+  {
+    "marca": "Mentor",
+    "linea": "CPG Cohesive III",
+    "referencia": "334-1057",
+    "forma": "anatomica",
+    "superficie": "texturizada",
+    "superficieMarca": "SILTEX",
+    "perfilMarca": "CPG 312 · Altura Baja, Proyección Moderada Plus",
+    "volumenCc": 195.0,
+    "baseCm": 10.5,
+    "alturaCm": 9.3,
+    "proyeccionCm": 4.4,
+    "arcoCm": 8.3,
+    "gel": "Cohesive III",
+    "catalogo": "Mentor CPG — datos/fuentes/mentor-cpg-anatomicas.pdf",
+    "pagina": "5",
+    "notas": "Arco = API de Mentor: polo inferior al punto medio, incluye 0,5 cm de cubierta tisular. No comparable con el arco de Motiva o Silimed"
+  },
+  {
+    "marca": "Mentor",
+    "linea": "CPG Cohesive III",
+    "referencia": "334-1107",
+    "forma": "anatomica",
+    "superficie": "texturizada",
+    "superficieMarca": "SILTEX",
+    "perfilMarca": "CPG 312 · Altura Baja, Proyección Moderada Plus",
+    "volumenCc": 225.0,
+    "baseCm": 11.0,
+    "alturaCm": 9.7,
+    "proyeccionCm": 4.7,
+    "arcoCm": 8.6,
+    "gel": "Cohesive III",
+    "catalogo": "Mentor CPG — datos/fuentes/mentor-cpg-anatomicas.pdf",
+    "pagina": "5",
+    "notas": "Arco = API de Mentor: polo inferior al punto medio, incluye 0,5 cm de cubierta tisular. No comparable con el arco de Motiva o Silimed"
+  },
+  {
+    "marca": "Mentor",
+    "linea": "CPG Cohesive III",
+    "referencia": "334-1157",
+    "forma": "anatomica",
+    "superficie": "texturizada",
+    "superficieMarca": "SILTEX",
+    "perfilMarca": "CPG 312 · Altura Baja, Proyección Moderada Plus",
+    "volumenCc": 255.0,
+    "baseCm": 11.5,
+    "alturaCm": 10.2,
+    "proyeccionCm": 4.9,
+    "arcoCm": 9.0,
+    "gel": "Cohesive III",
+    "catalogo": "Mentor CPG — datos/fuentes/mentor-cpg-anatomicas.pdf",
+    "pagina": "5",
+    "notas": "Arco = API de Mentor: polo inferior al punto medio, incluye 0,5 cm de cubierta tisular. No comparable con el arco de Motiva o Silimed"
+  },
+  {
+    "marca": "Mentor",
+    "linea": "CPG Cohesive III",
+    "referencia": "334-1207",
+    "forma": "anatomica",
+    "superficie": "texturizada",
+    "superficieMarca": "SILTEX",
+    "perfilMarca": "CPG 312 · Altura Baja, Proyección Moderada Plus",
+    "volumenCc": 290.0,
+    "baseCm": 12.0,
+    "alturaCm": 10.6,
+    "proyeccionCm": 5.1,
+    "arcoCm": 9.3,
+    "gel": "Cohesive III",
+    "catalogo": "Mentor CPG — datos/fuentes/mentor-cpg-anatomicas.pdf",
+    "pagina": "5",
+    "notas": "Arco = API de Mentor: polo inferior al punto medio, incluye 0,5 cm de cubierta tisular. No comparable con el arco de Motiva o Silimed"
+  },
+  {
+    "marca": "Mentor",
+    "linea": "CPG Cohesive III",
+    "referencia": "334-1257",
+    "forma": "anatomica",
+    "superficie": "texturizada",
+    "superficieMarca": "SILTEX",
+    "perfilMarca": "CPG 312 · Altura Baja, Proyección Moderada Plus",
+    "volumenCc": 330.0,
+    "baseCm": 12.5,
+    "alturaCm": 11.1,
+    "proyeccionCm": 5.3,
+    "arcoCm": 9.7,
+    "gel": "Cohesive III",
+    "catalogo": "Mentor CPG — datos/fuentes/mentor-cpg-anatomicas.pdf",
+    "pagina": "5",
+    "notas": "Arco = API de Mentor: polo inferior al punto medio, incluye 0,5 cm de cubierta tisular. No comparable con el arco de Motiva o Silimed"
+  },
+  {
+    "marca": "Mentor",
+    "linea": "CPG Cohesive III",
+    "referencia": "334-1307",
+    "forma": "anatomica",
+    "superficie": "texturizada",
+    "superficieMarca": "SILTEX",
+    "perfilMarca": "CPG 312 · Altura Baja, Proyección Moderada Plus",
+    "volumenCc": 370.0,
+    "baseCm": 13.0,
+    "alturaCm": 11.5,
+    "proyeccionCm": 5.5,
+    "arcoCm": 10.0,
+    "gel": "Cohesive III",
+    "catalogo": "Mentor CPG — datos/fuentes/mentor-cpg-anatomicas.pdf",
+    "pagina": "5",
+    "notas": "Arco = API de Mentor: polo inferior al punto medio, incluye 0,5 cm de cubierta tisular. No comparable con el arco de Motiva o Silimed"
+  },
+  {
+    "marca": "Mentor",
+    "linea": "CPG Cohesive III",
+    "referencia": "334-1357",
+    "forma": "anatomica",
+    "superficie": "texturizada",
+    "superficieMarca": "SILTEX",
+    "perfilMarca": "CPG 312 · Altura Baja, Proyección Moderada Plus",
+    "volumenCc": 415.0,
+    "baseCm": 13.5,
+    "alturaCm": 11.9,
+    "proyeccionCm": 5.7,
+    "arcoCm": 10.4,
+    "gel": "Cohesive III",
+    "catalogo": "Mentor CPG — datos/fuentes/mentor-cpg-anatomicas.pdf",
+    "pagina": "5",
+    "notas": "Arco = API de Mentor: polo inferior al punto medio, incluye 0,5 cm de cubierta tisular. No comparable con el arco de Motiva o Silimed"
+  },
+  {
+    "marca": "Mentor",
+    "linea": "CPG Cohesive III",
+    "referencia": "334-1407",
+    "forma": "anatomica",
+    "superficie": "texturizada",
+    "superficieMarca": "SILTEX",
+    "perfilMarca": "CPG 312 · Altura Baja, Proyección Moderada Plus",
+    "volumenCc": 465.0,
+    "baseCm": 14.0,
+    "alturaCm": 12.4,
+    "proyeccionCm": 5.9,
+    "arcoCm": 10.8,
+    "gel": "Cohesive III",
+    "catalogo": "Mentor CPG — datos/fuentes/mentor-cpg-anatomicas.pdf",
+    "pagina": "5",
+    "notas": "Arco = API de Mentor: polo inferior al punto medio, incluye 0,5 cm de cubierta tisular. No comparable con el arco de Motiva o Silimed"
+  },
+  {
+    "marca": "Mentor",
+    "linea": "CPG Cohesive III",
+    "referencia": "334-1457",
+    "forma": "anatomica",
+    "superficie": "texturizada",
+    "superficieMarca": "SILTEX",
+    "perfilMarca": "CPG 312 · Altura Baja, Proyección Moderada Plus",
+    "volumenCc": 515.0,
+    "baseCm": 14.5,
+    "alturaCm": 12.8,
+    "proyeccionCm": 6.1,
+    "arcoCm": 11.1,
+    "gel": "Cohesive III",
+    "catalogo": "Mentor CPG — datos/fuentes/mentor-cpg-anatomicas.pdf",
+    "pagina": "5",
+    "notas": "Arco = API de Mentor: polo inferior al punto medio, incluye 0,5 cm de cubierta tisular. No comparable con el arco de Motiva o Silimed"
+  },
+  {
+    "marca": "Mentor",
+    "linea": "CPG Cohesive III",
+    "referencia": "334-1507",
+    "forma": "anatomica",
+    "superficie": "texturizada",
+    "superficieMarca": "SILTEX",
+    "perfilMarca": "CPG 312 · Altura Baja, Proyección Moderada Plus",
+    "volumenCc": 570.0,
+    "baseCm": 15.0,
+    "alturaCm": 13.3,
+    "proyeccionCm": 6.3,
+    "arcoCm": 11.5,
+    "gel": "Cohesive III",
+    "catalogo": "Mentor CPG — datos/fuentes/mentor-cpg-anatomicas.pdf",
+    "pagina": "5",
+    "notas": "Arco = API de Mentor: polo inferior al punto medio, incluye 0,5 cm de cubierta tisular. No comparable con el arco de Motiva o Silimed"
+  },
+  {
+    "marca": "Mentor",
+    "linea": "CPG Cohesive III",
+    "referencia": "334-1607",
+    "forma": "anatomica",
+    "superficie": "texturizada",
+    "superficieMarca": "SILTEX",
+    "perfilMarca": "CPG 312 · Altura Baja, Proyección Moderada Plus",
+    "volumenCc": 690.0,
+    "baseCm": 16.0,
+    "alturaCm": 14.2,
+    "proyeccionCm": 6.8,
+    "arcoCm": 12.2,
+    "gel": "Cohesive III",
+    "catalogo": "Mentor CPG — datos/fuentes/mentor-cpg-anatomicas.pdf",
+    "pagina": "5",
+    "notas": "Arco = API de Mentor: polo inferior al punto medio, incluye 0,5 cm de cubierta tisular. No comparable con el arco de Motiva o Silimed"
+  },
+  {
+    "marca": "Mentor",
+    "linea": "CPG Cohesive III",
+    "referencia": "334-0902",
+    "forma": "anatomica",
+    "superficie": "texturizada",
+    "superficieMarca": "SILTEX",
+    "perfilMarca": "CPG 323 · Altura Media, Proyección Alta",
+    "volumenCc": 165.0,
+    "baseCm": 9.0,
+    "alturaCm": 8.5,
+    "proyeccionCm": 4.6,
+    "arcoCm": 8.1,
+    "gel": "Cohesive III",
+    "catalogo": "Mentor CPG — datos/fuentes/mentor-cpg-anatomicas.pdf",
+    "pagina": "6",
+    "notas": "Arco = API de Mentor: polo inferior al punto medio, incluye 0,5 cm de cubierta tisular. No comparable con el arco de Motiva o Silimed"
+  },
+  {
+    "marca": "Mentor",
+    "linea": "CPG Cohesive III",
+    "referencia": "334-0952",
+    "forma": "anatomica",
+    "superficie": "texturizada",
+    "superficieMarca": "SILTEX",
+    "perfilMarca": "CPG 323 · Altura Media, Proyección Alta",
+    "volumenCc": 195.0,
+    "baseCm": 9.5,
+    "alturaCm": 8.9,
+    "proyeccionCm": 4.8,
+    "arcoCm": 8.5,
+    "gel": "Cohesive III",
+    "catalogo": "Mentor CPG — datos/fuentes/mentor-cpg-anatomicas.pdf",
+    "pagina": "6",
+    "notas": "Arco = API de Mentor: polo inferior al punto medio, incluye 0,5 cm de cubierta tisular. No comparable con el arco de Motiva o Silimed"
+  },
+  {
+    "marca": "Mentor",
+    "linea": "CPG Cohesive III",
+    "referencia": "334-1002",
+    "forma": "anatomica",
+    "superficie": "texturizada",
+    "superficieMarca": "SILTEX",
+    "perfilMarca": "CPG 323 · Altura Media, Proyección Alta",
+    "volumenCc": 225.0,
+    "baseCm": 10.0,
+    "alturaCm": 9.4,
+    "proyeccionCm": 5.1,
+    "arcoCm": 8.9,
+    "gel": "Cohesive III",
+    "catalogo": "Mentor CPG — datos/fuentes/mentor-cpg-anatomicas.pdf",
+    "pagina": "6",
+    "notas": "Arco = API de Mentor: polo inferior al punto medio, incluye 0,5 cm de cubierta tisular. No comparable con el arco de Motiva o Silimed"
+  },
+  {
+    "marca": "Mentor",
+    "linea": "CPG Cohesive III",
+    "referencia": "334-1052",
+    "forma": "anatomica",
+    "superficie": "texturizada",
+    "superficieMarca": "SILTEX",
+    "perfilMarca": "CPG 323 · Altura Media, Proyección Alta",
+    "volumenCc": 260.0,
+    "baseCm": 10.5,
+    "alturaCm": 9.9,
+    "proyeccionCm": 5.3,
+    "arcoCm": 9.3,
+    "gel": "Cohesive III",
+    "catalogo": "Mentor CPG — datos/fuentes/mentor-cpg-anatomicas.pdf",
+    "pagina": "6",
+    "notas": "Arco = API de Mentor: polo inferior al punto medio, incluye 0,5 cm de cubierta tisular. No comparable con el arco de Motiva o Silimed"
+  },
+  {
+    "marca": "Mentor",
+    "linea": "CPG Cohesive III",
+    "referencia": "334-1102",
+    "forma": "anatomica",
+    "superficie": "texturizada",
+    "superficieMarca": "SILTEX",
+    "perfilMarca": "CPG 323 · Altura Media, Proyección Alta",
+    "volumenCc": 300.0,
+    "baseCm": 11.0,
+    "alturaCm": 10.3,
+    "proyeccionCm": 5.6,
+    "arcoCm": 9.7,
+    "gel": "Cohesive III",
+    "catalogo": "Mentor CPG — datos/fuentes/mentor-cpg-anatomicas.pdf",
+    "pagina": "6",
+    "notas": "Arco = API de Mentor: polo inferior al punto medio, incluye 0,5 cm de cubierta tisular. No comparable con el arco de Motiva o Silimed"
+  },
+  {
+    "marca": "Mentor",
+    "linea": "CPG Cohesive III",
+    "referencia": "334-1152",
+    "forma": "anatomica",
+    "superficie": "texturizada",
+    "superficieMarca": "SILTEX",
+    "perfilMarca": "CPG 323 · Altura Media, Proyección Alta",
+    "volumenCc": 345.0,
+    "baseCm": 11.5,
+    "alturaCm": 10.8,
+    "proyeccionCm": 5.8,
+    "arcoCm": 10.1,
+    "gel": "Cohesive III",
+    "catalogo": "Mentor CPG — datos/fuentes/mentor-cpg-anatomicas.pdf",
+    "pagina": "6",
+    "notas": "Arco = API de Mentor: polo inferior al punto medio, incluye 0,5 cm de cubierta tisular. No comparable con el arco de Motiva o Silimed"
+  },
+  {
+    "marca": "Mentor",
+    "linea": "CPG Cohesive III",
+    "referencia": "334-1202",
+    "forma": "anatomica",
+    "superficie": "texturizada",
+    "superficieMarca": "SILTEX",
+    "perfilMarca": "CPG 323 · Altura Media, Proyección Alta",
+    "volumenCc": 390.0,
+    "baseCm": 12.0,
+    "alturaCm": 11.3,
+    "proyeccionCm": 6.0,
+    "arcoCm": 10.5,
+    "gel": "Cohesive III",
+    "catalogo": "Mentor CPG — datos/fuentes/mentor-cpg-anatomicas.pdf",
+    "pagina": "6",
+    "notas": "Arco = API de Mentor: polo inferior al punto medio, incluye 0,5 cm de cubierta tisular. No comparable con el arco de Motiva o Silimed"
+  },
+  {
+    "marca": "Mentor",
+    "linea": "CPG Cohesive III",
+    "referencia": "334-1252",
+    "forma": "anatomica",
+    "superficie": "texturizada",
+    "superficieMarca": "SILTEX",
+    "perfilMarca": "CPG 323 · Altura Media, Proyección Alta",
+    "volumenCc": 440.0,
+    "baseCm": 12.5,
+    "alturaCm": 11.8,
+    "proyeccionCm": 6.2,
+    "arcoCm": 10.9,
+    "gel": "Cohesive III",
+    "catalogo": "Mentor CPG — datos/fuentes/mentor-cpg-anatomicas.pdf",
+    "pagina": "6",
+    "notas": "Arco = API de Mentor: polo inferior al punto medio, incluye 0,5 cm de cubierta tisular. No comparable con el arco de Motiva o Silimed"
+  },
+  {
+    "marca": "Mentor",
+    "linea": "CPG Cohesive III",
+    "referencia": "334-1302",
+    "forma": "anatomica",
+    "superficie": "texturizada",
+    "superficieMarca": "SILTEX",
+    "perfilMarca": "CPG 323 · Altura Media, Proyección Alta",
+    "volumenCc": 495.0,
+    "baseCm": 13.0,
+    "alturaCm": 12.2,
+    "proyeccionCm": 6.5,
+    "arcoCm": 11.3,
+    "gel": "Cohesive III",
+    "catalogo": "Mentor CPG — datos/fuentes/mentor-cpg-anatomicas.pdf",
+    "pagina": "6",
+    "notas": "Arco = API de Mentor: polo inferior al punto medio, incluye 0,5 cm de cubierta tisular. No comparable con el arco de Motiva o Silimed"
+  },
+  {
+    "marca": "Mentor",
+    "linea": "CPG Cohesive III",
+    "referencia": "334-1352",
+    "forma": "anatomica",
+    "superficie": "texturizada",
+    "superficieMarca": "SILTEX",
+    "perfilMarca": "CPG 323 · Altura Media, Proyección Alta",
+    "volumenCc": 555.0,
+    "baseCm": 13.5,
+    "alturaCm": 12.7,
+    "proyeccionCm": 6.7,
+    "arcoCm": 11.8,
+    "gel": "Cohesive III",
+    "catalogo": "Mentor CPG — datos/fuentes/mentor-cpg-anatomicas.pdf",
+    "pagina": "6",
+    "notas": "Arco = API de Mentor: polo inferior al punto medio, incluye 0,5 cm de cubierta tisular. No comparable con el arco de Motiva o Silimed"
+  },
+  {
+    "marca": "Mentor",
+    "linea": "CPG Cohesive III",
+    "referencia": "334-1402",
+    "forma": "anatomica",
+    "superficie": "texturizada",
+    "superficieMarca": "SILTEX",
+    "perfilMarca": "CPG 323 · Altura Media, Proyección Alta",
+    "volumenCc": 620.0,
+    "baseCm": 14.0,
+    "alturaCm": 13.2,
+    "proyeccionCm": 6.9,
+    "arcoCm": 12.2,
+    "gel": "Cohesive III",
+    "catalogo": "Mentor CPG — datos/fuentes/mentor-cpg-anatomicas.pdf",
+    "pagina": "6",
+    "notas": "Arco = API de Mentor: polo inferior al punto medio, incluye 0,5 cm de cubierta tisular. No comparable con el arco de Motiva o Silimed"
+  },
+  {
+    "marca": "Mentor",
+    "linea": "CPG Cohesive III",
+    "referencia": "334-1452",
+    "forma": "anatomica",
+    "superficie": "texturizada",
+    "superficieMarca": "SILTEX",
+    "perfilMarca": "CPG 323 · Altura Media, Proyección Alta",
+    "volumenCc": 685.0,
+    "baseCm": 14.5,
+    "alturaCm": 13.6,
+    "proyeccionCm": 7.1,
+    "arcoCm": 12.6,
+    "gel": "Cohesive III",
+    "catalogo": "Mentor CPG — datos/fuentes/mentor-cpg-anatomicas.pdf",
+    "pagina": "6",
+    "notas": "Arco = API de Mentor: polo inferior al punto medio, incluye 0,5 cm de cubierta tisular. No comparable con el arco de Motiva o Silimed"
+  },
+  {
+    "marca": "Mentor",
+    "linea": "CPG Cohesive III",
+    "referencia": "334-0904",
+    "forma": "anatomica",
+    "superficie": "texturizada",
+    "superficieMarca": "SILTEX",
+    "perfilMarca": "CPG 333 · Altura Elevada, Proyección Alta",
+    "volumenCc": 180.0,
+    "baseCm": 9.0,
+    "alturaCm": 9.4,
+    "proyeccionCm": 4.6,
+    "arcoCm": 8.4,
+    "gel": "Cohesive III",
+    "catalogo": "Mentor CPG — datos/fuentes/mentor-cpg-anatomicas.pdf",
+    "pagina": "6",
+    "notas": "Arco = API de Mentor: polo inferior al punto medio, incluye 0,5 cm de cubierta tisular. No comparable con el arco de Motiva o Silimed"
+  },
+  {
+    "marca": "Mentor",
+    "linea": "CPG Cohesive III",
+    "referencia": "334-0954",
+    "forma": "anatomica",
+    "superficie": "texturizada",
+    "superficieMarca": "SILTEX",
+    "perfilMarca": "CPG 333 · Altura Elevada, Proyección Alta",
+    "volumenCc": 215.0,
+    "baseCm": 9.5,
+    "alturaCm": 9.9,
+    "proyeccionCm": 4.8,
+    "arcoCm": 8.8,
+    "gel": "Cohesive III",
+    "catalogo": "Mentor CPG — datos/fuentes/mentor-cpg-anatomicas.pdf",
+    "pagina": "6",
+    "notas": "Arco = API de Mentor: polo inferior al punto medio, incluye 0,5 cm de cubierta tisular. No comparable con el arco de Motiva o Silimed"
+  },
+  {
+    "marca": "Mentor",
+    "linea": "CPG Cohesive III",
+    "referencia": "334-1004",
+    "forma": "anatomica",
+    "superficie": "texturizada",
+    "superficieMarca": "SILTEX",
+    "perfilMarca": "CPG 333 · Altura Elevada, Proyección Alta",
+    "volumenCc": 250.0,
+    "baseCm": 10.0,
+    "alturaCm": 10.4,
+    "proyeccionCm": 5.1,
+    "arcoCm": 9.3,
+    "gel": "Cohesive III",
+    "catalogo": "Mentor CPG — datos/fuentes/mentor-cpg-anatomicas.pdf",
+    "pagina": "6",
+    "notas": "Arco = API de Mentor: polo inferior al punto medio, incluye 0,5 cm de cubierta tisular. No comparable con el arco de Motiva o Silimed"
+  },
+  {
+    "marca": "Mentor",
+    "linea": "CPG Cohesive III",
+    "referencia": "334-1054",
+    "forma": "anatomica",
+    "superficie": "texturizada",
+    "superficieMarca": "SILTEX",
+    "perfilMarca": "CPG 333 · Altura Elevada, Proyección Alta",
+    "volumenCc": 290.0,
+    "baseCm": 10.5,
+    "alturaCm": 10.9,
+    "proyeccionCm": 5.3,
+    "arcoCm": 9.7,
+    "gel": "Cohesive III",
+    "catalogo": "Mentor CPG — datos/fuentes/mentor-cpg-anatomicas.pdf",
+    "pagina": "6",
+    "notas": "Arco = API de Mentor: polo inferior al punto medio, incluye 0,5 cm de cubierta tisular. No comparable con el arco de Motiva o Silimed"
+  },
+  {
+    "marca": "Mentor",
+    "linea": "CPG Cohesive III",
+    "referencia": "334-1104",
+    "forma": "anatomica",
+    "superficie": "texturizada",
+    "superficieMarca": "SILTEX",
+    "perfilMarca": "CPG 333 · Altura Elevada, Proyección Alta",
+    "volumenCc": 330.0,
+    "baseCm": 11.0,
+    "alturaCm": 11.5,
+    "proyeccionCm": 5.6,
+    "arcoCm": 10.1,
+    "gel": "Cohesive III",
+    "catalogo": "Mentor CPG — datos/fuentes/mentor-cpg-anatomicas.pdf",
+    "pagina": "6",
+    "notas": "Arco = API de Mentor: polo inferior al punto medio, incluye 0,5 cm de cubierta tisular. No comparable con el arco de Motiva o Silimed"
+  },
+  {
+    "marca": "Mentor",
+    "linea": "CPG Cohesive III",
+    "referencia": "334-1154",
+    "forma": "anatomica",
+    "superficie": "texturizada",
+    "superficieMarca": "SILTEX",
+    "perfilMarca": "CPG 333 · Altura Elevada, Proyección Alta",
+    "volumenCc": 380.0,
+    "baseCm": 11.5,
+    "alturaCm": 12.0,
+    "proyeccionCm": 5.8,
+    "arcoCm": 10.5,
+    "gel": "Cohesive III",
+    "catalogo": "Mentor CPG — datos/fuentes/mentor-cpg-anatomicas.pdf",
+    "pagina": "6",
+    "notas": "Arco = API de Mentor: polo inferior al punto medio, incluye 0,5 cm de cubierta tisular. No comparable con el arco de Motiva o Silimed"
+  },
+  {
+    "marca": "Mentor",
+    "linea": "CPG Cohesive III",
+    "referencia": "334-1204",
+    "forma": "anatomica",
+    "superficie": "texturizada",
+    "superficieMarca": "SILTEX",
+    "perfilMarca": "CPG 333 · Altura Elevada, Proyección Alta",
+    "volumenCc": 430.0,
+    "baseCm": 12.0,
+    "alturaCm": 12.5,
+    "proyeccionCm": 6.0,
+    "arcoCm": 11.0,
+    "gel": "Cohesive III",
+    "catalogo": "Mentor CPG — datos/fuentes/mentor-cpg-anatomicas.pdf",
+    "pagina": "6",
+    "notas": "Arco = API de Mentor: polo inferior al punto medio, incluye 0,5 cm de cubierta tisular. No comparable con el arco de Motiva o Silimed"
+  },
+  {
+    "marca": "Mentor",
+    "linea": "CPG Cohesive III",
+    "referencia": "334-1254",
+    "forma": "anatomica",
+    "superficie": "texturizada",
+    "superficieMarca": "SILTEX",
+    "perfilMarca": "CPG 333 · Altura Elevada, Proyección Alta",
+    "volumenCc": 485.0,
+    "baseCm": 12.5,
+    "alturaCm": 13.0,
+    "proyeccionCm": 6.2,
+    "arcoCm": 11.4,
+    "gel": "Cohesive III",
+    "catalogo": "Mentor CPG — datos/fuentes/mentor-cpg-anatomicas.pdf",
+    "pagina": "6",
+    "notas": "Arco = API de Mentor: polo inferior al punto medio, incluye 0,5 cm de cubierta tisular. No comparable con el arco de Motiva o Silimed"
+  },
+  {
+    "marca": "Mentor",
+    "linea": "CPG Cohesive III",
+    "referencia": "334-1304",
+    "forma": "anatomica",
+    "superficie": "texturizada",
+    "superficieMarca": "SILTEX",
+    "perfilMarca": "CPG 333 · Altura Elevada, Proyección Alta",
+    "volumenCc": 545.0,
+    "baseCm": 13.0,
+    "alturaCm": 13.5,
+    "proyeccionCm": 6.5,
+    "arcoCm": 11.8,
+    "gel": "Cohesive III",
+    "catalogo": "Mentor CPG — datos/fuentes/mentor-cpg-anatomicas.pdf",
+    "pagina": "6",
+    "notas": "Arco = API de Mentor: polo inferior al punto medio, incluye 0,5 cm de cubierta tisular. No comparable con el arco de Motiva o Silimed"
+  },
+  {
+    "marca": "Mentor",
+    "linea": "CPG Cohesive III",
+    "referencia": "334-1354",
+    "forma": "anatomica",
+    "superficie": "texturizada",
+    "superficieMarca": "SILTEX",
+    "perfilMarca": "CPG 333 · Altura Elevada, Proyección Alta",
+    "volumenCc": 610.0,
+    "baseCm": 13.5,
+    "alturaCm": 14.1,
+    "proyeccionCm": 6.7,
+    "arcoCm": 12.2,
+    "gel": "Cohesive III",
+    "catalogo": "Mentor CPG — datos/fuentes/mentor-cpg-anatomicas.pdf",
+    "pagina": "6",
+    "notas": "Arco = API de Mentor: polo inferior al punto medio, incluye 0,5 cm de cubierta tisular. No comparable con el arco de Motiva o Silimed"
+  },
+  {
+    "marca": "Mentor",
+    "linea": "CPG Cohesive III",
+    "referencia": "334-1404",
+    "forma": "anatomica",
+    "superficie": "texturizada",
+    "superficieMarca": "SILTEX",
+    "perfilMarca": "CPG 333 · Altura Elevada, Proyección Alta",
+    "volumenCc": 680.0,
+    "baseCm": 14.0,
+    "alturaCm": 14.6,
+    "proyeccionCm": 6.9,
+    "arcoCm": 12.7,
+    "gel": "Cohesive III",
+    "catalogo": "Mentor CPG — datos/fuentes/mentor-cpg-anatomicas.pdf",
+    "pagina": "6",
+    "notas": "Arco = API de Mentor: polo inferior al punto medio, incluye 0,5 cm de cubierta tisular. No comparable con el arco de Motiva o Silimed"
+  },
+  {
+    "marca": "Mentor",
+    "linea": "CPG Cohesive III",
+    "referencia": "334-1454",
+    "forma": "anatomica",
+    "superficie": "texturizada",
+    "superficieMarca": "SILTEX",
+    "perfilMarca": "CPG 333 · Altura Elevada, Proyección Alta",
+    "volumenCc": 755.0,
+    "baseCm": 14.5,
+    "alturaCm": 15.1,
+    "proyeccionCm": 7.1,
+    "arcoCm": 13.1,
+    "gel": "Cohesive III",
+    "catalogo": "Mentor CPG — datos/fuentes/mentor-cpg-anatomicas.pdf",
+    "pagina": "6",
+    "notas": "Arco = API de Mentor: polo inferior al punto medio, incluye 0,5 cm de cubierta tisular. No comparable con el arco de Motiva o Silimed"
+  },
+  {
+    "marca": "Mentor",
+    "linea": "CPG Cohesive III",
+    "referencia": "334-0906",
+    "forma": "anatomica",
+    "superficie": "texturizada",
+    "superficieMarca": "SILTEX",
+    "perfilMarca": "CPG 313 · Altura Baja, Proyección Alta",
+    "volumenCc": 130.0,
+    "baseCm": 9.0,
+    "alturaCm": 8.1,
+    "proyeccionCm": 4.4,
+    "arcoCm": 7.6,
+    "gel": "Cohesive III",
+    "catalogo": "Mentor CPG — datos/fuentes/mentor-cpg-anatomicas.pdf",
+    "pagina": "7",
+    "notas": "Arco = API de Mentor: polo inferior al punto medio, incluye 0,5 cm de cubierta tisular. No comparable con el arco de Motiva o Silimed"
+  },
+  {
+    "marca": "Mentor",
+    "linea": "CPG Cohesive III",
+    "referencia": "334-0956",
+    "forma": "anatomica",
+    "superficie": "texturizada",
+    "superficieMarca": "SILTEX",
+    "perfilMarca": "CPG 313 · Altura Baja, Proyección Alta",
+    "volumenCc": 155.0,
+    "baseCm": 9.5,
+    "alturaCm": 8.6,
+    "proyeccionCm": 4.5,
+    "arcoCm": 7.8,
+    "gel": "Cohesive III",
+    "catalogo": "Mentor CPG — datos/fuentes/mentor-cpg-anatomicas.pdf",
+    "pagina": "7",
+    "notas": "Arco = API de Mentor: polo inferior al punto medio, incluye 0,5 cm de cubierta tisular. No comparable con el arco de Motiva o Silimed"
+  },
+  {
+    "marca": "Mentor",
+    "linea": "CPG Cohesive III",
+    "referencia": "334-1006",
+    "forma": "anatomica",
+    "superficie": "texturizada",
+    "superficieMarca": "SILTEX",
+    "perfilMarca": "CPG 313 · Altura Baja, Proyección Alta",
+    "volumenCc": 180.0,
+    "baseCm": 10.0,
+    "alturaCm": 9.0,
+    "proyeccionCm": 4.6,
+    "arcoCm": 8.3,
+    "gel": "Cohesive III",
+    "catalogo": "Mentor CPG — datos/fuentes/mentor-cpg-anatomicas.pdf",
+    "pagina": "7",
+    "notas": "Arco = API de Mentor: polo inferior al punto medio, incluye 0,5 cm de cubierta tisular. No comparable con el arco de Motiva o Silimed"
+  },
+  {
+    "marca": "Mentor",
+    "linea": "CPG Cohesive III",
+    "referencia": "334-1056",
+    "forma": "anatomica",
+    "superficie": "texturizada",
+    "superficieMarca": "SILTEX",
+    "perfilMarca": "CPG 313 · Altura Baja, Proyección Alta",
+    "volumenCc": 210.0,
+    "baseCm": 10.5,
+    "alturaCm": 9.5,
+    "proyeccionCm": 4.8,
+    "arcoCm": 8.7,
+    "gel": "Cohesive III",
+    "catalogo": "Mentor CPG — datos/fuentes/mentor-cpg-anatomicas.pdf",
+    "pagina": "7",
+    "notas": "Arco = API de Mentor: polo inferior al punto medio, incluye 0,5 cm de cubierta tisular. No comparable con el arco de Motiva o Silimed"
+  },
+  {
+    "marca": "Mentor",
+    "linea": "CPG Cohesive III",
+    "referencia": "334-1106",
+    "forma": "anatomica",
+    "superficie": "texturizada",
+    "superficieMarca": "SILTEX",
+    "perfilMarca": "CPG 313 · Altura Baja, Proyección Alta",
+    "volumenCc": 240.0,
+    "baseCm": 11.0,
+    "alturaCm": 9.9,
+    "proyeccionCm": 4.9,
+    "arcoCm": 9.1,
+    "gel": "Cohesive III",
+    "catalogo": "Mentor CPG — datos/fuentes/mentor-cpg-anatomicas.pdf",
+    "pagina": "7",
+    "notas": "Arco = API de Mentor: polo inferior al punto medio, incluye 0,5 cm de cubierta tisular. No comparable con el arco de Motiva o Silimed"
+  },
+  {
+    "marca": "Mentor",
+    "linea": "CPG Cohesive III",
+    "referencia": "334-1156",
+    "forma": "anatomica",
+    "superficie": "texturizada",
+    "superficieMarca": "SILTEX",
+    "perfilMarca": "CPG 313 · Altura Baja, Proyección Alta",
+    "volumenCc": 270.0,
+    "baseCm": 11.5,
+    "alturaCm": 10.3,
+    "proyeccionCm": 5.0,
+    "arcoCm": 9.5,
+    "gel": "Cohesive III",
+    "catalogo": "Mentor CPG — datos/fuentes/mentor-cpg-anatomicas.pdf",
+    "pagina": "7",
+    "notas": "Arco = API de Mentor: polo inferior al punto medio, incluye 0,5 cm de cubierta tisular. No comparable con el arco de Motiva o Silimed"
+  },
+  {
+    "marca": "Mentor",
+    "linea": "CPG Cohesive III",
+    "referencia": "334-1206",
+    "forma": "anatomica",
+    "superficie": "texturizada",
+    "superficieMarca": "SILTEX",
+    "perfilMarca": "CPG 313 · Altura Baja, Proyección Alta",
+    "volumenCc": 310.0,
+    "baseCm": 12.0,
+    "alturaCm": 10.8,
+    "proyeccionCm": 5.2,
+    "arcoCm": 9.9,
+    "gel": "Cohesive III",
+    "catalogo": "Mentor CPG — datos/fuentes/mentor-cpg-anatomicas.pdf",
+    "pagina": "7",
+    "notas": "Arco = API de Mentor: polo inferior al punto medio, incluye 0,5 cm de cubierta tisular. No comparable con el arco de Motiva o Silimed"
+  },
+  {
+    "marca": "Mentor",
+    "linea": "CPG Cohesive III",
+    "referencia": "334-1256",
+    "forma": "anatomica",
+    "superficie": "texturizada",
+    "superficieMarca": "SILTEX",
+    "perfilMarca": "CPG 313 · Altura Baja, Proyección Alta",
+    "volumenCc": 350.0,
+    "baseCm": 12.5,
+    "alturaCm": 11.2,
+    "proyeccionCm": 5.4,
+    "arcoCm": 10.2,
+    "gel": "Cohesive III",
+    "catalogo": "Mentor CPG — datos/fuentes/mentor-cpg-anatomicas.pdf",
+    "pagina": "7",
+    "notas": "Arco = API de Mentor: polo inferior al punto medio, incluye 0,5 cm de cubierta tisular. No comparable con el arco de Motiva o Silimed"
+  },
+  {
+    "marca": "Mentor",
+    "linea": "CPG Cohesive III",
+    "referencia": "334-1306",
+    "forma": "anatomica",
+    "superficie": "texturizada",
+    "superficieMarca": "SILTEX",
+    "perfilMarca": "CPG 313 · Altura Baja, Proyección Alta",
+    "volumenCc": 395.0,
+    "baseCm": 13.0,
+    "alturaCm": 11.7,
+    "proyeccionCm": 5.6,
+    "arcoCm": 10.6,
+    "gel": "Cohesive III",
+    "catalogo": "Mentor CPG — datos/fuentes/mentor-cpg-anatomicas.pdf",
+    "pagina": "7",
+    "notas": "Arco = API de Mentor: polo inferior al punto medio, incluye 0,5 cm de cubierta tisular. No comparable con el arco de Motiva o Silimed"
+  },
+  {
+    "marca": "Mentor",
+    "linea": "CPG Cohesive III",
+    "referencia": "334-1356",
+    "forma": "anatomica",
+    "superficie": "texturizada",
+    "superficieMarca": "SILTEX",
+    "perfilMarca": "CPG 313 · Altura Baja, Proyección Alta",
+    "volumenCc": 440.0,
+    "baseCm": 13.5,
+    "alturaCm": 12.2,
+    "proyeccionCm": 5.8,
+    "arcoCm": 11.0,
+    "gel": "Cohesive III",
+    "catalogo": "Mentor CPG — datos/fuentes/mentor-cpg-anatomicas.pdf",
+    "pagina": "7",
+    "notas": "Arco = API de Mentor: polo inferior al punto medio, incluye 0,5 cm de cubierta tisular. No comparable con el arco de Motiva o Silimed"
+  },
+  {
+    "marca": "Mentor",
+    "linea": "CPG Cohesive III",
+    "referencia": "334-1406",
+    "forma": "anatomica",
+    "superficie": "texturizada",
+    "superficieMarca": "SILTEX",
+    "perfilMarca": "CPG 313 · Altura Baja, Proyección Alta",
+    "volumenCc": 490.0,
+    "baseCm": 14.0,
+    "alturaCm": 12.6,
+    "proyeccionCm": 6.1,
+    "arcoCm": 11.4,
+    "gel": "Cohesive III",
+    "catalogo": "Mentor CPG — datos/fuentes/mentor-cpg-anatomicas.pdf",
+    "pagina": "7",
+    "notas": "Arco = API de Mentor: polo inferior al punto medio, incluye 0,5 cm de cubierta tisular. No comparable con el arco de Motiva o Silimed"
+  },
+  {
+    "marca": "Mentor",
+    "linea": "CPG Cohesive III",
+    "referencia": "334-1456",
+    "forma": "anatomica",
+    "superficie": "texturizada",
+    "superficieMarca": "SILTEX",
+    "perfilMarca": "CPG 313 · Altura Baja, Proyección Alta",
+    "volumenCc": 545.0,
+    "baseCm": 14.5,
+    "alturaCm": 13.1,
+    "proyeccionCm": 6.3,
+    "arcoCm": 11.7,
+    "gel": "Cohesive III",
+    "catalogo": "Mentor CPG — datos/fuentes/mentor-cpg-anatomicas.pdf",
+    "pagina": "7",
+    "notas": "Arco = API de Mentor: polo inferior al punto medio, incluye 0,5 cm de cubierta tisular. No comparable con el arco de Motiva o Silimed"
+  },
+  {
+    "marca": "Mentor",
+    "linea": "CPG Cohesive III",
+    "referencia": "334-1506",
+    "forma": "anatomica",
+    "superficie": "texturizada",
+    "superficieMarca": "SILTEX",
+    "perfilMarca": "CPG 313 · Altura Baja, Proyección Alta",
+    "volumenCc": 605.0,
+    "baseCm": 15.0,
+    "alturaCm": 13.5,
+    "proyeccionCm": 6.6,
+    "arcoCm": 12.1,
+    "gel": "Cohesive III",
+    "catalogo": "Mentor CPG — datos/fuentes/mentor-cpg-anatomicas.pdf",
+    "pagina": "7",
+    "notas": "Arco = API de Mentor: polo inferior al punto medio, incluye 0,5 cm de cubierta tisular. No comparable con el arco de Motiva o Silimed"
+  },
+  {
+    "marca": "Motiva",
+    "linea": "Round SilkSurface",
+    "referencia": "RSM-105",
+    "forma": "redonda",
+    "superficie": "lisa",
+    "superficieMarca": "SilkSurface",
+    "perfilMarca": "Mini",
+    "volumenCc": 105.0,
+    "baseCm": 8.5,
+    "alturaCm": 8.5,
+    "proyeccionCm": 2.2,
+    "arcoCm": 5.0,
+    "gel": null,
+    "catalogo": "Aportado sin referencia de catálogo",
+    "pagina": null,
+    "notas": "Clasificación de SilkSurface como lisa, pendiente de confirmar"
+  },
+  {
+    "marca": "Motiva",
+    "linea": "Round SilkSurface",
+    "referencia": "RSD-135",
+    "forma": "redonda",
+    "superficie": "lisa",
+    "superficieMarca": "SilkSurface",
+    "perfilMarca": "Demi",
+    "volumenCc": 135.0,
+    "baseCm": 8.5,
+    "alturaCm": 8.5,
+    "proyeccionCm": 3.1,
+    "arcoCm": 5.7,
+    "gel": null,
+    "catalogo": "Aportado sin referencia de catálogo",
+    "pagina": null,
+    "notas": "Clasificación de SilkSurface como lisa, pendiente de confirmar"
+  },
+  {
+    "marca": "Motiva",
+    "linea": "Round SilkSurface",
+    "referencia": "RSF-145",
+    "forma": "redonda",
+    "superficie": "lisa",
+    "superficieMarca": "SilkSurface",
+    "perfilMarca": "Full",
+    "volumenCc": 145.0,
+    "baseCm": 8.5,
+    "alturaCm": 8.5,
+    "proyeccionCm": 3.5,
+    "arcoCm": 6.0,
+    "gel": null,
+    "catalogo": "Aportado sin referencia de catálogo",
+    "pagina": null,
+    "notas": "Clasificación de SilkSurface como lisa, pendiente de confirmar"
+  },
+  {
+    "marca": "Motiva",
+    "linea": "Round SilkSurface",
+    "referencia": "RSC-180",
+    "forma": "redonda",
+    "superficie": "lisa",
+    "superficieMarca": "SilkSurface",
+    "perfilMarca": "Corsé",
+    "volumenCc": 180.0,
+    "baseCm": 8.5,
+    "alturaCm": 8.5,
+    "proyeccionCm": 4.0,
+    "arcoCm": 6.5,
+    "gel": null,
+    "catalogo": "Aportado sin referencia de catálogo",
+    "pagina": null,
+    "notas": "Clasificación de SilkSurface como lisa, pendiente de confirmar"
+  },
+  {
+    "marca": "Motiva",
+    "linea": "Round SilkSurface",
+    "referencia": "RSM-125",
+    "forma": "redonda",
+    "superficie": "lisa",
+    "superficieMarca": "SilkSurface",
+    "perfilMarca": "Mini",
+    "volumenCc": 125.0,
+    "baseCm": 9.0,
+    "alturaCm": 9.0,
+    "proyeccionCm": 2.3,
+    "arcoCm": 5.3,
+    "gel": null,
+    "catalogo": "Aportado sin referencia de catálogo",
+    "pagina": null,
+    "notas": "Clasificación de SilkSurface como lisa, pendiente de confirmar"
+  },
+  {
+    "marca": "Motiva",
+    "linea": "Round SilkSurface",
+    "referencia": "RSD-155",
+    "forma": "redonda",
+    "superficie": "lisa",
+    "superficieMarca": "SilkSurface",
+    "perfilMarca": "Demi",
+    "volumenCc": 155.0,
+    "baseCm": 9.0,
+    "alturaCm": 9.0,
+    "proyeccionCm": 3.3,
+    "arcoCm": 6.0,
+    "gel": null,
+    "catalogo": "Aportado sin referencia de catálogo",
+    "pagina": null,
+    "notas": "Clasificación de SilkSurface como lisa, pendiente de confirmar"
+  },
+  {
+    "marca": "Motiva",
+    "linea": "Round SilkSurface",
+    "referencia": "RSF-175",
+    "forma": "redonda",
+    "superficie": "lisa",
+    "superficieMarca": "SilkSurface",
+    "perfilMarca": "Full",
+    "volumenCc": 175.0,
+    "baseCm": 9.0,
+    "alturaCm": 9.0,
+    "proyeccionCm": 3.7,
+    "arcoCm": 6.3,
+    "gel": null,
+    "catalogo": "Aportado sin referencia de catálogo",
+    "pagina": null,
+    "notas": "Clasificación de SilkSurface como lisa, pendiente de confirmar"
+  },
+  {
+    "marca": "Motiva",
+    "linea": "Round SilkSurface",
+    "referencia": "RSC-210",
+    "forma": "redonda",
+    "superficie": "lisa",
+    "superficieMarca": "SilkSurface",
+    "perfilMarca": "Corsé",
+    "volumenCc": 210.0,
+    "baseCm": 9.0,
+    "alturaCm": 9.0,
+    "proyeccionCm": 4.2,
+    "arcoCm": 6.8,
+    "gel": null,
+    "catalogo": "Aportado sin referencia de catálogo",
+    "pagina": null,
+    "notas": "Clasificación de SilkSurface como lisa, pendiente de confirmar"
+  },
+  {
+    "marca": "Motiva",
+    "linea": "Round SilkSurface",
+    "referencia": "RSM-140",
+    "forma": "redonda",
+    "superficie": "lisa",
+    "superficieMarca": "SilkSurface",
+    "perfilMarca": "Mini",
+    "volumenCc": 140.0,
+    "baseCm": 9.5,
+    "alturaCm": 9.5,
+    "proyeccionCm": 2.4,
+    "arcoCm": 5.5,
+    "gel": null,
+    "catalogo": "Aportado sin referencia de catálogo",
+    "pagina": null,
+    "notas": "Clasificación de SilkSurface como lisa, pendiente de confirmar"
+  },
+  {
+    "marca": "Motiva",
+    "linea": "Round SilkSurface",
+    "referencia": "RSD-180",
+    "forma": "redonda",
+    "superficie": "lisa",
+    "superficieMarca": "SilkSurface",
+    "perfilMarca": "Demi",
+    "volumenCc": 180.0,
+    "baseCm": 9.5,
+    "alturaCm": 9.5,
+    "proyeccionCm": 3.4,
+    "arcoCm": 6.3,
+    "gel": null,
+    "catalogo": "Aportado sin referencia de catálogo",
+    "pagina": null,
+    "notas": "Clasificación de SilkSurface como lisa, pendiente de confirmar"
+  },
+  {
+    "marca": "Motiva",
+    "linea": "Round SilkSurface",
+    "referencia": "RSF-205",
+    "forma": "redonda",
+    "superficie": "lisa",
+    "superficieMarca": "SilkSurface",
+    "perfilMarca": "Full",
+    "volumenCc": 205.0,
+    "baseCm": 9.5,
+    "alturaCm": 9.5,
+    "proyeccionCm": 3.9,
+    "arcoCm": 6.7,
+    "gel": null,
+    "catalogo": "Aportado sin referencia de catálogo",
+    "pagina": null,
+    "notas": "Clasificación de SilkSurface como lisa, pendiente de confirmar"
+  },
+  {
+    "marca": "Motiva",
+    "linea": "Round SilkSurface",
+    "referencia": "RSC-240",
+    "forma": "redonda",
+    "superficie": "lisa",
+    "superficieMarca": "SilkSurface",
+    "perfilMarca": "Corsé",
+    "volumenCc": 240.0,
+    "baseCm": 9.5,
+    "alturaCm": 9.5,
+    "proyeccionCm": 4.5,
+    "arcoCm": 7.2,
+    "gel": null,
+    "catalogo": "Aportado sin referencia de catálogo",
+    "pagina": null,
+    "notas": "Clasificación de SilkSurface como lisa, pendiente de confirmar"
+  },
+  {
+    "marca": "Motiva",
+    "linea": "Round SilkSurface",
+    "referencia": "RSM-150",
+    "forma": "redonda",
+    "superficie": "lisa",
+    "superficieMarca": "SilkSurface",
+    "perfilMarca": "Mini",
+    "volumenCc": 150.0,
+    "baseCm": 9.75,
+    "alturaCm": 9.75,
+    "proyeccionCm": 2.4,
+    "arcoCm": 5.6,
+    "gel": null,
+    "catalogo": "Aportado sin referencia de catálogo",
+    "pagina": null,
+    "notas": "Clasificación de SilkSurface como lisa, pendiente de confirmar"
+  },
+  {
+    "marca": "Motiva",
+    "linea": "Round SilkSurface",
+    "referencia": "RSD-190",
+    "forma": "redonda",
+    "superficie": "lisa",
+    "superficieMarca": "SilkSurface",
+    "perfilMarca": "Demi",
+    "volumenCc": 190.0,
+    "baseCm": 9.75,
+    "alturaCm": 9.75,
+    "proyeccionCm": 3.4,
+    "arcoCm": 6.4,
+    "gel": null,
+    "catalogo": "Aportado sin referencia de catálogo",
+    "pagina": null,
+    "notas": "Clasificación de SilkSurface como lisa, pendiente de confirmar"
+  },
+  {
+    "marca": "Motiva",
+    "linea": "Round SilkSurface",
+    "referencia": "RSF-220",
+    "forma": "redonda",
+    "superficie": "lisa",
+    "superficieMarca": "SilkSurface",
+    "perfilMarca": "Full",
+    "volumenCc": 220.0,
+    "baseCm": 9.75,
+    "alturaCm": 9.75,
+    "proyeccionCm": 4.0,
+    "arcoCm": 6.9,
+    "gel": null,
+    "catalogo": "Aportado sin referencia de catálogo",
+    "pagina": null,
+    "notas": "Clasificación de SilkSurface como lisa, pendiente de confirmar"
+  },
+  {
+    "marca": "Motiva",
+    "linea": "Round SilkSurface",
+    "referencia": "RSC-260",
+    "forma": "redonda",
+    "superficie": "lisa",
+    "superficieMarca": "SilkSurface",
+    "perfilMarca": "Corsé",
+    "volumenCc": 260.0,
+    "baseCm": 9.75,
+    "alturaCm": 9.75,
+    "proyeccionCm": 4.6,
+    "arcoCm": 7.4,
+    "gel": null,
+    "catalogo": "Aportado sin referencia de catálogo",
+    "pagina": null,
+    "notas": "Clasificación de SilkSurface como lisa, pendiente de confirmar"
+  },
+  {
+    "marca": "Motiva",
+    "linea": "Round SilkSurface",
+    "referencia": "RSM-160",
+    "forma": "redonda",
+    "superficie": "lisa",
+    "superficieMarca": "SilkSurface",
+    "perfilMarca": "Mini",
+    "volumenCc": 160.0,
+    "baseCm": 10.0,
+    "alturaCm": 10.0,
+    "proyeccionCm": 2.5,
+    "arcoCm": 5.8,
+    "gel": null,
+    "catalogo": "Aportado sin referencia de catálogo",
+    "pagina": null,
+    "notas": "Clasificación de SilkSurface como lisa, pendiente de confirmar"
+  },
+  {
+    "marca": "Motiva",
+    "linea": "Round SilkSurface",
+    "referencia": "RSD-205",
+    "forma": "redonda",
+    "superficie": "lisa",
+    "superficieMarca": "SilkSurface",
+    "perfilMarca": "Demi",
+    "volumenCc": 205.0,
+    "baseCm": 10.0,
+    "alturaCm": 10.0,
+    "proyeccionCm": 3.5,
+    "arcoCm": 6.5,
+    "gel": null,
+    "catalogo": "Aportado sin referencia de catálogo",
+    "pagina": null,
+    "notas": "Clasificación de SilkSurface como lisa, pendiente de confirmar"
+  },
+  {
+    "marca": "Motiva",
+    "linea": "Round SilkSurface",
+    "referencia": "RSF-235",
+    "forma": "redonda",
+    "superficie": "lisa",
+    "superficieMarca": "SilkSurface",
+    "perfilMarca": "Full",
+    "volumenCc": 235.0,
+    "baseCm": 10.0,
+    "alturaCm": 10.0,
+    "proyeccionCm": 4.1,
+    "arcoCm": 7.1,
+    "gel": null,
+    "catalogo": "Aportado sin referencia de catálogo",
+    "pagina": null,
+    "notas": "Clasificación de SilkSurface como lisa, pendiente de confirmar"
+  },
+  {
+    "marca": "Motiva",
+    "linea": "Round SilkSurface",
+    "referencia": "RSC-280",
+    "forma": "redonda",
+    "superficie": "lisa",
+    "superficieMarca": "SilkSurface",
+    "perfilMarca": "Corsé",
+    "volumenCc": 280.0,
+    "baseCm": 10.0,
+    "alturaCm": 10.0,
+    "proyeccionCm": 4.8,
+    "arcoCm": 7.7,
+    "gel": null,
+    "catalogo": "Aportado sin referencia de catálogo",
+    "pagina": null,
+    "notas": "Clasificación de SilkSurface como lisa, pendiente de confirmar"
+  },
+  {
+    "marca": "Motiva",
+    "linea": "Round SilkSurface",
+    "referencia": "RSM-170",
+    "forma": "redonda",
+    "superficie": "lisa",
+    "superficieMarca": "SilkSurface",
+    "perfilMarca": "Mini",
+    "volumenCc": 170.0,
+    "baseCm": 10.25,
+    "alturaCm": 10.25,
+    "proyeccionCm": 2.5,
+    "arcoCm": 5.9,
+    "gel": null,
+    "catalogo": "Aportado sin referencia de catálogo",
+    "pagina": null,
+    "notas": "Clasificación de SilkSurface como lisa, pendiente de confirmar"
+  },
+  {
+    "marca": "Motiva",
+    "linea": "Round SilkSurface",
+    "referencia": "RSD-215",
+    "forma": "redonda",
+    "superficie": "lisa",
+    "superficieMarca": "SilkSurface",
+    "perfilMarca": "Demi",
+    "volumenCc": 215.0,
+    "baseCm": 10.25,
+    "alturaCm": 10.25,
+    "proyeccionCm": 3.5,
+    "arcoCm": 6.6,
+    "gel": null,
+    "catalogo": "Aportado sin referencia de catálogo",
+    "pagina": null,
+    "notas": "Clasificación de SilkSurface como lisa, pendiente de confirmar"
+  },
+  {
+    "marca": "Motiva",
+    "linea": "Round SilkSurface",
+    "referencia": "RSF-255",
+    "forma": "redonda",
+    "superficie": "lisa",
+    "superficieMarca": "SilkSurface",
+    "perfilMarca": "Full",
+    "volumenCc": 255.0,
+    "baseCm": 10.25,
+    "alturaCm": 10.25,
+    "proyeccionCm": 4.2,
+    "arcoCm": 7.2,
+    "gel": null,
+    "catalogo": "Aportado sin referencia de catálogo",
+    "pagina": null,
+    "notas": "Clasificación de SilkSurface como lisa, pendiente de confirmar"
+  },
+  {
+    "marca": "Motiva",
+    "linea": "Round SilkSurface",
+    "referencia": "RSC-300",
+    "forma": "redonda",
+    "superficie": "lisa",
+    "superficieMarca": "SilkSurface",
+    "perfilMarca": "Corsé",
+    "volumenCc": 300.0,
+    "baseCm": 10.25,
+    "alturaCm": 10.25,
+    "proyeccionCm": 4.9,
+    "arcoCm": 7.9,
+    "gel": null,
+    "catalogo": "Aportado sin referencia de catálogo",
+    "pagina": null,
+    "notas": "Clasificación de SilkSurface como lisa, pendiente de confirmar"
+  },
+  {
+    "marca": "Motiva",
+    "linea": "Round SilkSurface",
+    "referencia": "RSM-185",
+    "forma": "redonda",
+    "superficie": "lisa",
+    "superficieMarca": "SilkSurface",
+    "perfilMarca": "Mini",
+    "volumenCc": 185.0,
+    "baseCm": 10.5,
+    "alturaCm": 10.5,
+    "proyeccionCm": 2.6,
+    "arcoCm": 6.1,
+    "gel": null,
+    "catalogo": "Aportado sin referencia de catálogo",
+    "pagina": null,
+    "notas": "Clasificación de SilkSurface como lisa, pendiente de confirmar"
+  },
+  {
+    "marca": "Motiva",
+    "linea": "Round SilkSurface",
+    "referencia": "RSD-230",
+    "forma": "redonda",
+    "superficie": "lisa",
+    "superficieMarca": "SilkSurface",
+    "perfilMarca": "Demi",
+    "volumenCc": 230.0,
+    "baseCm": 10.5,
+    "alturaCm": 10.5,
+    "proyeccionCm": 3.6,
+    "arcoCm": 6.8,
+    "gel": null,
+    "catalogo": "Aportado sin referencia de catálogo",
+    "pagina": null,
+    "notas": "Clasificación de SilkSurface como lisa, pendiente de confirmar"
+  },
+  {
+    "marca": "Motiva",
+    "linea": "Round SilkSurface",
+    "referencia": "RSF-275",
+    "forma": "redonda",
+    "superficie": "lisa",
+    "superficieMarca": "SilkSurface",
+    "perfilMarca": "Full",
+    "volumenCc": 275.0,
+    "baseCm": 10.5,
+    "alturaCm": 10.5,
+    "proyeccionCm": 4.3,
+    "arcoCm": 7.4,
+    "gel": null,
+    "catalogo": "Aportado sin referencia de catálogo",
+    "pagina": null,
+    "notas": "Clasificación de SilkSurface como lisa, pendiente de confirmar"
+  },
+  {
+    "marca": "Motiva",
+    "linea": "Round SilkSurface",
+    "referencia": "RSC-325",
+    "forma": "redonda",
+    "superficie": "lisa",
+    "superficieMarca": "SilkSurface",
+    "perfilMarca": "Corsé",
+    "volumenCc": 325.0,
+    "baseCm": 10.5,
+    "alturaCm": 10.5,
+    "proyeccionCm": 5.1,
+    "arcoCm": 8.2,
+    "gel": null,
+    "catalogo": "Aportado sin referencia de catálogo",
+    "pagina": null,
+    "notas": "Clasificación de SilkSurface como lisa, pendiente de confirmar"
+  },
+  {
+    "marca": "Motiva",
+    "linea": "Round SilkSurface",
+    "referencia": "RSM-205",
+    "forma": "redonda",
+    "superficie": "lisa",
+    "superficieMarca": "SilkSurface",
+    "perfilMarca": "Mini",
+    "volumenCc": 205.0,
+    "baseCm": 10.75,
+    "alturaCm": 10.75,
+    "proyeccionCm": 2.6,
+    "arcoCm": 6.2,
+    "gel": null,
+    "catalogo": "Aportado sin referencia de catálogo",
+    "pagina": null,
+    "notas": "Clasificación de SilkSurface como lisa, pendiente de confirmar"
+  },
+  {
+    "marca": "Motiva",
+    "linea": "Round SilkSurface",
+    "referencia": "RSD-245",
+    "forma": "redonda",
+    "superficie": "lisa",
+    "superficieMarca": "SilkSurface",
+    "perfilMarca": "Demi",
+    "volumenCc": 245.0,
+    "baseCm": 10.75,
+    "alturaCm": 10.75,
+    "proyeccionCm": 3.7,
+    "arcoCm": 7.0,
+    "gel": null,
+    "catalogo": "Aportado sin referencia de catálogo",
+    "pagina": null,
+    "notas": "Clasificación de SilkSurface como lisa, pendiente de confirmar"
+  },
+  {
+    "marca": "Motiva",
+    "linea": "Round SilkSurface",
+    "referencia": "RSF-295",
+    "forma": "redonda",
+    "superficie": "lisa",
+    "superficieMarca": "SilkSurface",
+    "perfilMarca": "Full",
+    "volumenCc": 295.0,
+    "baseCm": 10.75,
+    "alturaCm": 10.75,
+    "proyeccionCm": 4.4,
+    "arcoCm": 7.6,
+    "gel": null,
+    "catalogo": "Aportado sin referencia de catálogo",
+    "pagina": null,
+    "notas": "Clasificación de SilkSurface como lisa, pendiente de confirmar"
+  },
+  {
+    "marca": "Motiva",
+    "linea": "Round SilkSurface",
+    "referencia": "RSC-350",
+    "forma": "redonda",
+    "superficie": "lisa",
+    "superficieMarca": "SilkSurface",
+    "perfilMarca": "Corsé",
+    "volumenCc": 350.0,
+    "baseCm": 10.75,
+    "alturaCm": 10.75,
+    "proyeccionCm": 5.2,
+    "arcoCm": 8.3,
+    "gel": null,
+    "catalogo": "Aportado sin referencia de catálogo",
+    "pagina": null,
+    "notas": "Clasificación de SilkSurface como lisa, pendiente de confirmar"
+  },
+  {
+    "marca": "Motiva",
+    "linea": "Round SilkSurface",
+    "referencia": "RSM-220",
+    "forma": "redonda",
+    "superficie": "lisa",
+    "superficieMarca": "SilkSurface",
+    "perfilMarca": "Mini",
+    "volumenCc": 220.0,
+    "baseCm": 11.0,
+    "alturaCm": 11.0,
+    "proyeccionCm": 2.7,
+    "arcoCm": 6.4,
+    "gel": null,
+    "catalogo": "Aportado sin referencia de catálogo",
+    "pagina": null,
+    "notas": "Clasificación de SilkSurface como lisa, pendiente de confirmar"
+  },
+  {
+    "marca": "Motiva",
+    "linea": "Round SilkSurface",
+    "referencia": "RSD-265",
+    "forma": "redonda",
+    "superficie": "lisa",
+    "superficieMarca": "SilkSurface",
+    "perfilMarca": "Demi",
+    "volumenCc": 265.0,
+    "baseCm": 11.0,
+    "alturaCm": 11.0,
+    "proyeccionCm": 3.8,
+    "arcoCm": 7.1,
+    "gel": null,
+    "catalogo": "Aportado sin referencia de catálogo",
+    "pagina": null,
+    "notas": "Clasificación de SilkSurface como lisa, pendiente de confirmar"
+  },
+  {
+    "marca": "Motiva",
+    "linea": "Round SilkSurface",
+    "referencia": "RSF-315",
+    "forma": "redonda",
+    "superficie": "lisa",
+    "superficieMarca": "SilkSurface",
+    "perfilMarca": "Full",
+    "volumenCc": 315.0,
+    "baseCm": 11.0,
+    "alturaCm": 11.0,
+    "proyeccionCm": 4.5,
+    "arcoCm": 7.7,
+    "gel": null,
+    "catalogo": "Aportado sin referencia de catálogo",
+    "pagina": null,
+    "notas": "Clasificación de SilkSurface como lisa, pendiente de confirmar"
+  },
+  {
+    "marca": "Motiva",
+    "linea": "Round SilkSurface",
+    "referencia": "RSC-380",
+    "forma": "redonda",
+    "superficie": "lisa",
+    "superficieMarca": "SilkSurface",
+    "perfilMarca": "Corsé",
+    "volumenCc": 380.0,
+    "baseCm": 11.0,
+    "alturaCm": 11.0,
+    "proyeccionCm": 5.4,
+    "arcoCm": 8.6,
+    "gel": null,
+    "catalogo": "Aportado sin referencia de catálogo",
+    "pagina": null,
+    "notas": "Clasificación de SilkSurface como lisa, pendiente de confirmar"
+  },
+  {
+    "marca": "Motiva",
+    "linea": "Round SilkSurface",
+    "referencia": "RSM-230",
+    "forma": "redonda",
+    "superficie": "lisa",
+    "superficieMarca": "SilkSurface",
+    "perfilMarca": "Mini",
+    "volumenCc": 230.0,
+    "baseCm": 11.25,
+    "alturaCm": 11.25,
+    "proyeccionCm": 2.7,
+    "arcoCm": 6.5,
+    "gel": null,
+    "catalogo": "Aportado sin referencia de catálogo",
+    "pagina": null,
+    "notas": "Clasificación de SilkSurface como lisa, pendiente de confirmar"
+  },
+  {
+    "marca": "Motiva",
+    "linea": "Round SilkSurface",
+    "referencia": "RSD-285",
+    "forma": "redonda",
+    "superficie": "lisa",
+    "superficieMarca": "SilkSurface",
+    "perfilMarca": "Demi",
+    "volumenCc": 285.0,
+    "baseCm": 11.25,
+    "alturaCm": 11.25,
+    "proyeccionCm": 3.8,
+    "arcoCm": 7.2,
+    "gel": null,
+    "catalogo": "Aportado sin referencia de catálogo",
+    "pagina": null,
+    "notas": "Clasificación de SilkSurface como lisa, pendiente de confirmar"
+  },
+  {
+    "marca": "Motiva",
+    "linea": "Round SilkSurface",
+    "referencia": "RSF-335",
+    "forma": "redonda",
+    "superficie": "lisa",
+    "superficieMarca": "SilkSurface",
+    "perfilMarca": "Full",
+    "volumenCc": 335.0,
+    "baseCm": 11.25,
+    "alturaCm": 11.25,
+    "proyeccionCm": 4.6,
+    "arcoCm": 7.9,
+    "gel": null,
+    "catalogo": "Aportado sin referencia de catálogo",
+    "pagina": null,
+    "notas": "Clasificación de SilkSurface como lisa, pendiente de confirmar"
+  },
+  {
+    "marca": "Motiva",
+    "linea": "Round SilkSurface",
+    "referencia": "RSC-410",
+    "forma": "redonda",
+    "superficie": "lisa",
+    "superficieMarca": "SilkSurface",
+    "perfilMarca": "Corsé",
+    "volumenCc": 410.0,
+    "baseCm": 11.25,
+    "alturaCm": 11.25,
+    "proyeccionCm": 5.5,
+    "arcoCm": 8.7,
+    "gel": null,
+    "catalogo": "Aportado sin referencia de catálogo",
+    "pagina": null,
+    "notas": "Clasificación de SilkSurface como lisa, pendiente de confirmar"
+  },
+  {
+    "marca": "Motiva",
+    "linea": "Round SilkSurface",
+    "referencia": "RSM-245",
+    "forma": "redonda",
+    "superficie": "lisa",
+    "superficieMarca": "SilkSurface",
+    "perfilMarca": "Mini",
+    "volumenCc": 245.0,
+    "baseCm": 11.5,
+    "alturaCm": 11.5,
+    "proyeccionCm": 2.8,
+    "arcoCm": 6.6,
+    "gel": null,
+    "catalogo": "Aportado sin referencia de catálogo",
+    "pagina": null,
+    "notas": "Clasificación de SilkSurface como lisa, pendiente de confirmar"
+  },
+  {
+    "marca": "Motiva",
+    "linea": "Round SilkSurface",
+    "referencia": "RSD-300",
+    "forma": "redonda",
+    "superficie": "lisa",
+    "superficieMarca": "SilkSurface",
+    "perfilMarca": "Demi",
+    "volumenCc": 300.0,
+    "baseCm": 11.5,
+    "alturaCm": 11.5,
+    "proyeccionCm": 3.9,
+    "arcoCm": 7.4,
+    "gel": null,
+    "catalogo": "Aportado sin referencia de catálogo",
+    "pagina": null,
+    "notas": "Clasificación de SilkSurface como lisa, pendiente de confirmar"
+  },
+  {
+    "marca": "Motiva",
+    "linea": "Round SilkSurface",
+    "referencia": "RSF-355",
+    "forma": "redonda",
+    "superficie": "lisa",
+    "superficieMarca": "SilkSurface",
+    "perfilMarca": "Full",
+    "volumenCc": 355.0,
+    "baseCm": 11.5,
+    "alturaCm": 11.5,
+    "proyeccionCm": 4.7,
+    "arcoCm": 8.1,
+    "gel": null,
+    "catalogo": "Aportado sin referencia de catálogo",
+    "pagina": null,
+    "notas": "Clasificación de SilkSurface como lisa, pendiente de confirmar"
+  },
+  {
+    "marca": "Motiva",
+    "linea": "Round SilkSurface",
+    "referencia": "RSC-440",
+    "forma": "redonda",
+    "superficie": "lisa",
+    "superficieMarca": "SilkSurface",
+    "perfilMarca": "Corsé",
+    "volumenCc": 440.0,
+    "baseCm": 11.5,
+    "alturaCm": 11.5,
+    "proyeccionCm": 5.7,
+    "arcoCm": 9.0,
+    "gel": null,
+    "catalogo": "Aportado sin referencia de catálogo",
+    "pagina": null,
+    "notas": "Clasificación de SilkSurface como lisa, pendiente de confirmar"
+  },
+  {
+    "marca": "Motiva",
+    "linea": "Round SilkSurface",
+    "referencia": "RSM-260",
+    "forma": "redonda",
+    "superficie": "lisa",
+    "superficieMarca": "SilkSurface",
+    "perfilMarca": "Mini",
+    "volumenCc": 260.0,
+    "baseCm": 11.75,
+    "alturaCm": 11.75,
+    "proyeccionCm": 2.8,
+    "arcoCm": 6.7,
+    "gel": null,
+    "catalogo": "Aportado sin referencia de catálogo",
+    "pagina": null,
+    "notas": "Clasificación de SilkSurface como lisa, pendiente de confirmar"
+  },
+  {
+    "marca": "Motiva",
+    "linea": "Round SilkSurface",
+    "referencia": "RSD-320",
+    "forma": "redonda",
+    "superficie": "lisa",
+    "superficieMarca": "SilkSurface",
+    "perfilMarca": "Demi",
+    "volumenCc": 320.0,
+    "baseCm": 11.75,
+    "alturaCm": 11.75,
+    "proyeccionCm": 3.9,
+    "arcoCm": 7.5,
+    "gel": null,
+    "catalogo": "Aportado sin referencia de catálogo",
+    "pagina": null,
+    "notas": "Clasificación de SilkSurface como lisa, pendiente de confirmar"
+  },
+  {
+    "marca": "Motiva",
+    "linea": "Round SilkSurface",
+    "referencia": "RSF-375",
+    "forma": "redonda",
+    "superficie": "lisa",
+    "superficieMarca": "SilkSurface",
+    "perfilMarca": "Full",
+    "volumenCc": 375.0,
+    "baseCm": 11.75,
+    "alturaCm": 11.75,
+    "proyeccionCm": 4.8,
+    "arcoCm": 8.2,
+    "gel": null,
+    "catalogo": "Aportado sin referencia de catálogo",
+    "pagina": null,
+    "notas": "Clasificación de SilkSurface como lisa, pendiente de confirmar"
+  },
+  {
+    "marca": "Motiva",
+    "linea": "Round SilkSurface",
+    "referencia": "RSC-475",
+    "forma": "redonda",
+    "superficie": "lisa",
+    "superficieMarca": "SilkSurface",
+    "perfilMarca": "Corsé",
+    "volumenCc": 475.0,
+    "baseCm": 11.75,
+    "alturaCm": 11.75,
+    "proyeccionCm": 5.8,
+    "arcoCm": 9.2,
+    "gel": null,
+    "catalogo": "Aportado sin referencia de catálogo",
+    "pagina": null,
+    "notas": "Clasificación de SilkSurface como lisa, pendiente de confirmar"
+  },
+  {
+    "marca": "Motiva",
+    "linea": "Round SilkSurface",
+    "referencia": "RSM-275",
+    "forma": "redonda",
+    "superficie": "lisa",
+    "superficieMarca": "SilkSurface",
+    "perfilMarca": "Mini",
+    "volumenCc": 275.0,
+    "baseCm": 12.0,
+    "alturaCm": 12.0,
+    "proyeccionCm": 2.9,
+    "arcoCm": 6.9,
+    "gel": null,
+    "catalogo": "Aportado sin referencia de catálogo",
+    "pagina": null,
+    "notas": "Clasificación de SilkSurface como lisa, pendiente de confirmar"
+  },
+  {
+    "marca": "Motiva",
+    "linea": "Round SilkSurface",
+    "referencia": "RSD-340",
+    "forma": "redonda",
+    "superficie": "lisa",
+    "superficieMarca": "SilkSurface",
+    "perfilMarca": "Demi",
+    "volumenCc": 340.0,
+    "baseCm": 12.0,
+    "alturaCm": 12.0,
+    "proyeccionCm": 4.0,
+    "arcoCm": 7.7,
+    "gel": null,
+    "catalogo": "Aportado sin referencia de catálogo",
+    "pagina": null,
+    "notas": "Clasificación de SilkSurface como lisa, pendiente de confirmar"
+  },
+  {
+    "marca": "Motiva",
+    "linea": "Round SilkSurface",
+    "referencia": "RSF-400",
+    "forma": "redonda",
+    "superficie": "lisa",
+    "superficieMarca": "SilkSurface",
+    "perfilMarca": "Full",
+    "volumenCc": 400.0,
+    "baseCm": 12.0,
+    "alturaCm": 12.0,
+    "proyeccionCm": 4.9,
+    "arcoCm": 8.4,
+    "gel": null,
+    "catalogo": "Aportado sin referencia de catálogo",
+    "pagina": null,
+    "notas": "Clasificación de SilkSurface como lisa, pendiente de confirmar"
+  },
+  {
+    "marca": "Motiva",
+    "linea": "Round SilkSurface",
+    "referencia": "RSC-510",
+    "forma": "redonda",
+    "superficie": "lisa",
+    "superficieMarca": "SilkSurface",
+    "perfilMarca": "Corsé",
+    "volumenCc": 510.0,
+    "baseCm": 12.0,
+    "alturaCm": 12.0,
+    "proyeccionCm": 6.0,
+    "arcoCm": 9.5,
+    "gel": null,
+    "catalogo": "Aportado sin referencia de catálogo",
+    "pagina": null,
+    "notas": "Clasificación de SilkSurface como lisa, pendiente de confirmar"
+  },
+  {
+    "marca": "Motiva",
+    "linea": "Round SilkSurface",
+    "referencia": "RSM-290",
+    "forma": "redonda",
+    "superficie": "lisa",
+    "superficieMarca": "SilkSurface",
+    "perfilMarca": "Mini",
+    "volumenCc": 290.0,
+    "baseCm": 12.25,
+    "alturaCm": 12.25,
+    "proyeccionCm": 2.9,
+    "arcoCm": 7.0,
+    "gel": null,
+    "catalogo": "Aportado sin referencia de catálogo",
+    "pagina": null,
+    "notas": "Clasificación de SilkSurface como lisa, pendiente de confirmar"
+  },
+  {
+    "marca": "Motiva",
+    "linea": "Round SilkSurface",
+    "referencia": "RSD-360",
+    "forma": "redonda",
+    "superficie": "lisa",
+    "superficieMarca": "SilkSurface",
+    "perfilMarca": "Demi",
+    "volumenCc": 360.0,
+    "baseCm": 12.25,
+    "alturaCm": 12.25,
+    "proyeccionCm": 4.0,
+    "arcoCm": 7.8,
+    "gel": null,
+    "catalogo": "Aportado sin referencia de catálogo",
+    "pagina": null,
+    "notas": "Clasificación de SilkSurface como lisa, pendiente de confirmar"
+  },
+  {
+    "marca": "Motiva",
+    "linea": "Round SilkSurface",
+    "referencia": "RSF-425",
+    "forma": "redonda",
+    "superficie": "lisa",
+    "superficieMarca": "SilkSurface",
+    "perfilMarca": "Full",
+    "volumenCc": 425.0,
+    "baseCm": 12.25,
+    "alturaCm": 12.25,
+    "proyeccionCm": 5.0,
+    "arcoCm": 8.6,
+    "gel": null,
+    "catalogo": "Aportado sin referencia de catálogo",
+    "pagina": null,
+    "notas": "Clasificación de SilkSurface como lisa, pendiente de confirmar"
+  },
+  {
+    "marca": "Motiva",
+    "linea": "Round SilkSurface",
+    "referencia": "RSC-550",
+    "forma": "redonda",
+    "superficie": "lisa",
+    "superficieMarca": "SilkSurface",
+    "perfilMarca": "Corsé",
+    "volumenCc": 550.0,
+    "baseCm": 12.25,
+    "alturaCm": 12.25,
+    "proyeccionCm": 6.1,
+    "arcoCm": 9.6,
+    "gel": null,
+    "catalogo": "Aportado sin referencia de catálogo",
+    "pagina": null,
+    "notas": "Clasificación de SilkSurface como lisa, pendiente de confirmar"
+  },
+  {
+    "marca": "Motiva",
+    "linea": "Round SilkSurface",
+    "referencia": "RSM-310",
+    "forma": "redonda",
+    "superficie": "lisa",
+    "superficieMarca": "SilkSurface",
+    "perfilMarca": "Mini",
+    "volumenCc": 310.0,
+    "baseCm": 12.5,
+    "alturaCm": 12.5,
+    "proyeccionCm": 3.0,
+    "arcoCm": 7.2,
+    "gel": null,
+    "catalogo": "Aportado sin referencia de catálogo",
+    "pagina": null,
+    "notas": "Clasificación de SilkSurface como lisa, pendiente de confirmar"
+  },
+  {
+    "marca": "Motiva",
+    "linea": "Round SilkSurface",
+    "referencia": "RSD-380",
+    "forma": "redonda",
+    "superficie": "lisa",
+    "superficieMarca": "SilkSurface",
+    "perfilMarca": "Demi",
+    "volumenCc": 380.0,
+    "baseCm": 12.5,
+    "alturaCm": 12.5,
+    "proyeccionCm": 4.1,
+    "arcoCm": 7.9,
+    "gel": null,
+    "catalogo": "Aportado sin referencia de catálogo",
+    "pagina": null,
+    "notas": "Clasificación de SilkSurface como lisa, pendiente de confirmar"
+  },
+  {
+    "marca": "Motiva",
+    "linea": "Round SilkSurface",
+    "referencia": "RSF-450",
+    "forma": "redonda",
+    "superficie": "lisa",
+    "superficieMarca": "SilkSurface",
+    "perfilMarca": "Full",
+    "volumenCc": 450.0,
+    "baseCm": 12.5,
+    "alturaCm": 12.5,
+    "proyeccionCm": 5.1,
+    "arcoCm": 8.8,
+    "gel": null,
+    "catalogo": "Aportado sin referencia de catálogo",
+    "pagina": null,
+    "notas": "Clasificación de SilkSurface como lisa, pendiente de confirmar"
+  },
+  {
+    "marca": "Motiva",
+    "linea": "Round SilkSurface",
+    "referencia": "RSC-590",
+    "forma": "redonda",
+    "superficie": "lisa",
+    "superficieMarca": "SilkSurface",
+    "perfilMarca": "Corsé",
+    "volumenCc": 590.0,
+    "baseCm": 12.5,
+    "alturaCm": 12.5,
+    "proyeccionCm": 6.3,
+    "arcoCm": 9.9,
+    "gel": null,
+    "catalogo": "Aportado sin referencia de catálogo",
+    "pagina": null,
+    "notas": "Clasificación de SilkSurface como lisa, pendiente de confirmar"
+  },
+  {
+    "marca": "Motiva",
+    "linea": "Round SilkSurface",
+    "referencia": "RSM-360",
+    "forma": "redonda",
+    "superficie": "lisa",
+    "superficieMarca": "SilkSurface",
+    "perfilMarca": "Mini",
+    "volumenCc": 360.0,
+    "baseCm": 13.0,
+    "alturaCm": 13.0,
+    "proyeccionCm": 3.1,
+    "arcoCm": 7.5,
+    "gel": null,
+    "catalogo": "Aportado sin referencia de catálogo",
+    "pagina": null,
+    "notas": "Clasificación de SilkSurface como lisa, pendiente de confirmar"
+  },
+  {
+    "marca": "Motiva",
+    "linea": "Round SilkSurface",
+    "referencia": "RSD-425",
+    "forma": "redonda",
+    "superficie": "lisa",
+    "superficieMarca": "SilkSurface",
+    "perfilMarca": "Demi",
+    "volumenCc": 425.0,
+    "baseCm": 13.0,
+    "alturaCm": 13.0,
+    "proyeccionCm": 4.3,
+    "arcoCm": 8.3,
+    "gel": null,
+    "catalogo": "Aportado sin referencia de catálogo",
+    "pagina": null,
+    "notas": "Clasificación de SilkSurface como lisa, pendiente de confirmar"
+  },
+  {
+    "marca": "Motiva",
+    "linea": "Round SilkSurface",
+    "referencia": "RSF-500",
+    "forma": "redonda",
+    "superficie": "lisa",
+    "superficieMarca": "SilkSurface",
+    "perfilMarca": "Full",
+    "volumenCc": 500.0,
+    "baseCm": 13.0,
+    "alturaCm": 13.0,
+    "proyeccionCm": 5.3,
+    "arcoCm": 9.1,
+    "gel": null,
+    "catalogo": "Aportado sin referencia de catálogo",
+    "pagina": null,
+    "notas": "Clasificación de SilkSurface como lisa, pendiente de confirmar"
+  },
+  {
+    "marca": "Motiva",
+    "linea": "Round SilkSurface",
+    "referencia": "RSC-650",
+    "forma": "redonda",
+    "superficie": "lisa",
+    "superficieMarca": "SilkSurface",
+    "perfilMarca": "Corsé",
+    "volumenCc": 650.0,
+    "baseCm": 13.0,
+    "alturaCm": 13.0,
+    "proyeccionCm": 6.6,
+    "arcoCm": 10.3,
+    "gel": null,
+    "catalogo": "Aportado sin referencia de catálogo",
+    "pagina": null,
+    "notas": "Clasificación de SilkSurface como lisa, pendiente de confirmar"
+  },
+  {
+    "marca": "Motiva",
+    "linea": "Round SilkSurface",
+    "referencia": "RSM-400",
+    "forma": "redonda",
+    "superficie": "lisa",
+    "superficieMarca": "SilkSurface",
+    "perfilMarca": "Mini",
+    "volumenCc": 400.0,
+    "baseCm": 13.5,
+    "alturaCm": 13.5,
+    "proyeccionCm": 3.2,
+    "arcoCm": 7.7,
+    "gel": null,
+    "catalogo": "Aportado sin referencia de catálogo",
+    "pagina": null,
+    "notas": "Clasificación de SilkSurface como lisa, pendiente de confirmar"
+  },
+  {
+    "marca": "Motiva",
+    "linea": "Round SilkSurface",
+    "referencia": "RSD-475",
+    "forma": "redonda",
+    "superficie": "lisa",
+    "superficieMarca": "SilkSurface",
+    "perfilMarca": "Demi",
+    "volumenCc": 475.0,
+    "baseCm": 13.5,
+    "alturaCm": 13.5,
+    "proyeccionCm": 4.4,
+    "arcoCm": 8.5,
+    "gel": null,
+    "catalogo": "Aportado sin referencia de catálogo",
+    "pagina": null,
+    "notas": "Clasificación de SilkSurface como lisa, pendiente de confirmar"
+  },
+  {
+    "marca": "Motiva",
+    "linea": "Round SilkSurface",
+    "referencia": "RSF-550",
+    "forma": "redonda",
+    "superficie": "lisa",
+    "superficieMarca": "SilkSurface",
+    "perfilMarca": "Full",
+    "volumenCc": 550.0,
+    "baseCm": 13.5,
+    "alturaCm": 13.5,
+    "proyeccionCm": 5.5,
+    "arcoCm": 9.5,
+    "gel": null,
+    "catalogo": "Aportado sin referencia de catálogo",
+    "pagina": null,
+    "notas": "Clasificación de SilkSurface como lisa, pendiente de confirmar"
+  },
+  {
+    "marca": "Motiva",
+    "linea": "Round SilkSurface",
+    "referencia": "RSC-725",
+    "forma": "redonda",
+    "superficie": "lisa",
+    "superficieMarca": "SilkSurface",
+    "perfilMarca": "Corsé",
+    "volumenCc": 725.0,
+    "baseCm": 13.5,
+    "alturaCm": 13.5,
+    "proyeccionCm": 6.9,
+    "arcoCm": 10.8,
+    "gel": null,
+    "catalogo": "Aportado sin referencia de catálogo",
+    "pagina": null,
+    "notas": "Clasificación de SilkSurface como lisa, pendiente de confirmar"
+  },
+  {
+    "marca": "Motiva",
+    "linea": "Round SilkSurface",
+    "referencia": "RSM-430",
+    "forma": "redonda",
+    "superficie": "lisa",
+    "superficieMarca": "SilkSurface",
+    "perfilMarca": "Mini",
+    "volumenCc": 430.0,
+    "baseCm": 14.0,
+    "alturaCm": 14.0,
+    "proyeccionCm": 3.3,
+    "arcoCm": 8.0,
+    "gel": null,
+    "catalogo": "Aportado sin referencia de catálogo",
+    "pagina": null,
+    "notas": "Clasificación de SilkSurface como lisa, pendiente de confirmar"
+  },
+  {
+    "marca": "Motiva",
+    "linea": "Round SilkSurface",
+    "referencia": "RSD-525",
+    "forma": "redonda",
+    "superficie": "lisa",
+    "superficieMarca": "SilkSurface",
+    "perfilMarca": "Demi",
+    "volumenCc": 525.0,
+    "baseCm": 14.0,
+    "alturaCm": 14.0,
+    "proyeccionCm": 4.5,
+    "arcoCm": 8.8,
+    "gel": null,
+    "catalogo": "Aportado sin referencia de catálogo",
+    "pagina": null,
+    "notas": "Clasificación de SilkSurface como lisa, pendiente de confirmar"
+  },
+  {
+    "marca": "Motiva",
+    "linea": "Round SilkSurface",
+    "referencia": "RSF-625",
+    "forma": "redonda",
+    "superficie": "lisa",
+    "superficieMarca": "SilkSurface",
+    "perfilMarca": "Full",
+    "volumenCc": 625.0,
+    "baseCm": 14.0,
+    "alturaCm": 14.0,
+    "proyeccionCm": 5.7,
+    "arcoCm": 9.8,
+    "gel": null,
+    "catalogo": "Aportado sin referencia de catálogo",
+    "pagina": null,
+    "notas": "Clasificación de SilkSurface como lisa, pendiente de confirmar"
+  },
+  {
+    "marca": "Motiva",
+    "linea": "Round SilkSurface",
+    "referencia": "RSC-825",
+    "forma": "redonda",
+    "superficie": "lisa",
+    "superficieMarca": "SilkSurface",
+    "perfilMarca": "Corsé",
+    "volumenCc": 825.0,
+    "baseCm": 14.0,
+    "alturaCm": 14.0,
+    "proyeccionCm": 7.2,
+    "arcoCm": 11.2,
+    "gel": null,
+    "catalogo": "Aportado sin referencia de catálogo",
+    "pagina": null,
+    "notas": "Clasificación de SilkSurface como lisa, pendiente de confirmar"
+  },
+  {
+    "marca": "Motiva",
+    "linea": "Round SilkSurface",
+    "referencia": "RSM-475",
+    "forma": "redonda",
+    "superficie": "lisa",
+    "superficieMarca": "SilkSurface",
+    "perfilMarca": "Mini",
+    "volumenCc": 475.0,
+    "baseCm": 14.5,
+    "alturaCm": 14.5,
+    "proyeccionCm": 3.4,
+    "arcoCm": 8.3,
+    "gel": null,
+    "catalogo": "Aportado sin referencia de catálogo",
+    "pagina": null,
+    "notas": "Clasificación de SilkSurface como lisa, pendiente de confirmar"
+  },
+  {
+    "marca": "Motiva",
+    "linea": "Round SilkSurface",
+    "referencia": "RSD-575",
+    "forma": "redonda",
+    "superficie": "lisa",
+    "superficieMarca": "SilkSurface",
+    "perfilMarca": "Demi",
+    "volumenCc": 575.0,
+    "baseCm": 14.5,
+    "alturaCm": 14.5,
+    "proyeccionCm": 4.6,
+    "arcoCm": 9.1,
+    "gel": null,
+    "catalogo": "Aportado sin referencia de catálogo",
+    "pagina": null,
+    "notas": "Clasificación de SilkSurface como lisa, pendiente de confirmar"
+  },
+  {
+    "marca": "Motiva",
+    "linea": "Round SilkSurface",
+    "referencia": "RSF-700",
+    "forma": "redonda",
+    "superficie": "lisa",
+    "superficieMarca": "SilkSurface",
+    "perfilMarca": "Full",
+    "volumenCc": 700.0,
+    "baseCm": 14.5,
+    "alturaCm": 14.5,
+    "proyeccionCm": 5.9,
+    "arcoCm": 10.2,
+    "gel": null,
+    "catalogo": "Aportado sin referencia de catálogo",
+    "pagina": null,
+    "notas": "Clasificación de SilkSurface como lisa, pendiente de confirmar"
+  },
+  {
+    "marca": "Motiva",
+    "linea": "Round SilkSurface",
+    "referencia": "RSC-925",
+    "forma": "redonda",
+    "superficie": "lisa",
+    "superficieMarca": "SilkSurface",
+    "perfilMarca": "Corsé",
+    "volumenCc": 925.0,
+    "baseCm": 14.5,
+    "alturaCm": 14.5,
+    "proyeccionCm": 7.5,
+    "arcoCm": 11.7,
+    "gel": null,
+    "catalogo": "Aportado sin referencia de catálogo",
+    "pagina": null,
+    "notas": "Clasificación de SilkSurface como lisa, pendiente de confirmar"
+  }
+];
+</script>
+<script>
+// Buscador de implantes por base mamaria.
+// Los datos vienen de datos.js (const IMPLANTES), generado por construir.py.
+
+// Escala fija en px/cm: cada esquema ocupa justo lo que mide su implante, así
+// dos tarjetas se pueden comparar visualmente sin leer los números.
+const ESCALA = 8;
+const PAD_SUP = 8;
+const PAD_INF = 26;   // hueco para la cota inferior
+const CLAVE_ESTADO = "buscador-implantes-v1";
+
+const $ = (id) => document.getElementById(id);
+
+const el = {
+  base: $("base"),
+  tolerancia: $("tolerancia"),
+  forma: $("forma"),
+  superficie: $("superficie"),
+  orden: $("orden"),
+  listaMarcas: $("listaMarcas"),
+  resumen: $("resumen"),
+  resultados: $("resultados"),
+  avisoDemo: $("avisoDemo"),
+  avisoDemoTexto: $("avisoDemoTexto"),
+};
+
+const unicos = (campo) => [...new Set(IMPLANTES.map((i) => i[campo]))].sort();
+const num = (n, dec = 1) => n.toFixed(dec).replace(".", ",");
+
+// El CSV guarda los valores sin tildes para no complicar la edición a mano;
+// al mostrarlos se acentúan.
+const ACENTOS = { anatomica: "Anatómica" };
+const cap = (s) => ACENTOS[s] || s.charAt(0).toUpperCase() + s.slice(1);
+
+// --- Esquemas ---------------------------------------------------------------
+// Se dibujan a partir de las medidas de cada fila, así el esquema nunca puede
+// contradecir a la tabla.
+
+function cota(x1, y1, x2, y2, texto, anclaX, anclaY, rotar) {
+  const tope = 3;
+  const vertical = x1 === x2;
+  const marcas = vertical
+    ? `<path d="M${x1 - tope},${y1} H${x1 + tope} M${x2 - tope},${y2} H${x2 + tope}"/>`
+    : `<path d="M${x1},${y1 - tope} V${y1 + tope} M${x2},${y2 - tope} V${y2 + tope}"/>`;
+  const transform = rotar ? ` transform="rotate(-90 ${anclaX} ${anclaY})"` : "";
+  return `<g class="cota" stroke="var(--cota)" stroke-width="1" fill="none">
+      <path d="M${x1},${y1} L${x2},${y2}"/>${marcas}
+    </g>
+    <text x="${anclaX}" y="${anclaY}" text-anchor="middle" font-size="9"
+      fill="var(--cota)" font-family="ui-monospace, Menlo, monospace"${transform}>${texto}</text>`;
+}
+
+function vistaFrontal({ baseCm, alturaCm }) {
+  const ancho = baseCm * ESCALA;
+  const alto = alturaCm * ESCALA;
+  const padIzq = 4;
+  const padDer = 32;             // hueco para la cota de altura
+  const w = ancho + padIzq + padDer;
+  const h = alto + PAD_SUP + PAD_INF;
+
+  const izq = padIzq;
+  const der = padIzq + ancho;
+  const cx = padIzq + ancho / 2;
+  const cy = PAD_SUP + alto / 2;
+  const abajo = PAD_SUP + alto;
+
+  return `<svg viewBox="0 0 ${w} ${h}" width="${w}" height="${h}" role="img"
+      aria-label="Vista frontal: base ${num(baseCm)} por ${num(alturaCm)} centímetros">
+    <ellipse cx="${cx}" cy="${cy}" rx="${ancho / 2}" ry="${alto / 2}"
+      fill="var(--implante)" stroke="var(--implante-borde)" stroke-width="1.5"/>
+    ${cota(izq, abajo + 11, der, abajo + 11, num(baseCm), cx, abajo + 22, false)}
+    ${cota(der + 11, PAD_SUP, der + 11, abajo, num(alturaCm), der + 21, cy, true)}
+  </svg>`;
+}
+
+function vistaLateral({ alturaCm, proyeccionCm, forma }) {
+  const alto = alturaCm * ESCALA;
+  const proy = proyeccionCm * ESCALA;
+  const padIzq = 8;
+  const padDer = 10;
+  const w = proy + padIzq + padDer;
+  const h = alto + PAD_SUP + PAD_INF;
+
+  const x0 = padIzq;             // pared torácica
+  const yTop = PAD_SUP;
+  const yBot = yTop + alto;
+
+  // En anatómica el punto de máxima proyección cae en el polo inferior y el
+  // polo superior se afina; en redonda el perfil es una cúpula simétrica.
+  const anatomica = forma === "anatomica";
+  const apexY = yTop + alto * (anatomica ? 0.68 : 0.5);
+  const apexX = x0 + proy;
+  const dArriba = (apexY - yTop) * 0.78;
+  const dAbajo = (yBot - apexY) * 0.78;
+  // Cuánto se separa la curva de la pared torácica al arrancar: si el polo
+  // superior sale recto hacia fuera, la anatómica se ve como una cúpula.
+  const salidaSup = proy * (anatomica ? 0.30 : 0.72);
+  const salidaInf = proy * (anatomica ? 0.50 : 0.62);
+
+  const perfil = `M${x0},${yTop}
+    C${x0 + salidaSup},${yTop} ${apexX},${apexY - dArriba} ${apexX},${apexY}
+    C${apexX},${apexY + dAbajo} ${x0 + salidaInf},${yBot} ${x0},${yBot} Z`;
+
+  return `<svg viewBox="0 0 ${w} ${h}" width="${w}" height="${h}" role="img"
+      aria-label="Vista lateral: proyección ${num(proyeccionCm)} centímetros">
+    <path d="M${x0},${yTop - 5} V${yBot + 5}" stroke="var(--cota)" stroke-width="1.5"
+      stroke-dasharray="3 2" fill="none"/>
+    <path d="${perfil}" fill="var(--implante)" stroke="var(--implante-borde)" stroke-width="1.5"/>
+    ${cota(x0, yBot + 11, apexX, yBot + 11, num(proyeccionCm), x0 + proy / 2, yBot + 22, false)}
+  </svg>`;
+}
+
+// --- Tarjeta ----------------------------------------------------------------
+
+function medida(etiqueta, valor, unidad) {
+  if (valor == null) {
+    return `<div class="medida"><dt>${etiqueta}</dt><dd class="vacio">—</dd></div>`;
+  }
+  return `<div class="medida"><dt>${etiqueta}</dt>
+    <dd>${valor}<span class="u"> ${unidad}</span></dd></div>`;
+}
+
+function tarjeta(imp, objetivo) {
+  const delta = imp.baseCm - objetivo;
+  const exacta = Math.abs(delta) < 0.001;
+  const signo = delta > 0 ? "+" : delta < 0 ? "−" : "";
+  const indice = imp.proyeccionCm / imp.baseCm;
+
+  const fuente = [imp.catalogo, imp.pagina ? `p. ${imp.pagina}` : null]
+    .filter(Boolean).join(" · ");
+
+  return `<article class="tarjeta${exacta ? " exacta" : ""}">
+    <div class="tarjeta-cabecera">
+      <div>
+        <div class="marca-linea">${imp.marca} · ${imp.linea}</div>
+        <div class="referencia">${imp.referencia}</div>
+      </div>
+      <span class="delta${exacta ? " cero" : ""}">
+        ${exacta ? "exacta" : `${signo}${num(Math.abs(delta), 1)}`}
+      </span>
+    </div>
+
+    <div class="etiquetas">
+      <span class="etiqueta perfil">${imp.perfilMarca}</span>
+      <span class="etiqueta">${cap(imp.forma)}</span>
+      <span class="etiqueta">${imp.superficieMarca
+        ? `${imp.superficieMarca} · ${imp.superficie}`
+        : cap(imp.superficie)}</span>
+      ${imp.gel ? `<span class="etiqueta">${imp.gel}</span>` : ""}
+    </div>
+
+    <div class="esquemas">
+      <figure class="esquema">${vistaFrontal(imp)}<figcaption>Frontal</figcaption></figure>
+      <figure class="esquema">${vistaLateral(imp)}<figcaption>Lateral</figcaption></figure>
+    </div>
+
+    <dl class="medidas">
+      ${medida("Base", num(imp.baseCm), "cm")}
+      ${medida("Altura", num(imp.alturaCm), "cm")}
+      ${medida("Proyección", num(imp.proyeccionCm), "cm")}
+      ${medida("Arco", imp.arcoCm == null ? null : num(imp.arcoCm), "cm")}
+      ${medida("Volumen", num(imp.volumenCc, 0), "cc")}
+      ${medida("Índice", num(indice, 2), "")}
+    </dl>
+
+    <div class="fuente">
+      ${fuente}${imp.notas ? ` — ${imp.notas}` : ""}
+    </div>
+  </article>`;
+}
+
+// --- Búsqueda ---------------------------------------------------------------
+
+function marcasSeleccionadas() {
+  return [...el.listaMarcas.querySelectorAll("input:checked")].map((i) => i.value);
+}
+
+function buscar() {
+  const objetivo = parseFloat(el.base.value);
+  const tol = parseFloat(el.tolerancia.value);
+
+  if (!Number.isFinite(objetivo) || !Number.isFinite(tol)) {
+    el.resumen.textContent = "Introduce una base y una tolerancia válidas.";
+    el.resultados.innerHTML = "";
+    return;
+  }
+
+  const min = objetivo - tol;
+  const max = objetivo + tol;
+  const marcas = marcasSeleccionadas();
+
+  const encontrados = IMPLANTES.filter((i) =>
+    i.baseCm >= min - 0.001 &&
+    i.baseCm <= max + 0.001 &&
+    marcas.includes(i.marca) &&
+    (!el.forma.value || i.forma === el.forma.value) &&
+    (!el.superficie.value || i.superficie === el.superficie.value)
+  );
+
+  const criterio = el.orden.value;
+  encontrados.sort((a, b) => {
+    if (criterio === "volumen") return a.volumenCc - b.volumenCc;
+    if (criterio === "proyeccion") return a.proyeccionCm - b.proyeccionCm;
+    const da = Math.abs(a.baseCm - objetivo);
+    const db = Math.abs(b.baseCm - objetivo);
+    return da !== db ? da - db : a.volumenCc - b.volumenCc;
+  });
+
+  const rango = `${num(min)}–${num(max)} cm`;
+  el.resumen.innerHTML = encontrados.length
+    ? `<strong>${encontrados.length}</strong> ${encontrados.length === 1 ? "opción" : "opciones"}
+       con base entre <strong>${rango}</strong>`
+    : `Ninguna opción con base entre <strong>${rango}</strong> con estos filtros.`;
+
+  el.resultados.innerHTML = encontrados.length
+    ? encontrados.map((i) => tarjeta(i, objetivo)).join("")
+    : `<p class="vacio-total">Prueba a ampliar la tolerancia o a quitar filtros.</p>`;
+
+  guardarEstado();
+}
+
+// --- Estado (comodidad, no dato crítico) ------------------------------------
+
+function guardarEstado() {
+  try {
+    localStorage.setItem(CLAVE_ESTADO, JSON.stringify({
+      base: el.base.value,
+      tolerancia: el.tolerancia.value,
+      forma: el.forma.value,
+      superficie: el.superficie.value,
+      orden: el.orden.value,
+      marcas: marcasSeleccionadas(),
+    }));
+  } catch { /* modo privado o almacenamiento bloqueado: se ignora */ }
+}
+
+function leerEstado() {
+  try {
+    return JSON.parse(localStorage.getItem(CLAVE_ESTADO) || "null");
+  } catch {
+    return null;
+  }
+}
+
+// --- Aviso de calidad de los datos ------------------------------------------
+// El banner lo decide el propio dataset, no una constante: mientras falte
+// trazabilidad o haya filas de prueba, se ve. Cuando los datos estén completos
+// desaparece solo.
+
+function mostrarAvisoDatos() {
+  const total = IMPLANTES.length;
+  const demo = IMPLANTES.filter((i) => i.marca.toUpperCase() === "DEMO").length;
+  const sinPagina = IMPLANTES.filter((i) => !i.pagina).length;
+  const partes = [];
+
+  if (demo) {
+    partes.push(`<strong>${demo} de ${total} filas son ficticias</strong>
+      (marca DEMO) y no corresponden a ningún producto real.`);
+  }
+  if (sinPagina) {
+    partes.push(`${sinPagina === total ? "Los datos no tienen" : `${sinPagina} filas no tienen`}
+      referencia de catálogo ni página, así que una medida no se puede
+      contrastar contra su origen.`);
+  }
+
+  if (!partes.length) return;
+  el.avisoDemoTexto.innerHTML =
+    partes.join(" ") + " Contrasta cada medida antes de usarla en planificación.";
+  el.avisoDemo.hidden = false;
+}
+
+// --- Arranque ---------------------------------------------------------------
+
+function iniciar() {
+  const previo = leerEstado();
+
+  const marcas = unicos("marca");
+  el.listaMarcas.innerHTML = marcas.map((m) => {
+    const marcada = !previo || !previo.marcas ? true : previo.marcas.includes(m);
+    return `<label class="chip">
+      <input type="checkbox" value="${m}"${marcada ? " checked" : ""}> ${m}
+    </label>`;
+  }).join("");
+
+  for (const s of unicos("superficie")) {
+    el.superficie.add(new Option(cap(s), s));
+  }
+
+  if (previo) {
+    el.base.value = previo.base ?? el.base.value;
+    el.tolerancia.value = previo.tolerancia ?? el.tolerancia.value;
+    el.forma.value = previo.forma ?? "";
+    el.superficie.value = previo.superficie ?? "";
+    el.orden.value = previo.orden ?? "cercania";
+  }
+
+  mostrarAvisoDatos();
+
+  document.querySelector("main").addEventListener("input", buscar);
+  buscar();
+}
+
+iniciar();
+
+</script>
+</body>
+</html>
