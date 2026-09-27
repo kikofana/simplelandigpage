@@ -34,6 +34,7 @@ FORMAS = {"redonda", "anatomica"}
 # El término comercial literal (SILTEX, SilkSurface, …) va en superficie_marca.
 SUPERFICIES = {
     "lisa", "texturizada", "microtexturizada", "nanotexturizada",
+    "poliuretano",  # Microthane (Polytech): no cabe en EN ISO 14607
     "sin especificar",
 }
 NUMERICAS = ["volumen_cc", "base_cm", "altura_cm", "proyeccion_cm"]
@@ -44,7 +45,7 @@ RANGOS = {
     "base_cm": (6.0, 18.0),
     "altura_cm": (6.0, 18.0),
     "proyeccion_cm": (1.0, 8.0),
-    "volumen_cc": (80.0, 1000.0),
+    "volumen_cc": (50.0, 1000.0),  # Polytech Même Microthane baja a 55 cc
 }
 
 

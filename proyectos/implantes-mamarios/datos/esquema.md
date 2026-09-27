@@ -11,8 +11,8 @@ Medidas siempre en **centímetros**, volumen en **cc**.
 | `linea` | sí | texto | Familia de producto: `MemoryGel Xtra`, `Ergonomix`, … |
 | `referencia` | sí | texto | Código de catálogo. **Clave única** junto con `marca` |
 | `forma` | sí | `redonda`, `anatomica` | Sin tilde en `anatomica` |
-| `superficie` | sí | `lisa`, `texturizada`, `microtexturizada`, `nanotexturizada`, `sin especificar` | Taxonomía normalizada, para filtrar entre marcas |
-| `superficie_marca` | no | texto | Término comercial literal: `SILTEX`, `SilkSurface`, `Liso` |
+| `superficie` | sí | `lisa`, `texturizada`, `microtexturizada`, `nanotexturizada`, `poliuretano`, `sin especificar` | Taxonomía normalizada, para filtrar entre marcas |
+| `superficie_marca` | no | texto | Término comercial literal: `SILTEX`, `SilkSurface`, `Liso`, `MESMO`, `POLYtxt`, `POLYsmoooth`, `Microthane` |
 | `perfil_marca` | sí | texto | Etiqueta literal del catálogo. **No traducir entre marcas** |
 | `volumen_cc` | sí | número | |
 | `base_cm` | sí | número | Diámetro/anchura de base. Es el campo que manda en la búsqueda |
@@ -37,7 +37,7 @@ Errores (bloquean la generación):
 Avisos (no bloquean, pero hay que mirarlos):
 
 - Medidas fuera de rango plausible: base 6–18 cm, proyección 1–8 cm,
-  volumen 80–1000 cc.
+  volumen 50–1000 cc.
 - `proyeccion_cm` > `base_cm`. Existe, pero es raro: casi siempre es una
   columna mal extraída del PDF.
 - Filas sin `arco_cm`, sin `superficie` identificada o sin `pagina`. Se agrupan

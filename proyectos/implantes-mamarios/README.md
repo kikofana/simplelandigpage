@@ -6,16 +6,35 @@ entre 10,5 y 11,5, ordenado por cercanía.
 
 ## Estado
 
-**292 implantes cargados**: 171 redondos y 121 anatómicos.
+**935 implantes cargados**: 369 redondos y 566 anatómicos.
 
 | Marca | Línea | Forma | Filas | Bases |
 |---|---|---|---|---|
+| Polytech | Même SublimeLine | redonda | 198 | 7,3 – 15,0 cm |
+| Polytech | Opticon / Replicon / Optimam SublimeLine | anatómica | 388 | 7,3 – 15,8 cm |
+| Polytech | Opticon 4Two / Replicon 4Two | anatómica | 57 | 10,4 – 13,6 cm |
 | Mentor | CPG Cohesive III | anatómica | 121 | 9,0 – 17,0 cm |
 | Mentor | MemoryGel Xtra (SILTEX y liso) | redonda | 53 | 8,4 – 15,7 cm |
 | Motiva | Round SilkSurface (Mini/Demi/Full/Corsé) | redonda | 76 | 8,5 – 14,5 cm |
 | Silimed | Redondos (LO/MD/HI/XH) | redonda | 42 | 9,2 – 12,5 cm |
 
-Una consulta de base 11 ±0,5 devuelve 69 opciones: 42 redondas y 27 anatómicas.
+Una consulta de base 11 ±0,5 devuelve 210 opciones, 141 de ellas de Polytech.
+Con tanto volumen conviene acotar con los filtros de marca, forma o superficie.
+
+### Polytech, en corto
+
+- **Cuatro superficies**: POLYsmoooth (lisa), MESMO y POLYtxt
+  (microtexturizadas según EN ISO 14607) y **Microthane**, espuma de
+  poliuretano que el propio catálogo dice que no cabe en esa norma. Por eso
+  tiene su propio valor, `poliuretano`, en el filtro de superficie.
+- **Cuatro formas**: Même (redonda); **Replicon**, base redonda con proyección
+  anatómica; **Opticon**, base corta (altura menor que la anchura); y
+  **Optimam**, base oblonga (altura mayor). Más la línea **4Two**, de doble gel.
+- **El volumen no viene en columna**: va en el sufijo de la referencia
+  (`10724-110` = 110 cc). Verificado contra la geometría: la relación volumen ÷
+  (base² × proyección) es estable dentro de cada forma.
+- **La columna D es el arco del ápex al borde**, la misma medida que el arco de
+  Motiva y Silimed (verificado numéricamente). Salvo en 4Two: ver abajo.
 
 Las CPG cubren las nueve combinaciones de altura (Baja/Media/Alta) por
 proyección (Moderada/Moderada Plus/Alta). La denominación lo codifica: dígito 1
@@ -28,25 +47,48 @@ Mentor publica el **Arco del Polo Inferior (API)**: del punto más bajo del polo
 inferior al **punto medio** del implante, e **incluye 0,5 cm de cubierta
 tisular**. Motiva y Silimed publican un arco que no se define igual.
 
-Las tres cifras viven en la columna `arco_cm`, pero **no son la misma
-magnitud**. Compáralas dentro de una marca, no entre marcas. La base, la altura
-y la proyección sí son directamente comparables.
+Para saber cuáles son la misma medida, se compara cada arco con el teórico del
+ápex al borde (un cuarto de elipse de semiejes base/2 y proyección):
+
+| Arco | Arco ÷ teórico |
+|---|---|
+| Polytech Même (D) | 0,96 |
+| Motiva | 0,98 |
+| Silimed | 0,99 |
+| Polytech 4Two (D) | 1,09 – 1,10 |
+| Mentor CPG (API) | 1,13 |
+
+**Polytech Même, Motiva y Silimed miden lo mismo** y se pueden comparar entre
+sí. **La API de Mentor y la D de 4Two no**: son otra magnitud, y el catálogo de
+Polytech no define la de 4Two. Las anatómicas de Polytech dan 0,72 – 0,80, más
+corto porque el ápex cae en el polo inferior, coherente con la misma definición.
+La base, la altura y la proyección sí son siempre comparables.
 
 ### Lo que falta en estos datos
 
 Nada de esto impide usarlo, pero conviene tenerlo presente:
 
-1. **Las 171 filas de redondos no tienen catálogo ni página**, así que no se
-   puede contrastar una medida contra su origen. Las 121 CPG sí: salen del PDF
-   que está en `datos/fuentes/`, con su página. La app avisa mientras queden
-   filas sin trazabilidad.
-2. **Silimed no trae superficie ni línea**, quedan como `sin especificar`.
-3. **Las páginas de CPG aportadas no indican la superficie.** Se marcan como
+1. **Las 171 filas de redondos de Mentor, Motiva y Silimed no tienen catálogo
+   ni página**, así que no se puede contrastar una medida contra su origen.
+   Las CPG y todo Polytech sí: salen de los PDF que están en `datos/fuentes/`,
+   con su página. La app avisa mientras queden filas sin trazabilidad.
+2. **`20734-365` (Replicon POLYtxt, proyección baja, 13 cm) tiene un volumen
+   dudoso.** El catálogo imprime 365 cc, pero su serie va 235 → 365 → 290 y por
+   geometría serían unos 260 cc. Es la única anomalía de volumen en las 49
+   tablas de Polytech. Base, altura y proyección encajan en la serie. Confirmar
+   la referencia con el distribuidor; mientras, la ficha lo avisa.
+3. **Una fila de Polytech está tapada en el PDF** (`10724-330`, Même lisa baja
+   de 13,5 cm): el texto sigue en el archivo pero en la página no se ve, así
+   que no se ha cargado. Probablemente el distribuidor no la ofrece.
+4. **Silimed no trae superficie ni línea**, quedan como `sin especificar`.
+5. **Las páginas de CPG aportadas no indican la superficie.** Se marcan como
    SILTEX / texturizada, que es lo que monta la línea, pero no está leído del
    documento.
-4. **La tabla de Silimed parece truncada**: termina en `505 HI` (12,5 cm) sin
+6. **La tabla de Silimed parece truncada**: termina en `505 HI` (12,5 cm) sin
    las MD/LO de esa base.
-5. **De Motiva solo está Round SilkSurface**; falta Ergonomix.
+7. **De Motiva solo está Round SilkSurface**; falta Ergonomix.
+8. **El catálogo de Polytech es de febrero de 2021.** Conviene comprobar que
+   las referencias siguen vigentes.
 
 ### Ya verificado
 
@@ -77,18 +119,36 @@ Los nombres comerciales no son comparables entre marcas, así que ambos grupos
 del fabricante. Así seguirán funcionando cuando entren marcas con otra
 nomenclatura.
 
-| Grupo | Índice | Cortes | Huecos que los justifican |
-|---|---|---|---|
-| Proyección | proyección ÷ base | 0,39 y 0,45 | nada entre 0,370–0,407 ni entre 0,445–0,456 |
-| Altura | altura ÷ base | 0,91 y 0,98 | nada entre 0,944–1,019 |
+| Grupo | Índice | Cortes |
+|---|---|---|
+| Proyección | proyección ÷ base | 0,39 y 0,45 |
+| Altura | altura ÷ base | 0,91 y 0,98 |
 
-Los cortes no son a ojo: caen en huecos reales del catálogo, donde no existe
-ningún implante.
+**De dónde salen.** Se fijaron con Mentor, Motiva y Silimed, cuando caían en
+huecos reales del catálogo: entre 0,370 y 0,407 de proyección no había ningún
+implante, ni entre 0,944 y 1,019 de altura. Con eso, el de altura reproducía
+exactamente las etiquetas de las 121 CPG de Mentor sin leerlas, y el de
+proyección clasificaba entero cada perfil salvo el CPG 313.
 
-El de altura **reproduce exactamente las etiquetas de Mentor en las 121 CPG**,
-sin leerlas. El de proyección clasifica entero cada perfil de cada marca salvo
-el CPG 313 (altura baja, proyección alta), que se reparte 9/4: en un implante
-bajo, una proyección "alta" sigue dando una relación modesta.
+**Con Polytech ya no hay huecos.** Polytech tiene cuatro niveles de proyección
+(L/M/H/X) y rellena los espacios: 42 implantes caen en el antiguo hueco de
+0,370–0,407. Con todo el catálogo junto, el mayor hueco que queda es de 0,007,
+así que **no existe un corte "más natural" al que moverse** y se han mantenido.
+Los grupos siguen siendo puramente geométricos; lo que se pierde es que cada
+perfil comercial caiga entero en uno.
+
+Qué se reparte ahora, en Polytech:
+
+- **Proyección**: 38 de sus 49 perfiles caen enteros en un grupo. Los 11 que no,
+  son casi todos perfiles "Alta" (H), que por geometría quedan a caballo entre
+  media y alta. Es la realidad del implante: su índice cae ahí.
+- **Altura**: Opticon cae entero en baja (0,84), Optimam en alta (1,16) y
+  **Replicon también en alta**, porque su huella es redonda (índice 1,00) aunque
+  su perfil sea anatómico. El único perfil que se reparte es Opticon 4Two
+  (0,904 – 0,922), justo encima del corte de 0,91.
+
+Las etiquetas de Mentor se siguen reproduciendo exactamente: los cortes no se
+han tocado.
 
 Esto también deja ver cosas que los nombres esconden: el "Moderado Plus"
 redondo de Mentor (0,347) proyecta menos que su propio "Moderada Plus" de CPG
@@ -138,8 +198,11 @@ datos/
   plantilla.csv    CSV vacío con las cabeceras
   esquema.md       qué significa cada columna y qué se valida
   fuentes/
-    importar.py                transcripción de los catálogos -> implantes.csv
-    mentor-cpg-anatomicas.pdf  catálogo original de las CPG
+    importar.py                  transcripción de los catálogos -> implantes.csv
+    mentor-cpg-anatomicas.pdf    catálogo original de las CPG
+    polytech-biocablan-2021.pdf  catálogo Polytech (17 MB)
+    extraer_polytech.py          PDF de Polytech -> polytech.csv
+    polytech.csv                 tablas de Polytech ya extraídas y verificadas
 web/
   index.html       la app
   app.js           búsqueda + generación de los esquemas SVG

@@ -42,6 +42,32 @@ MENTOR CPG  Anatómicas, de mentor-cpg-anatomicas.pdf, en esta misma carpeta.
          magnitud que el arco de Motiva o Silimed, así que las cifras de arco
          no son comparables entre estas marcas.
 
+POLYTECH De polytech-biocablan-2021.pdf (distribuidor Biocablan, feb. 2021,
+         nº 1), vía polytech.csv, que genera extraer_polytech.py; ahí se explica
+         por qué la extracción comprueba cada fila contra la página renderizada.
+         Medidas en mm en el catálogo; aquí se pasan a cm.
+
+         Sin columna de volumen: va en el sufijo de la referencia (10724-110 =
+         110 cc). Verificado: volumen / (base² × proyección) es estable dentro
+         de cada forma (variación ~5-6 %, la misma que Motiva con volúmenes
+         reales). Excepción: 20734-365 rompe su serie (235 -> 365 -> 290) y por
+         geometría le tocarían unos 260 cc. El catálogo la imprime así, así que
+         se carga como está pero marcada.
+
+         Formas: Même = redonda. Replicon = base redonda con proyección
+         anatómica (altura = base). Opticon = base corta, Optimam = oblonga.
+         4Two = doble gel, en variantes AO (Opticon) y AR (Replicon).
+
+         Superficies: POLYsmoooth lisa; MESMO y POLYtxt microtexturizadas
+         (EN ISO 14607:2018, según el catálogo); Microthane es espuma de
+         poliuretano, que el propio catálogo dice que no cabe en esa norma, y
+         por eso tiene valor propio.
+
+         La columna D es el arco del ápex al borde: D / cuarto de elipse
+         (base/2, proyección) da 0,96 en Même, frente a 0,98 de Motiva y 0,99
+         de Silimed, así que es comparable con ellos. En la línea 4Two sale
+         1,09-1,10 y el catálogo no la define: no es la misma medida.
+
 MOTIVA   Las columnas no venían etiquetadas fila a fila. El orden es
          base / proyección / arco / volumen, verificado cruzando dos filas
          contra Silimed a igual base y proyección:
@@ -251,6 +277,48 @@ MOTIVA = [
 
 PERFILES_MOTIVA = ["Mini", "Demi", "Full", "Corsé"]
 
+# --- Polytech ----------------------------------------------------------------
+POLYTECH_CSV = Path(__file__).resolve().parent / "polytech.csv"
+POLYTECH_PDF = "Polytech (Biocablan, feb. 2021, nº 1) — datos/fuentes/polytech-biocablan-2021.pdf"
+
+# (patrón en el título, superficie normalizada, término comercial)
+SUPERFICIES_POLYTECH = [
+    ("Microthane", "poliuretano", "Microthane"),
+    ("POLYText", "microtexturizada", "POLYtxt"),
+    ("MESMO", "microtexturizada", "MESMO"),
+    ("Microtexturada", "microtexturizada", "MESMO"),
+    ("Lisa", "lisa", "POLYsmoooth"),
+]
+
+NOTAS_POLYTECH = {
+    "4Two": "Arco (D) de la línea 4Two: no es la misma medida que el resto de "
+            "Polytech ni que Motiva o Silimed, y el catálogo no la define",
+    "Replicon": "Base redonda con proyección anatómica: altura = base, "
+                "así que el filtro de altura la agrupa como alta",
+}
+NOTAS_REFERENCIA = {
+    "20734-365": "VOLUMEN DUDOSO: el catálogo imprime 365 cc, pero rompe su serie "
+                 "(235 -> 365 -> 290) y por geometría serían unos 260 cc. "
+                 "Confirmar con el distribuidor",
+}
+
+
+def linea_polytech(titulo):
+    modelo = next(m for m in ("Opticon", "Replicon", "Optimam", "Meme") if titulo.startswith(m))
+    modelo = "Même" if modelo == "Meme" else modelo
+    return f"{modelo} 4Two" if "4Two" in titulo else f"{modelo} SublimeLine"
+
+
+def superficie_polytech(titulo, pagina):
+    if "4Two" in titulo:  # la tabla no la dice; la da la sección (índice, pp. 4-5)
+        return ("poliuretano", "Microthane") if pagina == 28 else ("microtexturizada", "POLYtxt")
+    return next((s, m) for patron, s, m in SUPERFICIES_POLYTECH if patron in titulo)
+
+
+def perfil_polytech(titulo):
+    t = titulo.replace("®", "").replace("Meme", "Même").replace("POLYText", "POLYtxt")
+    return " ".join(t.split())
+
 
 def fila(**kw):
     base = {c: "" for c in CABECERAS}
@@ -307,6 +375,28 @@ def generar():
                 gel="Cohesive III",
                 catalogo=CPG_PDF, pagina=pagina,
                 notas=CPG_NOTA,
+            ))
+
+    # Polytech, desde el CSV que deja extraer_polytech.py.
+    with POLYTECH_CSV.open(encoding="utf-8") as fh:
+        for r in csv.DictReader(fh):
+            titulo, ref = r["titulo"], r["referencia"]
+            superficie, superficie_marca = superficie_polytech(titulo, int(r["pagina"]))
+            gel = "Diagon\\Gel 4Two" if "4Two" in titulo else "EasyFit Gel"
+            notas = [NOTAS_REFERENCIA.get(ref)]
+            notas += [n for clave, n in NOTAS_POLYTECH.items() if clave in titulo]
+            filas.append(fila(
+                marca="Polytech", linea=linea_polytech(titulo), referencia=ref,
+                forma="redonda" if titulo.startswith("Meme") else "anatomica",
+                superficie=superficie, superficie_marca=superficie_marca,
+                perfil_marca=perfil_polytech(titulo),
+                volumen_cc=int(ref.split("-")[1]),
+                base_cm=round(float(r["base_mm"]) / 10, 2),
+                altura_cm=round(float(r["altura_mm"]) / 10, 2),
+                proyeccion_cm=round(float(r["proyeccion_mm"]) / 10, 2),
+                arco_cm=round(float(r["d_mm"]) / 10, 2),
+                gel=gel, catalogo=POLYTECH_PDF, pagina=r["pagina"],
+                notas=". ".join(n for n in notas if n),
             ))
 
     # Motiva. SilkSurface cuenta como lisa (confirmado); el término comercial

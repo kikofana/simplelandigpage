@@ -39,9 +39,10 @@ const num = (n, dec = 1) => n.toFixed(dec).replace(".", ",");
 
 // Cada marca nombra la proyección a su manera y los nombres no se traducen
 // entre sí, así que el grupo se calcula del índice (proyección ÷ base), que sí
-// es comparable. Los dos cortes caen en huecos reales del catálogo: entre 0,370
-// y 0,407 no hay ningún implante, y entre 0,445 y 0,456 tampoco. Cada perfil de
-// cada marca cae entero en un grupo, salvo el CPG 313 de Mentor, que se reparte.
+// es comparable. Los cortes se fijaron en huecos del catálogo de Mentor, Motiva
+// y Silimed; Polytech, con cuatro niveles de proyección, rellena esos huecos y
+// ya no queda ninguno mejor, así que algunos de sus perfiles "Alta" se reparten
+// entre media y alta. Ver README -> Los grupos de proyección y de altura.
 const CORTE_MEDIA = 0.39;
 const CORTE_ALTA = 0.45;
 
@@ -55,8 +56,8 @@ function grupoProyeccion(imp) {
 
 // La altura se agrupa igual, del índice altura ÷ base, y por el mismo motivo:
 // que siga funcionando cuando entren anatómicas de una marca que no use la
-// nomenclatura de Mentor. Los cortes caen en huecos del catálogo (entre 0,944 y
-// 1,019 no hay nada) y reproducen las etiquetas de las CPG en las 121 filas.
+// nomenclatura de Mentor. Reproducen las etiquetas de las 121 CPG sin leerlas.
+// Replicon (Polytech) cae en alta: su huella es redonda, índice 1,00.
 const ALTURA_MEDIA = 0.91;
 const ALTURA_ALTA = 0.98;
 
