@@ -68,13 +68,27 @@ POLYTECH De polytech-biocablan-2021.pdf (distribuidor Biocablan, feb. 2021,
          de Silimed, así que es comparable con ellos. En la línea 4Two sale
          1,09-1,10 y el catálogo no la define: no es la misma medida.
 
-MOTIVA   Las columnas no venían etiquetadas fila a fila. El orden es
-         base / proyección / arco / volumen, verificado cruzando dos filas
-         contra Silimed a igual base y proyección:
-           RSC-180  base 8.5, proy 4.0 -> 6.5   vs Silimed 190 MD  9.2 / 4.0 -> 6.7
-           RSF-315  base 11,  proy 4.5 -> 7.7   vs Silimed 305 MD 11.0 / 4.6 -> 7.8
-         Las cuatro columnas de perfil son Mini / Demi / Full / Corsé,
-         con prefijos de referencia RSM / RSD / RSF / RSC.
+MOTIVA   De motiva-smoothsilk.pdf (SmoothSilk Matrix, SID-001021 Rev. 1), vía
+         motiva.csv, que genera extraer_motiva.py. Tres líneas: Round
+         SilkSurface, Ergonomix SilkSurface y Ergonomix2 SmoothSilk, cada una
+         en perfiles Mini / Demi / Full / Corsé.
+
+         Round se cargó primero a mano desde una tabla pegada. Al llegar el PDF
+         se contrastó: las 76 filas coincidían al decimal, y faltaban solo las
+         3 de base 15 (RSM-525, RSD-625, RSF-775). Desde entonces el PDF es la
+         fuente y la tabla tecleada se retiró.
+
+         Ergonomix y Ergonomix2 publican dos medidas "C", al 40 % y al 45 %,
+         en vez de un arco. No son el arco de Round: comparadas con el arco
+         teórico ápex-borde dan 0,78 y 0,88, frente a 0,98 de Round, aun
+         teniendo Ergonomix exactamente la base, proyección y volumen de su
+         Round en las 79 tallas. Motiva las llama aproximadas "según modelo
+         clínico" (Ergonomix) y "distancia" (Ergonomix2). No van a arco_cm:
+         se conservan en notas.
+
+         Erratas y marcas del catálogo que se cargan tal cual, anotadas:
+         ERSC-290Z aparece en la tabla de Ergonomix2 con prefijo de Ergonomix;
+         ERSC-650/725/825/925 son pedido especial.
 """
 
 import csv
@@ -252,30 +266,12 @@ MENTOR_CPG = [
 ]
 
 # --- Motiva ----------------------------------------------------------------
-# base, y luego (referencia, proyección, arco, volumen) para Mini/Demi/Full/Corsé
-MOTIVA = [
-    (8.5, ("RSM-105", 2.2, 5.0, 105), ("RSD-135", 3.1, 5.7, 135), ("RSF-145", 3.5, 6.0, 145), ("RSC-180", 4.0, 6.5, 180)),
-    (9.0, ("RSM-125", 2.3, 5.3, 125), ("RSD-155", 3.3, 6.0, 155), ("RSF-175", 3.7, 6.3, 175), ("RSC-210", 4.2, 6.8, 210)),
-    (9.5, ("RSM-140", 2.4, 5.5, 140), ("RSD-180", 3.4, 6.3, 180), ("RSF-205", 3.9, 6.7, 205), ("RSC-240", 4.5, 7.2, 240)),
-    (9.75, ("RSM-150", 2.4, 5.6, 150), ("RSD-190", 3.4, 6.4, 190), ("RSF-220", 4.0, 6.9, 220), ("RSC-260", 4.6, 7.4, 260)),
-    (10.0, ("RSM-160", 2.5, 5.8, 160), ("RSD-205", 3.5, 6.5, 205), ("RSF-235", 4.1, 7.1, 235), ("RSC-280", 4.8, 7.7, 280)),
-    (10.25, ("RSM-170", 2.5, 5.9, 170), ("RSD-215", 3.5, 6.6, 215), ("RSF-255", 4.2, 7.2, 255), ("RSC-300", 4.9, 7.9, 300)),
-    (10.5, ("RSM-185", 2.6, 6.1, 185), ("RSD-230", 3.6, 6.8, 230), ("RSF-275", 4.3, 7.4, 275), ("RSC-325", 5.1, 8.2, 325)),
-    (10.75, ("RSM-205", 2.6, 6.2, 205), ("RSD-245", 3.7, 7.0, 245), ("RSF-295", 4.4, 7.6, 295), ("RSC-350", 5.2, 8.3, 350)),
-    (11.0, ("RSM-220", 2.7, 6.4, 220), ("RSD-265", 3.8, 7.1, 265), ("RSF-315", 4.5, 7.7, 315), ("RSC-380", 5.4, 8.6, 380)),
-    (11.25, ("RSM-230", 2.7, 6.5, 230), ("RSD-285", 3.8, 7.2, 285), ("RSF-335", 4.6, 7.9, 335), ("RSC-410", 5.5, 8.7, 410)),
-    (11.5, ("RSM-245", 2.8, 6.6, 245), ("RSD-300", 3.9, 7.4, 300), ("RSF-355", 4.7, 8.1, 355), ("RSC-440", 5.7, 9.0, 440)),
-    (11.75, ("RSM-260", 2.8, 6.7, 260), ("RSD-320", 3.9, 7.5, 320), ("RSF-375", 4.8, 8.2, 375), ("RSC-475", 5.8, 9.2, 475)),
-    (12.0, ("RSM-275", 2.9, 6.9, 275), ("RSD-340", 4.0, 7.7, 340), ("RSF-400", 4.9, 8.4, 400), ("RSC-510", 6.0, 9.5, 510)),
-    (12.25, ("RSM-290", 2.9, 7.0, 290), ("RSD-360", 4.0, 7.8, 360), ("RSF-425", 5.0, 8.6, 425), ("RSC-550", 6.1, 9.6, 550)),
-    (12.5, ("RSM-310", 3.0, 7.2, 310), ("RSD-380", 4.1, 7.9, 380), ("RSF-450", 5.1, 8.8, 450), ("RSC-590", 6.3, 9.9, 590)),
-    (13.0, ("RSM-360", 3.1, 7.5, 360), ("RSD-425", 4.3, 8.3, 425), ("RSF-500", 5.3, 9.1, 500), ("RSC-650", 6.6, 10.3, 650)),
-    (13.5, ("RSM-400", 3.2, 7.7, 400), ("RSD-475", 4.4, 8.5, 475), ("RSF-550", 5.5, 9.5, 550), ("RSC-725", 6.9, 10.8, 725)),
-    (14.0, ("RSM-430", 3.3, 8.0, 430), ("RSD-525", 4.5, 8.8, 525), ("RSF-625", 5.7, 9.8, 625), ("RSC-825", 7.2, 11.2, 825)),
-    (14.5, ("RSM-475", 3.4, 8.3, 475), ("RSD-575", 4.6, 9.1, 575), ("RSF-700", 5.9, 10.2, 700), ("RSC-925", 7.5, 11.7, 925)),
-]
-
-PERFILES_MOTIVA = ["Mini", "Demi", "Full", "Corsé"]
+MOTIVA_CSV = Path(__file__).resolve().parent / "motiva.csv"
+MOTIVA_PDF = "Motiva SmoothSilk Matrix (SID-001021 Rev. 1) — datos/fuentes/motiva-smoothsilk.pdf"
+NOTAS_MOTIVA_REF = {
+    "ERSC-290Z": "Referencia tal como la imprime el catálogo, con prefijo de Ergonomix "
+                 "en la tabla de Ergonomix2; probablemente E2SC-290Z. Confirmar",
+}
 
 # --- Polytech ----------------------------------------------------------------
 POLYTECH_CSV = Path(__file__).resolve().parent / "polytech.csv"
@@ -401,15 +397,27 @@ def generar():
 
     # Motiva. SilkSurface cuenta como lisa (confirmado); el término comercial
     # se conserva en superficie_marca.
-    for base_cm, *grupos in MOTIVA:
-        for perfil, (ref, proy, arco, vol) in zip(PERFILES_MOTIVA, grupos):
+    with MOTIVA_CSV.open(encoding="utf-8") as fh:
+        for r in csv.DictReader(fh):
+            ref = r["referencia"]
+            notas = [NOTAS_MOTIVA_REF.get(ref)]
+            if r["c40_cm"]:
+                etiqueta = "Distancia" if r["linea"].startswith("Ergonomix2") else "Arco aproximado"
+                notas.append(
+                    f"{etiqueta} C según Motiva: {r['c40_cm'].replace('.', ',')} cm al 40 %, "
+                    f"{r['c45_cm'].replace('.', ',')} cm al 45 %. No es la misma medida que "
+                    "el arco de Round, por eso no figura como arco")
+            if r["pedido_especial"]:
+                notas.append("Pedido especial")
             filas.append(fila(
-                marca="Motiva", linea="Round SilkSurface", referencia=ref,
-                forma="redonda", superficie="lisa", superficie_marca="SilkSurface",
-                perfil_marca=perfil,
-                volumen_cc=vol, base_cm=base_cm, altura_cm=base_cm,
-                proyeccion_cm=proy, arco_cm=arco,
-                catalogo=SIN_CATALOGO,
+                marca="Motiva", linea=r["linea"], referencia=ref,
+                forma="redonda", superficie="lisa",
+                superficie_marca="SmoothSilk" if "SmoothSilk" in r["linea"] else "SilkSurface",
+                perfil_marca=r["perfil"],
+                volumen_cc=r["volumen_cc"], base_cm=r["base_cm"], altura_cm=r["base_cm"],
+                proyeccion_cm=r["proyeccion_cm"], arco_cm=r["arco_cm"],
+                catalogo=MOTIVA_PDF, pagina=r["pagina"],
+                notas=". ".join(n for n in notas if n),
             ))
 
     return filas

@@ -70,13 +70,13 @@ Esquema de datos, validador, buscador con tolerancia ±, esquemas SVG, interfaz.
 Funciona de punta a punta con datos de demostración ficticios.
 
 ### Fase 2 — Datos reales 🟢 cubre el uso actual
-292 implantes: 171 redondos de Mentor, Motiva y Silimed, y las 121 anatómicas
-CPG de Mentor, que son las únicas anatómicas en uso. Todo transcrito en
-`datos/fuentes/importar.py`.
+1100 implantes de cuatro marcas: Mentor (MemoryGel Xtra y CPG), Motiva (Round,
+Ergonomix y Ergonomix2), Polytech (Même, Opticon, Replicon, Optimam y 4Two) y
+Silimed. Mentor CPG, Motiva y Polytech salen de sus PDF, que están en
+`datos/fuentes/` junto con los scripts que los extraen.
 
-Queda, pero no bloquea: la línea **Ergonomix** de Motiva, y completar la
-trazabilidad de los redondos (las CPG ya la tienen). Ver README → "Lo que falta
-en estos datos".
+Queda, pero no bloquea: la trazabilidad de los redondos de Mentor y Silimed.
+Ver README → "Lo que falta en estos datos".
 
 ### Fase 3 — Refinamiento 🟡 en curso
 Hecho:
@@ -117,14 +117,22 @@ contra las páginas renderizadas. En las páginas con dos tablas el orden visual
 no coincide con el de extracción, así que el emparejamiento tabla-denominación
 se verificó por referencia y por altura.
 
+Polytech también salió de PDF, con una complicación: el distribuidor tapa
+alguna fila sin borrar su texto, así que cada referencia se comprobó contra la
+página renderizada (ver `extraer_polytech.py`).
+
+Motiva llegó después en PDF. Sirvió para comprobar la tabla que se había pegado
+a mano (coincidía al decimal) y para añadir Ergonomix y Ergonomix2.
+
 ## Lo que sigue haciendo falta
 
-- **Catálogo, año y página de los 171 redondos.** Es lo que más pesa: sin eso
-  no se puede contrastar una medida contra su origen, que es justo lo que salva
-  de un error de transcripción. Las 121 CPG ya lo tienen. La app lo avisa
-  hasta que se rellene.
-- La línea **Ergonomix** de Motiva.
+- **Catálogo, año y página de los 95 redondos de Mentor y Silimed.** Es lo que
+  más pesa: sin eso no se puede contrastar una medida contra su origen, que es
+  justo lo que salva de un error de transcripción. La app lo avisa hasta que se
+  rellene.
 - Confirmar la superficie de las CPG: las páginas aportadas no la indican.
+- Confirmar dos referencias dudosas: `20734-365` (Polytech, volumen) y
+  `ERSC-290Z` (Motiva, prefijo).
 
 Y un aviso que sigue vigente: **toda fila hay que contrastarla contra el
 catálogo antes de usarla en consulta**. `construir.py` detecta incoherencias

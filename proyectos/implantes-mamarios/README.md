@@ -6,7 +6,7 @@ entre 10,5 y 11,5, ordenado por cercanía.
 
 ## Estado
 
-**935 implantes cargados**: 369 redondos y 566 anatómicos.
+**1100 implantes cargados**: 534 redondos y 566 anatómicos.
 
 | Marca | Línea | Forma | Filas | Bases |
 |---|---|---|---|---|
@@ -15,10 +15,13 @@ entre 10,5 y 11,5, ordenado por cercanía.
 | Polytech | Opticon 4Two / Replicon 4Two | anatómica | 57 | 10,4 – 13,6 cm |
 | Mentor | CPG Cohesive III | anatómica | 121 | 9,0 – 17,0 cm |
 | Mentor | MemoryGel Xtra (SILTEX y liso) | redonda | 53 | 8,4 – 15,7 cm |
-| Motiva | Round SilkSurface (Mini/Demi/Full/Corsé) | redonda | 76 | 8,5 – 14,5 cm |
+| Motiva | Round SilkSurface (Mini/Demi/Full/Corsé) | redonda | 79 | 8,5 – 15,0 cm |
+| Motiva | Ergonomix SilkSurface | redonda | 79 | 8,5 – 15,0 cm |
+| Motiva | Ergonomix2 SmoothSilk | redonda | 83 | 8,0 – 15,0 cm |
 | Silimed | Redondos (LO/MD/HI/XH) | redonda | 42 | 9,2 – 12,5 cm |
 
-Una consulta de base 11 ±0,5 devuelve 210 opciones, 141 de ellas de Polytech.
+Una consulta de base 11 ±0,5 devuelve 250 opciones, 141 de ellas de Polytech y
+60 de Motiva.
 Con tanto volumen conviene acotar con los filtros de marca, forma o superficie.
 
 ### Polytech, en corto
@@ -36,6 +39,18 @@ Con tanto volumen conviene acotar con los filtros de marca, forma o superficie.
 - **La columna D es el arco del ápex al borde**, la misma medida que el arco de
   Motiva y Silimed (verificado numéricamente). Salvo en 4Two: ver abajo.
 
+### Motiva, en corto
+
+- **Tres líneas**, todas en Mini / Demi / Full / Corsé: Round SilkSurface,
+  Ergonomix SilkSurface y Ergonomix2 SmoothSilk (la línea JOY).
+- **Ergonomix tiene exactamente las medidas de Round** en las 79 tallas: misma
+  base, proyección y volumen. Lo que cambia es el implante, no el tamaño.
+  Ergonomix2 no: sus volúmenes son otros (8,5 × 2,2 cm son 110 cc, no 105).
+- **Ergonomix y Ergonomix2 no publican un arco**, sino dos medidas "C", al 40 %
+  y al 45 %. No son el arco de Round (ver la tabla de abajo), así que no van en
+  la columna de arco: aparecen en la nota de cada ficha.
+- **Pedido especial**: las Ergonomix Corsé de 650, 725, 825 y 925 cc.
+
 Las CPG cubren las nueve combinaciones de altura (Baja/Media/Alta) por
 proyección (Moderada/Moderada Plus/Alta). La denominación lo codifica: dígito 1
 cohesión, 2 altura, 3 proyección — `332` es altura alta con proyección
@@ -52,15 +67,19 @@ Para saber cuáles son la misma medida, se compara cada arco con el teórico del
 
 | Arco | Arco ÷ teórico |
 |---|---|
+| Motiva Ergonomix / Ergonomix2 (C al 40 %) | 0,78 – 0,80 |
+| Motiva Ergonomix / Ergonomix2 (C al 45 %) | 0,88 – 0,89 |
 | Polytech Même (D) | 0,96 |
-| Motiva | 0,98 |
+| Motiva Round | 0,98 |
 | Silimed | 0,99 |
 | Polytech 4Two (D) | 1,09 – 1,10 |
 | Mentor CPG (API) | 1,13 |
 
-**Polytech Même, Motiva y Silimed miden lo mismo** y se pueden comparar entre
-sí. **La API de Mentor y la D de 4Two no**: son otra magnitud, y el catálogo de
-Polytech no define la de 4Two. Las anatómicas de Polytech dan 0,72 – 0,80, más
+**Polytech Même, Motiva Round y Silimed miden lo mismo** y se pueden comparar
+entre sí. **La API de Mentor y la D de 4Two no**: son otra magnitud, y el
+catálogo de Polytech no define la de 4Two. Las **C de Ergonomix** tampoco: Motiva
+las llama aproximadas "según modelo clínico" (y en Ergonomix2, "distancia"),
+y salen más cortas que el arco de un Round con las mismas medidas exactas. Las anatómicas de Polytech dan 0,72 – 0,80, más
 corto porque el ápex cae en el polo inferior, coherente con la misma definición.
 La base, la altura y la proyección sí son siempre comparables.
 
@@ -68,10 +87,10 @@ La base, la altura y la proyección sí son siempre comparables.
 
 Nada de esto impide usarlo, pero conviene tenerlo presente:
 
-1. **Las 171 filas de redondos de Mentor, Motiva y Silimed no tienen catálogo
+1. **Las 95 filas de redondos de Mentor (53) y Silimed (42) no tienen catálogo
    ni página**, así que no se puede contrastar una medida contra su origen.
-   Las CPG y todo Polytech sí: salen de los PDF que están en `datos/fuentes/`,
-   con su página. La app avisa mientras queden filas sin trazabilidad.
+   Todo lo demás sí: sale de los PDF que están en `datos/fuentes/`, con su
+   página. La app avisa mientras queden filas sin trazabilidad.
 2. **`20734-365` (Replicon POLYtxt, proyección baja, 13 cm) tiene un volumen
    dudoso.** El catálogo imprime 365 cc, pero su serie va 235 → 365 → 290 y por
    geometría serían unos 260 cc. Es la única anomalía de volumen en las 49
@@ -86,7 +105,9 @@ Nada de esto impide usarlo, pero conviene tenerlo presente:
    documento.
 6. **La tabla de Silimed parece truncada**: termina en `505 HI` (12,5 cm) sin
    las MD/LO de esa base.
-7. **De Motiva solo está Round SilkSurface**; falta Ergonomix.
+7. **`ERSC-290Z`** aparece así en la tabla de Ergonomix2 (Corsé, base 10), con
+   el prefijo de Ergonomix. Casi seguro es `E2SC-290Z`; se carga como está
+   impresa y la ficha lo avisa. Confirmar antes de pedirla.
 8. **El catálogo de Polytech es de febrero de 2021.** Conviene comprobar que
    las referencias siguen vigentes.
 
@@ -94,6 +115,11 @@ Nada de esto impide usarlo, pero conviene tenerlo presente:
 
 - **SilkSurface cuenta como lisa.** Confirmado; la taxonomía normalizada la
   registra así y el término comercial se conserva en `superficie_marca`.
+  Ergonomix2 figura como SmoothSilk, que es como el catálogo titula la familia
+  entera ("SmoothSilk Round Matrix" para el Round SilkSurface), así que va
+  también como lisa.
+- **Los 76 Motiva Round que se pegaron a mano coinciden al decimal con el
+  PDF.** Solo faltaban las tres tallas de base 15.
 - **Las proyecciones no monótonas de Mentor son correctas.** `THPX-405` (5,9)
   → `THPX-425` (5,8) y `THPX-455` (6,0) → `THPX-470` (5,9) son así en el
   catálogo: más volumen con menos proyección. Contrastado contra el origen, no
@@ -203,6 +229,9 @@ datos/
     polytech-biocablan-2021.pdf  catálogo Polytech (17 MB)
     extraer_polytech.py          PDF de Polytech -> polytech.csv
     polytech.csv                 tablas de Polytech ya extraídas y verificadas
+    motiva-smoothsilk.pdf        catálogo Motiva: Round, Ergonomix, Ergonomix2
+    extraer_motiva.py            PDF de Motiva -> motiva.csv
+    motiva.csv                   tablas de Motiva ya extraídas
 web/
   index.html       la app
   app.js           búsqueda + generación de los esquemas SVG
